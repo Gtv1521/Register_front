@@ -1,0 +1,29 @@
+<div class="card-search">
+  <div class="search-box">
+    <input type="text" [(ngModel)]="busqueda" [placeholder]="
+        filtroActual === 'todo' ? 'Buscar en todo' :
+        filtroActual === 'Completo' ? 'Buscar en completos' :
+        filtroActual === 'pendiente' ? 'Buscar en pendientes' :
+        filtroActual === 'registro' ? 'Buscar por código o registro' :
+        'Buscar por cliente'
+      " (keyup.enter)="onBuscar()" />
+    <div class="modos">
+
+      <button [class.active]="filtroActual === 'todo'" (click)="setCambiarFiltro('todo')">
+        Todo
+      </button>
+      <button [class.active]="filtroActual === 'Completo'" (click)="setCambiarFiltro('Completo')">
+        Completo
+      </button>
+      <button [class.active]="filtroActual === 'pendiente'" (click)="setCambiarFiltro('pendiente')">
+        Pendiente
+      </button>
+      <button [class.active]="filtroActual === 'registro'" (click)="setCambiarFiltro('registro')">
+        Registro
+      </button>
+      <button [class.active]="filtroActual === 'cliente'" (click)="setCambiarFiltro('cliente')">
+        Cliente
+      </button>
+    </div>
+
+  </div>
