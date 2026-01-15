@@ -1,30 +1,29 @@
 <div class="contain">
-    <form action="">
+  <form class="formulario" action="">
+    <h3 class="title">Inicia session</h3>
 
-        <h3>Inicia session</h3>
-        
-        <section class="group">
-            <label for="email">Email</label>
-            <input type="text" id="Email" placeholder="Email">
-        </section>
-        
-        <section class="group">
-            <label for="password">Contraseña</label>
-            <input type="password">
-        </section>
+    <div class="container-fluid">
+      <section class="group-items">
+        <label class="item_name" for="email">Email: </label>
+        <input class="item_type" type="text" id="Email" placeholder="Email" />
+      </section>
 
-        <section class="options"> 
-            <div class="">
-                ¿Olvido su constraseña?
-            </div>
-            <div class="">
-                <input type="checkbox" name="show" id="show">
-                <label for="show">Mostrar contraseña</label>
-            </div>
-        </section>
+      <section class="group-items">
+        <label class="item_name" for="password">Contraseña: </label>
+        <input class="item_type" [type]="estado ? 'text' : 'password'" placeholder="*********"/>
+      </section>
 
-        <section>
-            <input type="button" value="Entrar">
-        </section>
-    </form>
+      <section class="options">
+        <div class="view">
+          <input (click)="togglePassword()" type="checkbox" name="show" id="show" />
+          <label for="show">   Mostrar contraseña</label>
+        </div>
+        <div class="restore">¿Olvido su constraseña?</div>
+      </section>
+
+      <section class="exit">
+        <input type="button" value="Entrar" />
+      </section>
+    </div>
+  </form>
 </div>
