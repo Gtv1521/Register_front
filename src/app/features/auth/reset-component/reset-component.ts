@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { environment } from '@environment';
 
 @Component({
   selector: 'app-reset-component',
@@ -27,13 +28,13 @@ export class ResetComponent {
     this.router.navigate(['/login']);
   }
 
-  onSubmit(){
-    if(this.reset.valid) {
+  onSubmit() {
+    if (this.reset.valid) {
       this.loading = true;
 
       const mail = this.reset.value;
 
       console.log(mail.email);
-    } 
+    }
   }
 }
