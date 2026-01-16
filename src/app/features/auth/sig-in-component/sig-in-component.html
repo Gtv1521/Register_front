@@ -1,1 +1,53 @@
-<p>sig-in-component works!</p>
+<div class="container">
+  <div class="container-fluid">
+    <h2 class="title">Nuevo usuario</h2>
+    <form class="container-form" action="">
+      <section class="group_item">
+        <label for="name" class="item_name">Nombre: </label
+        ><input id="name" type="text" class="item_type" placeholder="Nombre" />
+      </section>
+
+      <section class="group_item">
+        <label for="email" class="item_name">Email: </label>
+        <input id="email" type="text" class="item_type" placeholder="Email" />
+      </section>
+
+      <section class="group_item">
+        <label for="contraseña" class="item_name">Contraseña</label
+        ><input
+          id="contaseña"
+          [type]="estado ? 'text': 'password'"
+          class="item_type"
+          placeholder="Contraseña"
+        />
+      </section>
+
+      <section class="group_item">
+        <label for="confContraseña" class="item_name"
+          >Confirma contraseña:
+        </label>
+        <input
+          id="confContraseña"
+          [type]="estado ? 'text': 'password'"
+          class="item_type"
+          placeholder="Confirma contraseña"
+        />
+      </section>
+
+      <section class="options">
+        <div class="show">
+          <input type="checkbox" (click)="togglePassword()" name="" id="mostrar/ocultar" />
+          <label for="mostrar/ocultar"> {{ estado ? ' Ver':' Ocultar' }} contraseñas</label>
+        </div>
+      </section>
+
+      <section class="enviar">
+        <input type="button" value="Registrar" />
+      </section>
+
+      <section class="link" (click)="goLogin()">
+        <p>Iniciar session</p>
+      </section>
+    </form>
+  </div>
+</div>

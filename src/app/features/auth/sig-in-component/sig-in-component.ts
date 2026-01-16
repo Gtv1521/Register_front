@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router, RouteReuseStrategy } from '@angular/router';
 
 @Component({
   selector: 'app-sig-in-component',
@@ -8,4 +9,18 @@ import { Component } from '@angular/core';
 })
 export class SigInComponent {
 
+  // estados
+  estado: boolean = false;
+
+  // constructor
+  private router = inject(Router);
+
+  // metodos
+  togglePassword() {
+    this.estado = !this.estado;
+  }
+
+  goLogin() {
+    this.router.navigate(['/login']);
+  }
 }

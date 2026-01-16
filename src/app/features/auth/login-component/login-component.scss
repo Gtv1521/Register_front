@@ -19,7 +19,7 @@
 
     .title {
       width: 100%;
-      margin-top: 30px;
+      margin: 30px 0 40px 0;
       text-align: center;
       font-size: 2rem;
     }
@@ -47,9 +47,6 @@
           font-weight: 600;
           border-radius: 8px;
         }
-        &::checkmark {
-            background-color: red;
-        }
       }
 
       .options {
@@ -71,13 +68,24 @@
           font-weight: 700;
           
           &:hover {
-              background-color: var.$azul;
-              border: 2px solid var.$white;
-              color: var.$white;
+              border: 2px solid var.$azul;
+              box-shadow: 0 0 10px var.$azul;
           } 
         }
 
       }
     }
+
+    .add_user {
+      margin-top: 20px;
+    }
+  }
+}
+
+.link {
+  color: var.$rojo;
+  font-weight: 800;
+  &:hover{
+    color: var.$white;
   }
 }

@@ -1,0 +1,74 @@
+@use "../../../_styles/variables" as var;
+
+.container {
+  width: 100%;
+  height: 100lvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container-fluid {
+    background-color: var.$fondo_modal;
+    width: 50%;
+    // height: 50%;
+    border-radius: 20px;
+    padding: 50px 30px;
+    color: var.$white;
+
+    .title {
+      width: 100%;
+      margin: 30px 0 40px 0;
+      text-align: center;
+      font-size: 2rem;
+    }
+
+    .container-form {
+      width: 100%;
+      .group_item {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+
+        label {
+          width: 100%;
+          font-weight: 800;
+        }
+
+        input {
+          width: 90%;
+          margin-top: 10px;
+          padding: 4px 5%;
+          font-weight: 600;
+          border-radius: 8px;
+        }
+      }
+
+      .options {
+        height: 40px;
+      }
+
+      .enviar {
+        input {
+          width: 100%;
+          border-radius: 10px;
+          padding: 5px;
+          font-weight: 700;
+
+          &:hover {
+            border: 2px solid var.$azul;
+            box-shadow: 0 0 10px var.$azul;
+          }
+        }
+      }
+
+      .link {
+        color: var.$rojo;
+        font-weight: 800;
+        margin-top: 10px;
+        &:hover {
+          color: var.$white;
+        }
+      }
+    }
+  }
+}
