@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { LoginUseCase } from 'src/app/core/aplication/use-cases/session-usecase/login.useCase';
+import { LoginRequestDto } from 'src/app/core/infrastructure/dto/request/login-request.dto';
 
 @Component({
   selector: 'app-login-component',
@@ -10,15 +12,17 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class LoginComponent {
   estado: boolean = false;
+  loading: boolean = false;
+  error!: string;
 
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
+  private loginSession = inject(LoginUseCase);
 
   login = this.fb.group({
-    email: ['',[Validators.email, Validators.required]],
-    password: [ '', [Validators.required, Validators.minLength(8)]]
-  })
+    email: ['', [Validators.email, Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+  });
 
   togglePassword() {
     this.estado = !this.estado;
@@ -29,14 +33,24 @@ export class LoginComponent {
   }
 
   goReset() {
-    this.router.navigate(['/reset'])
+    this.router.navigate(['/reset']);
   }
 
-  onSubmit(){
+  onSubmit() {
     if (this.login.valid) {
-      const data = this.login.value;
+      this.loading = true;
+      const data = this.login.value as LoginRequestDto;
 
-      console.log(data.email, data.password);
+      this.loginSession.execate(data).subscribe({
+        next: (res) => {
+          this.loading = false;
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.error = err.error;          
+          this.loading = false;
+        },
+      });
     }
   }
 }

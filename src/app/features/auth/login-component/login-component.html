@@ -5,7 +5,13 @@
     <div class="container-fluid">
       <section class="group-items">
         <label class="item_name" for="email">Email: </label>
-        <input class="item_type" formControlName="email" type="text" id="Email" placeholder="Email" />
+        <input
+          class="item_type"
+          formControlName="email"
+          type="text"
+          id="Email"
+          placeholder="Email"
+        />
 
         @if (login.get('email')?.touched && login.get('email')?.invalid) {
         <div class="error-message">
@@ -71,5 +77,8 @@
     <div (click)="goSigIn()" class="add_user">
       <p class="link">Crear usuario</p>
     </div>
+    @if (error) {
+    {{ error }}
+    }
   </form>
 </div>
