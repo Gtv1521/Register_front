@@ -1,29 +1,75 @@
 <div class="contain">
-  <form class="formulario" action="">
+  <form class="formulario" [formGroup]="login" (ngSubmit)="onSubmit()">
     <h3 class="title">Inicia session</h3>
 
     <div class="container-fluid">
       <section class="group-items">
         <label class="item_name" for="email">Email: </label>
-        <input class="item_type" type="text" id="Email" placeholder="Email" />
+        <input class="item_type" formControlName="email" type="text" id="Email" placeholder="Email" />
+
+        @if (login.get('email')?.touched && login.get('email')?.invalid) {
+        <div class="error-message">
+          @if (login.get('email')?.errors?.['required']) {
+          <span>El correo es obligatorio</span>
+          }@else if(login.get('email')?.errors?.['minlength']) {
+          <span>
+            El correo debe tener al menos
+            {{ login.get('email')?.errors?.['minlength'].requiredLength }}
+          </span>
+          }@else {
+          <span>El correo tiene un error desconocido</span>
+          }
+        </div>
+        }
       </section>
 
       <section class="group-items">
         <label class="item_name" for="password">Contraseña: </label>
-        <input class="item_type" [type]="estado ? 'text' : 'password'" placeholder="*********"/>
+        <input
+          class="item_type"
+          [type]="estado ? 'text' : 'password'"
+          placeholder="Contraseña"
+          formControlName="password"
+        />
+        @if (login.get('password')?.touched && login.get('password')?.invalid) {
+        <div class="error-message">
+          @if (login.get('password')?.errors?.['required']) {
+          <span>La contraseña es obligatoria</span>
+          }@else if(login.get('password')?.errors?.['minlength']) {
+          <span>
+            La contraseña debe tener al menos
+            {{ login.get('email')?.errors?.['minlength'].requiredLength }}
+          </span>
+          }@else {
+          <span>La contraseña tiene un error desconocido</span>
+          }
+        </div>
+        }
       </section>
 
       <section class="options">
         <div class="view">
-          <input (click)="togglePassword()" type="checkbox" name="show" id="show" />
-          <label for="show">   Mostrar contraseña</label>
+          <input
+            (click)="togglePassword()"
+            type="checkbox"
+            name="show"
+            id="show"
+          />
+          <label for="show">
+            {{ estado ? " Ocultar" : " Mostrar" }} contraseña</label
+          >
         </div>
-        <div class="restore">¿Olvido su constraseña?</div>
+        <div class="restore" (click)="goReset()">
+          <p class="link">¿Olvido su constraseña?</p>
+        </div>
       </section>
 
       <section class="exit">
-        <input type="button" value="Entrar" />
+        <input type="submit" value="Entrar" />
       </section>
+    </div>
+    <div (click)="goSigIn()" class="add_user">
+      <p class="link">Crear usuario</p>
     </div>
   </form>
 </div>
