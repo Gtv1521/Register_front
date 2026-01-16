@@ -14,9 +14,9 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'sigin', component: SigInComponent },
       { path: 'reset', component: ResetComponent },
-      { path: 'dashboard', component: DashboardLayout },
     ],
   },
+  { path: 'dashboard', component: DashboardLayout },
 
 
 ];

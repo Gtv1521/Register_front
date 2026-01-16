@@ -1,29 +1,65 @@
-<div class="card-search">
-  <div class="search-box">
-    <input type="text" [(ngModel)]="busqueda" [placeholder]="
-        filtroActual === 'todo' ? 'Buscar en todo' :
-        filtroActual === 'Completo' ? 'Buscar en completos' :
-        filtroActual === 'pendiente' ? 'Buscar en pendientes' :
-        filtroActual === 'registro' ? 'Buscar por código o registro' :
-        'Buscar por cliente'
-      " (keyup.enter)="onBuscar()" />
-    <div class="modos">
-
-      <button [class.active]="filtroActual === 'todo'" (click)="setCambiarFiltro('todo')">
-        Todo
-      </button>
-      <button [class.active]="filtroActual === 'Completo'" (click)="setCambiarFiltro('Completo')">
-        Completo
-      </button>
-      <button [class.active]="filtroActual === 'pendiente'" (click)="setCambiarFiltro('pendiente')">
-        Pendiente
-      </button>
-      <button [class.active]="filtroActual === 'registro'" (click)="setCambiarFiltro('registro')">
-        Registro
-      </button>
-      <button [class.active]="filtroActual === 'cliente'" (click)="setCambiarFiltro('cliente')">
-        Cliente
-      </button>
+<div class="container">
+  <div class="container-fluid">
+    <!-- componente de busqueda -->
+    <mat-icon class="icons">delete</mat-icon>
+    <div class="card-search">
+      <div class="search-box">
+        <input type="text" [(ngModel)]="busqueda" [placeholder]="
+          filtroActual === 'todo' ? 'Buscar en todo' :
+          filtroActual === 'Completo' ? 'Buscar en completos' :
+          filtroActual === 'pendiente' ? 'Buscar en pendientes' :
+          filtroActual === 'registro' ? 'Buscar por código o registro' :
+          'Buscar por cliente'
+        " (keyup.enter)="onBuscar()" />
+        <mat-icon class="search-icon" (click)="onBuscar()">search</mat-icon>
+      </div>
     </div>
-
+    <mat-icon class="icons">exit_to_app</mat-icon>
   </div>
+  <!--mapeo de registros-->
+  <div class="content">
+    <div class="registers">
+      @for (registro of registrosFiltrados; track registro?.registro?.id) {
+      <app-card-component [registro]="registro" (verDetalleEvent)="verDetalle($event)"></app-card-component>
+      }
+    </div>
+  </div>
+
+  <footer class="dashboard-footer">
+    <!-- usuario logeado -->
+    <div class="footer-left">
+      <mat-icon class="user-icon">account_circle</mat-icon>
+      <div class="user-info">
+        <span class="user-name">Juan Pérez</span>
+        <span class="user-role">Técnico</span>
+      </div>
+    </div>
+    <div class="footer-center">
+      <span class="system-name">Centro de Reparación Electrónica</span>
+      <span class="system-version">v1.0.0</span>
+    </div>
+    <div class="footer-right">
+      <!-- filtros del buscador -->
+      <div class="filters">
+        <div class="modos">
+
+          <button [class.active]="filtroActual === 'todo'" (click)="setCambiarFiltro('todo')">
+            Todo
+          </button>
+          <button [class.active]="filtroActual === 'Completo'" (click)="setCambiarFiltro('Completo')">
+            Completo
+          </button>
+          <button [class.active]="filtroActual === 'pendiente'" (click)="setCambiarFiltro('pendiente')">
+            Pendiente
+          </button>
+          <button [class.active]="filtroActual === 'registro'" (click)="setCambiarFiltro('registro')">
+            Registro
+          </button>
+          <button [class.active]="filtroActual === 'cliente'" (click)="setCambiarFiltro('cliente')">
+            Cliente
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
