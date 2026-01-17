@@ -1,6 +1,6 @@
-import { ClientEntity } from "./client.entity";
-import { ObservationEntity } from "./observation.entity";
-import { RegisterEntity } from "./register.entity";
+import { ClientEntity } from "./entitys/client.entity";
+import { ObservationEntity } from "./entitys/observation.entity";
+import { RegisterEntity } from "./entitys/register.entity";
 
 export interface RegisterObservationEntity {
   registro: RegisterEntity,
