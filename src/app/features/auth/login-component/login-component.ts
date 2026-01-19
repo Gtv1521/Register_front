@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -13,7 +14,7 @@ import { LoginRequestDto } from 'src/app/core/infrastructure/dto/request/login-r
 export class LoginComponent {
   estado: boolean = false;
   loading: boolean = false;
-  error!: string;
+  error!: HttpErrorResponse;
 
   private router = inject(Router);
   private fb = inject(FormBuilder);
@@ -47,7 +48,8 @@ export class LoginComponent {
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-          this.error = err.error;          
+          this.error = err; 
+          console.log(this.error)         
           this.loading = false;
         },
       });

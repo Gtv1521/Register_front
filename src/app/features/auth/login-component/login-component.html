@@ -78,7 +78,16 @@
       <p class="link">Crear usuario</p>
     </div>
     @if (error) {
-    {{ error }}
+      @if (error.status === 400) {
+        
+        <div class="error">
+          {{ error.error.message}}
+        </div>
+        <div class="sessions">
+          <p>Ver sesiones</p>
+        </div>
+
+      }
     }
   </form>
 </div>
