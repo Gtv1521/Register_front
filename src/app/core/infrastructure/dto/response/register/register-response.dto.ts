@@ -1,8 +1,8 @@
-export interface RegisterEntity {
+export interface RegisterResponseDto {
   id: string,
   idClient: string,
-  urlQr: string,
   statusRegister: string,
+  urlQr: string,
   idQr: string,
   createdAt: string
 }

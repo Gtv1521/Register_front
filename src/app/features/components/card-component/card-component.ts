@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, output } from '@angular/core';
-import { RegisterObservationEntity } from '../../../core/domain/registerObservation.entity';
+import { RegisterObservationEntity } from '../../../core/domain/entitys/registerObservation.entity';
 
 @Component({
   selector: 'app-card-component',

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CardComponent } from "../../components/card-component/card-component";
-import { RegisterObservationEntity } from '../../../core/domain/registerObservation.entity';
+import { RegisterObservationEntity } from '../../../core/domain/entitys/registerObservation.entity';
 import { MatIconModule } from '@angular/material/icon';
+import { RegisterGetAllUsecase } from 'src/app/core/aplication/use-cases/register-usecase/registerGetAll-usecase';
 
 
 
@@ -19,6 +20,9 @@ export class DashboardLayout {
   busqueda = '';
   registrosFiltrados: RegisterObservationEntity[] = [];
   registros: RegisterObservationEntity[] = [];
+  private registers = inject(RegisterGetAllUsecase)
+
+
 
   setCambiarFiltro(nuevoFiltro: filterMode) {
     this.busqueda = '';
@@ -73,28 +77,28 @@ export class DashboardLayout {
 
   ngOnInit() {
     // Aquí puedes cargar los registros iniciales desde un servicio o API
-    this.registros = [
-      {
-        registro: { id: '1', idClient: '101', urlQr: 'http://example.com/qr1', status: 'Completo' },
-        observaciones: { id: "201", idRegister: "1", description: "Observación 1", idUser: "301", photos: [{ id: '1234', url: "https://res.cloudinary.com/djtxchura/image/upload/v1767118470/observation/1371343.jpg" }] },
-        cliente: { id: '101', name: 'Cliente A', email: '<EMAIL>', phone: 123456789 }
-      },
-      {
-        registro: { id: '2', idClient: '102', urlQr: 'http://example.com/qr2', status: 'pendiente' },
-        observaciones: { id: '202', idRegister: '2', description: 'Observación 2', idUser: "302", photos: [] },
-        cliente: { id: '102', name: 'Cliente B', email: '<EMAIL>', phone: 987654321 }
-      },
-      {
-        registro: { id: '3', idClient: '103', urlQr: 'http://example.com/qr3', status: 'Completo' },
-        observaciones: { id: '203', idRegister: '3', description: 'Observación 3', idUser: "303", photos: [{ id: '1234', url: "https://res.cloudinary.com/djtxchura/image/upload/v1767118470/observation/1371343.jpg" }] },
-        cliente: { id: '103', name: 'Cliente C', email: '<EMAIL>', phone: 555555555 }
-      },
-      {
-        registro: { id: '4', idClient: '104', urlQr: 'http://example.com/qr4', status: 'pendiente' },
-        observaciones: { id: '204', idRegister: '4', description: 'Observación 4', idUser: "304", photos: [] },
-        cliente: { id: '104', name: 'Cliente D', email: '<EMAIL>', phone: 111111111 }
-      }
-    ];
+    // this.registros = [
+    //   {
+    //     registro: { id: '1', idClient: '101', urlQr: 'http://example.com/qr1', statusRegister: 'Completo',  },
+    //     observaciones: { id: "201", idRegister: "1", description: "Observación 1", idUser: "301", photos: [{ id: '1234', url: "https://res.cloudinary.com/djtxchura/image/upload/v1767118470/observation/1371343.jpg" }] },
+    //     cliente: { id: '101', name: 'Cliente A', email: '<EMAIL>', phone: 123456789 }
+    //   },
+    //   {
+    //     registro: { id: '2', idClient: '102', urlQr: 'http://example.com/qr2', statusRegister: 'pendiente' },
+    //     observaciones: { id: '202', idRegister: '2', description: 'Observación 2', idUser: "302", photos: [] },
+    //     cliente: { id: '102', name: 'Cliente B', email: '<EMAIL>', phone: 987654321 }
+    //   },
+    //   {
+    //     registro: { id: '3', idClient: '103', urlQr: 'http://example.com/qr3', statusRegister: 'Completo' },
+    //     observaciones: { id: '203', idRegister: '3', description: 'Observación 3', idUser: "303", photos: [{ id: '1234', url: "https://res.cloudinary.com/djtxchura/image/upload/v1767118470/observation/1371343.jpg" }] },
+    //     cliente: { id: '103', name: 'Cliente C', email: '<EMAIL>', phone: 555555555 }
+    //   },
+    //   {
+    //     registro: { id: '4', idClient: '104', urlQr: 'http://example.com/qr4', statusRegister: 'pendiente' },
+    //     observaciones: { id: '204', idRegister: '4', description: 'Observación 4', idUser: "304", photos: [] },
+    //     cliente: { id: '104', name: 'Cliente D', email: '<EMAIL>', phone: 111111111 }
+    //   }
+    // ];
     this.registrosFiltrados = this.registros;
   }
 }
