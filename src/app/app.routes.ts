@@ -4,6 +4,7 @@ import { AuthComponent } from './features/auth/auth-component/auth-component';
 import { SigInComponent } from './features/auth/sig-in-component/sig-in-component';
 import { ResetComponent } from './features/auth/reset-component/reset-component';
 import { DashboardLayout } from './features/dashboard/dashboard-layout/dashboard-layout';
+import { NotFound } from './features/not-found/not-found';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -17,6 +18,8 @@ export const routes: Routes = [
     ],
   },
   { path: 'dashboard', component: DashboardLayout },
+  { path: 'register/:id', component: DashboardLayout}, //  esta es la ruta para mostrar los registros 
+  { path: '**', component: NotFound},
 
 
 ];

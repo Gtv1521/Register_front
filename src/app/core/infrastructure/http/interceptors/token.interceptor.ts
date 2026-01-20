@@ -4,15 +4,41 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   intercept(
-    request: HttpRequest<unknown>,
+    request: HttpRequest<any>,
     next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    return next.handle(request);
+  ): Observable<HttpEvent<any>> {
+     const authReq = this.addTokenToRequest(request);
+    
+    // Envía la petición modificada
+    return next.handle(authReq).pipe(
+      // Manejo global de errores
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error en la petición:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private addTokenToRequest(req: HttpRequest<any>): HttpRequest<any> {
+    // Obtén el token de localStorage
+    const token = localStorage.getItem('token');
+    
+    // Si existe el token, clona la petición y añade el header
+    if (token) {
+      return req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+    
+    return req;
   }
 }

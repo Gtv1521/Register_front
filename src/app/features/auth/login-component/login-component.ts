@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoginUseCase } from 'src/app/core/aplication/use-cases/session-usecase/login.useCase';
 import { LoginRequestDto } from 'src/app/core/infrastructure/dto/request/login-request.dto';
+import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 
 @Component({
   selector: 'app-login-component',
@@ -19,6 +20,7 @@ export class LoginComponent {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private loginSession = inject(LoginUseCase);
+  private auth = inject(AuthService);
 
   login = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
@@ -45,11 +47,11 @@ export class LoginComponent {
       this.loginSession.execate(data).subscribe({
         next: (res) => {
           this.loading = false;
+          this.auth.setAuth(res.idUser, res.idSession);
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           this.error = err; 
-          console.log(this.error)         
           this.loading = false;
         },
       });

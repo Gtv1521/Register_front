@@ -6,16 +6,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  // color: wheat;
 
   .formulario {
     background-color: var.$fondo_modal;
     width: 50%;
-    // height: 50%;
     border-radius: 20px;
     padding: 50px 30px;
     color: var.$white;
-    // position: relative;
 
     .title {
       width: 100%;
@@ -25,7 +22,6 @@
     }
 
     .container-fluid {
-    //   position: absolute;
       width: 100%;
       margin-top: 10px;
       bottom: 90px;

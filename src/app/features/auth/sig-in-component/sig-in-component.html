@@ -1,25 +1,83 @@
 <div class="container">
   <div class="container-fluid">
     <h2 class="title">Nuevo usuario</h2>
-    <form class="container-form" action="">
+    <form class="container-form" [formGroup]="sigin" (ngSubmit)="onSubmit()">
       <section class="group_item">
         <label for="name" class="item_name">Nombre: </label
-        ><input id="name" type="text" class="item_type" placeholder="Nombre" />
+        ><input
+          id="name"
+          type="text"
+          class="item_type"
+          placeholder="Nombre"
+          formControlName="name"
+        />
+
+        @if (sigin.get("name")?.touched && sigin.get("name")?.invalid) {
+          <div class="error-message">
+            @if (sigin.get("name")?.errors?.["required"]) {
+              <span>el nombre es obligatorio</span>
+            } @else if (sigin.get("name")?.errors?.["minlength"]) {
+              <span>
+                El nombre debe tener al menos
+                {{ sigin.get("email")?.errors?.["minlength"].requiredLength }}
+              </span>
+            } @else {
+              <span>El nombre tiene un error desconocido</span>
+            }
+          </div>
+        }
       </section>
 
       <section class="group_item">
         <label for="email" class="item_name">Email: </label>
-        <input id="email" type="text" class="item_type" placeholder="Email" />
+        <input
+          id="email"
+          type="text"
+          class="item_type"
+          formControlName="email"
+          placeholder="Email"
+        />
+
+        @if (sigin.get("email")?.touched && sigin.get("email")?.invalid) {
+          <div class="error-message">
+            @if (sigin.get("email")?.errors?.["required"]) {
+              <span>El correo es obligatorio</span>
+            } @else if (sigin.get("email")?.errors?.["minlength"]) {
+              <span>
+                El correo debe tener al menos
+                {{ sigin.get("email")?.errors?.["minlength"].requiredLength }}
+              </span>
+            } @else {
+              <span>El correo tiene un error desconocido</span>
+            }
+          </div>
+        }
       </section>
 
       <section class="group_item">
         <label for="contraseña" class="item_name">Contraseña</label
         ><input
-          id="contaseña"
-          [type]="estado ? 'text': 'password'"
+          id="contraseña"
+          [type]="estado ? 'text' : 'password'"
           class="item_type"
+          formControlName="password"
           placeholder="Contraseña"
         />
+
+        @if (sigin.get("password")?.touched && sigin.get("password")?.invalid) {
+          <div class="error-message">
+            @if (sigin.get("password")?.errors?.["required"]) {
+              <span>La contraseña es obligatoria</span>
+            } @else if (sigin.get("password")?.errors?.["minlength"]) {
+              <span>
+                La contraseñá debe tener al menos
+                {{ sigin.get("email")?.errors?.["minlength"].requiredLength }}
+              </span>
+            } @else {
+              <span>la contraseña tiene un error desconocido</span>
+            }
+          </div>
+        }
       </section>
 
       <section class="group_item">
@@ -28,26 +86,64 @@
         </label>
         <input
           id="confContraseña"
-          [type]="estado ? 'text': 'password'"
+          [type]="estado ? 'text' : 'password'"
           class="item_type"
+          formControlName="confPassword"
           placeholder="Confirma contraseña"
         />
+
+        @if (
+          sigin.get("confPassword")?.touched &&
+          sigin.get("confPassword")?.invalid
+        ) {
+          <div class="error-message">
+            @if (sigin.get("confPassword")?.errors?.["required"]) {
+              <span>La contraseña es obligatoria</span>
+            } @else if (sigin.get("confPassword")?.errors?.["minlength"]) {
+              <span>
+                La contraseña debe tener al menos
+                {{
+                  sigin.get("confPassword")?.errors?.["minlength"]
+                    .requiredLength
+                }}
+              </span>
+            } @else if (
+              sigin.get("confPassword")?.errors?.["confirmPasswordValidator"]
+            ) {
+              Las contraseñás no coinciden
+            } @else {
+              <span>El correo tiene un error desconocido</span>
+            }
+          </div>
+        }
       </section>
 
       <section class="options">
         <div class="show">
-          <input type="checkbox" (click)="togglePassword()" name="" id="mostrar/ocultar" />
-          <label for="mostrar/ocultar"> {{ estado ? ' Ocultar':' Ver' }} contraseñas</label>
+          <input
+            type="checkbox"
+            (click)="togglePassword()"
+            name=""
+            id="mostrar/ocultar"
+          />
+          <label for="mostrar/ocultar">
+            {{ estado ? " Ocultar" : " Ver" }} contraseñas</label
+          >
         </div>
       </section>
 
       <section class="enviar">
-        <input type="button" value="Registrar" />
+        <input type="submit" value="Registrar" />
       </section>
 
       <section class="link" (click)="goLogin()">
         <p>Iniciar session</p>
       </section>
     </form>
+    @if (error) {
+      @if (error.status === 400) {
+        {{ error.message }}
+      }
+    }
   </div>
 </div>

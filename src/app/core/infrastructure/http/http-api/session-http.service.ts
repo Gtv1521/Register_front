@@ -5,16 +5,18 @@ import { SigInRequestDto } from '../../dto/request/sig-in-request.dto';
 import { SessionEntity } from 'src/app/core/domain/entitys/session.entity';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environment';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SessionResponseDto } from '../../dto/response/session-response.dto';
 import { SessionMapper } from 'src/app/core/aplication/mappers/session.mapper';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SessionHttpService
-  implements ISession<LoginRequestDto, SigInRequestDto, SessionEntity>
-{
+export class SessionHttpService implements ISession<
+  LoginRequestDto,
+  SigInRequestDto,
+  SessionEntity
+> {
   apiUrl = `${environment.apiUrl}/Session`;
 
   private http = inject(HttpClient);

@@ -7,14 +7,9 @@ export class SessionMapper
   implements IMapper<SessionResponseDto, SessionEntity>
 {
   fromDto(dto: SessionResponseDto): SessionEntity {
-    return {
-      idSession: dto.idSession,
-      idUser: dto.idUser,
-      accessToken: dto.accessToken,
-      refreshToken: dto.refreshToken,
-    };
+    return dto as SessionEntity;
   }
   toDto(entity: SessionEntity): SessionResponseDto {
-    throw new Error('Method not implemented.');
+    return entity as SessionResponseDto;
   }
 }
