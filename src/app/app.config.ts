@@ -18,6 +18,8 @@ import { USER_TOKEN } from './core/aplication/tokens/user.token';
 import { SessionHttpService } from './core/infrastructure/http/http-api/session-http.service';
 import { RegisterHttpService } from './core/infrastructure/http/http-api/register-http.service';
 import { TokenInterceptor } from './core/infrastructure/http/interceptors/token.interceptor';
+import { ObservationHttpService } from './core/infrastructure/http/http-api/observation-http.service';
+import { OBSERVATION_TOKEN } from './core/aplication/tokens/observation.token';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,4 +37,6 @@ export const appConfig: ApplicationConfig = {
     { provide: USER_TOKEN, useClass: UserHttpService },
     provideRouter(routes),
   ],
+    { provide: OBSERVATION_TOKEN, useClass: ObservationHttpService },
+  ]
 };

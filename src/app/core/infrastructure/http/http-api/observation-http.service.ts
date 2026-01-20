@@ -20,8 +20,8 @@ export class ObservationHttpService implements IObservation<ObservationRequestDt
   Get(id: string): Observable<ObservationEntity> {
     return this.http.get<ObservationResponseDto>(`${this.Url}/${id}`).pipe(map(res => this.mapper.fromDto(res)));
   }
-  GetAll(): Observable<ObservationEntity[]> {
-    return this.http.get<ObservationResponseDto[]>(this.Url).pipe(map(res => res.map(c => this.mapper.fromDto(c))));
+  GetAll(id: string, page: number, size: number): Observable<ObservationEntity[]> {
+    return this.http.get<ObservationResponseDto[]>(`${this.Url}/${id}/${page}/${size}`).pipe(map(res => res.map(c => this.mapper.fromDto(c))));
   }
   Create(dto: ObservationRequestDto): Observable<string> {
     return this.http.post<string>(`${this.Url}`, dto);

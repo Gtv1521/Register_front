@@ -1,0 +1,11 @@
+<div>
+  @for (observacion of observationsList; track observacion?.id) {
+  <div class="observation-card">
+    <h3>{{ observacion.description}}</h3>
+    @for (photo of observacion.photos; track photo.id) {
+    <img [src]="photo.photo" class="observation-photo">
+    }
+  </div>
+
+  }
+</div>

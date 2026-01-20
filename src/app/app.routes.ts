@@ -5,6 +5,7 @@ import { SigInComponent } from './features/auth/sig-in-component/sig-in-componen
 import { ResetComponent } from './features/auth/reset-component/reset-component';
 import { DashboardLayout } from './features/dashboard/dashboard-layout/dashboard-layout';
 import { NotFound } from './features/not-found/not-found';
+import { SeeObservation } from './features/observations/see-observation/see-observation';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -18,8 +19,9 @@ export const routes: Routes = [
     ],
   },
   { path: 'dashboard', component: DashboardLayout },
-  { path: 'register/:id', component: DashboardLayout}, //  esta es la ruta para mostrar los registros 
-  { path: '**', component: NotFound},
+  { path: 'register/:id', component: DashboardLayout }, //  esta es la ruta para mostrar los registros
+  { path: '**', component: NotFound },
+  { path: 'dashboard/see-observation/:id', component: SeeObservation },
 
 
 ];

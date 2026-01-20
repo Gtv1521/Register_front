@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { IFiter } from 'src/app/core/domain/interfaces/ICrud';
-import { SessionResponseDto } from '../../dto/response/session-response.dto';
-import { SessionEntity } from 'src/app/core/domain/entitys/session.entity';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environment';
@@ -26,7 +24,7 @@ export class RegisterHttpService implements IFiter<RegisterRequestDto, RegisterE
     return this.http.get<RegisterResponseDto[]>(`${this.Url}`)
       .pipe(map(res => res.map(c => this.mapper.fromDto(c))));
   }
-  Filter(data: string): Observable<RegisterEntity[]> {
+  Filter(): Observable<RegisterEntity[]> {
     return this.http.get<RegisterResponseDto[]>(`${this.Url}/Filter`)
       .pipe(map(res => res.map(c => this.mapper.fromDto(c))));
   }

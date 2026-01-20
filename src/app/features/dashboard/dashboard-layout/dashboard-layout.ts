@@ -10,6 +10,7 @@ import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/u
 import { SessionComponent } from '../../components/session-component/session-component';
 import { LoaderSessionComponent } from '../../components/floads/loader-session-component/loader-session-component';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
+import { Router } from '@angular/router';
 
 type FilterMode =
   | 'todo'
@@ -47,6 +48,7 @@ export class DashboardLayout implements OnInit {
   private registers = inject(RegisterGetAllUsecase);
   private auth = inject(AuthService);
 
+  private router = inject(Router);
   ngOnInit(): void {
     this.registers.execute().subscribe({
       next: (res) => {
@@ -158,7 +160,7 @@ export class DashboardLayout implements OnInit {
   }
 
   verDetalle(id: string): void {
-    console.log('Ver detalle:', id);
+    this.router.navigate(['/dashboard/see-observation', id]);
   }
 
   crearObservacion(id: number): void {

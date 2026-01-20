@@ -15,5 +15,6 @@ export interface IFiter<dto, entity> extends Omit<ICrud<dto, entity>, "Delete"> 
 export interface IUser<dto, entity> extends Omit<ICrud<dto, entity>, "Create" | "Delete"> {
 }
 
-export interface IObservation<dto, entity> extends Omit<ICrud<dto, entity>, "Delete"> {
+export interface IObservation<dto, entity> extends Omit<ICrud<dto, entity>, "Delete" | "GetAll"> {
+  GetAll(id: string, page: number, size: number): Observable<entity[]>;
 }
