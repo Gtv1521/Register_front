@@ -11,9 +11,10 @@
   color: var.$black;
   box-shadow: 0 0 10px var.$fondo_modal;
   text-align: center;
+  min-height: 320px;
 
   .imagen {
-    width: 90%;
+    width: 70%;
     border-radius: 20px;
   }
 

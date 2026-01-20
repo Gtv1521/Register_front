@@ -1,104 +1,154 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CardComponent } from "../../components/card-component/card-component";
-import { RegisterObservationEntity } from '../../../core/domain/entitys/registerObservation.entity';
 import { MatIconModule } from '@angular/material/icon';
+
+import { CardComponent } from '../../components/card-component/card-component';
 import { RegisterGetAllUsecase } from 'src/app/core/aplication/use-cases/register-usecase/registerGetAll-usecase';
+import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
+import { UserEntity } from 'src/app/core/domain/entitys/user.entity';
+import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
 
-
-
-type filterMode = 'todo' | 'Completo' | 'pendiente' | 'registro' | 'cliente';
+type FilterMode = 'todo' | 'Pendiente' | 'En progreso' | 'Completado' | 'cancelado';
 
 @Component({
   selector: 'app-dashboard-layout',
+  standalone: true,
   imports: [FormsModule, CardComponent, MatIconModule],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.scss',
 })
-export class DashboardLayout {
-  filtroActual: filterMode = 'todo';
-  busqueda = '';
-  registrosFiltrados: RegisterObservationEntity[] = [];
-  registros: RegisterObservationEntity[] = [];
-  private registers = inject(RegisterGetAllUsecase)
+export class DashboardLayout implements OnInit {
 
+  /* =======================
+     ESTADO DE LA VISTA
+     ======================= */
+  filtroActual: FilterMode = 'todo';
+  busqueda: string = '';
+  page: number = 1;
 
+  todosRegistros: RegisterEntity[] = [];
+  registrosFiltrados: RegisterEntity[] = [];
+  usuario: UserEntity | any;
+  private user = inject(UserGetUseCase)
+  private registers = inject(RegisterGetAllUsecase);
+  ngOnInit(): void {
+    this.registers.execute().subscribe({
+      next: res => {
+        this.todosRegistros = res;
+        this.aplicarFiltroYBusqueda();
+      },
+      error: err => console.error(err),
+    });
+    this.user.execute("696e8018b353e25d715d7d72").subscribe({
+      next: res => {
+        this.usuario = res;
+      },
+      error: err => console.error(err),
+    });
 
-  setCambiarFiltro(nuevoFiltro: filterMode) {
+  }
+  cambiarFiltro(filtro: FilterMode): void {
+    this.filtroActual = filtro;
     this.busqueda = '';
-    this.filtroActual = nuevoFiltro;
+    this.aplicarFiltroYBusqueda();
   }
 
-  onBuscar() {
+  onBuscar(): void {
+    this.aplicarFiltroYBusqueda();
+  }
+  private aplicarFiltroYBusqueda(): void {
+    let resultado = this.filtrarPorEstado(this.todosRegistros);
+
+    if (this.busqueda.trim()) {
+      resultado = this.buscarSegunFiltro(resultado);
+    }
+
+    this.registrosFiltrados = resultado;
+  }
+  private filtrarPorEstado(registros: RegisterEntity[]): RegisterEntity[] {
     switch (this.filtroActual) {
+
+      case 'Pendiente':
+        return this.todosRegistros.filter(
+          r => r.statusRegister === 'Pending'
+        );
+
+      case 'En progreso':
+        return registros.filter(
+          r => r.statusRegister === 'InProgress'
+        );
+
+      case 'Completado':
+        return registros.filter(
+          r => r.statusRegister == "Completed"
+        )
+
+      case 'cancelado':
+        return registros.filter(
+          r => r.statusRegister == "Cancelled"
+        )
+
       case 'todo':
-        this.buscarPorTodo();
-        break;
-      case 'Completo':
-        this.buscarPorCompleto();
-        break;
-      case 'pendiente':
-        this.buscarPorPendiente();
-        break;
-      case 'registro':
-        this.buscarPorRegistro();
-        break;
-      case 'cliente':
-        this.buscarPorCliente();
-        break;
+      default:
+        return registros;
     }
   }
-  verDetalle(id: string) {
-    console.log('Ver detalle del registro con ID:', id);
-  }
-  crearObservacion(id: number) {
-    console.log('Crear observacion para el registro con ID:', id);
-  }
-  private buscarPorTodo() {
-    console.log('Buscando en todo:', this.busqueda);
+  private buscarSegunFiltro(registros: RegisterEntity[]): RegisterEntity[] {
+    const texto = this.busqueda.toLowerCase().trim();
 
-  }
-  private buscarPorCompleto() {
-    console.log('Buscando en Completo:', this.busqueda);
+    switch (this.filtroActual) {
 
-  }
-  private buscarPorPendiente() {
-    console.log('Buscando en pendiente:', this.busqueda);
+      case 'Pendiente':
+        return registros.filter(r =>
+          r.observation?.description
+            ?.toLowerCase()
+            .includes(texto)
+        );
+      case 'En progreso':
+        return registros.filter(r =>
+          r.observation?.description?.toLowerCase().includes(texto)
+        );
+      case 'Completado':
+        return registros.filter(r =>
+          r.observation?.description?.toLowerCase().includes(texto)
+        );
+      case 'cancelado':
+        return registros.filter(r =>
+          r.observation?.description?.toLowerCase().includes(texto)
+        );
 
+      case 'todo':
+      default:
+        return this.buscarGlobal(registros, texto);
+    }
   }
-  private buscarPorRegistro() {
-    console.log('Buscando en registro:', this.busqueda);
+  private buscarGlobal(
+    registros: RegisterEntity[],
+    texto: string
+  ): RegisterEntity[] {
 
+    return registros.filter(r => {
+      const contenido = [
+        r.id,
+        r.idClient,
+        r.statusRegister,
+        r.observation?.description,
+        ...(r.clients
+          ? [`${r.clients.name} ${r.clients.email} ${r.clients.phone}`] : [])
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return contenido.includes(texto);
+    });
   }
-  private buscarPorCliente() {
-    console.log('Buscando en cliente:', this.busqueda);
 
+  verDetalle(id: string): void {
+    console.log('Ver detalle:', id);
   }
 
-  ngOnInit() {
-    // Aquí puedes cargar los registros iniciales desde un servicio o API
-    // this.registros = [
-    //   {
-    //     registro: { id: '1', idClient: '101', urlQr: 'http://example.com/qr1', statusRegister: 'Completo',  },
-    //     observaciones: { id: "201", idRegister: "1", description: "Observación 1", idUser: "301", photos: [{ id: '1234', url: "https://res.cloudinary.com/djtxchura/image/upload/v1767118470/observation/1371343.jpg" }] },
-    //     cliente: { id: '101', name: 'Cliente A', email: '<EMAIL>', phone: 123456789 }
-    //   },
-    //   {
-    //     registro: { id: '2', idClient: '102', urlQr: 'http://example.com/qr2', statusRegister: 'pendiente' },
-    //     observaciones: { id: '202', idRegister: '2', description: 'Observación 2', idUser: "302", photos: [] },
-    //     cliente: { id: '102', name: 'Cliente B', email: '<EMAIL>', phone: 987654321 }
-    //   },
-    //   {
-    //     registro: { id: '3', idClient: '103', urlQr: 'http://example.com/qr3', statusRegister: 'Completo' },
-    //     observaciones: { id: '203', idRegister: '3', description: 'Observación 3', idUser: "303", photos: [{ id: '1234', url: "https://res.cloudinary.com/djtxchura/image/upload/v1767118470/observation/1371343.jpg" }] },
-    //     cliente: { id: '103', name: 'Cliente C', email: '<EMAIL>', phone: 555555555 }
-    //   },
-    //   {
-    //     registro: { id: '4', idClient: '104', urlQr: 'http://example.com/qr4', statusRegister: 'pendiente' },
-    //     observaciones: { id: '204', idRegister: '4', description: 'Observación 4', idUser: "304", photos: [] },
-    //     cliente: { id: '104', name: 'Cliente D', email: '<EMAIL>', phone: 111111111 }
-    //   }
-    // ];
-    this.registrosFiltrados = this.registros;
+  crearObservacion(id: number): void {
+    console.log('Crear observación:', id);
   }
 }

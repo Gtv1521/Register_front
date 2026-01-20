@@ -1,4 +1,5 @@
 export interface ObservationRequestDto {
+  id: string,
   IdRegister: string,
   Type: number,
   Description: string,

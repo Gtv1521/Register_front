@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, output } from '@angular/core';
-import { RegisterObservationEntity } from '../../../core/domain/entitys/registerObservation.entity';
+import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 
 @Component({
   selector: 'app-card-component',
@@ -9,9 +9,21 @@ import { RegisterObservationEntity } from '../../../core/domain/entitys/register
 })
 export class CardComponent {
 
-  @Input() registro?: RegisterObservationEntity;
+  imageUrl!: string | null | undefined;
+
+  @Input() registro!: RegisterEntity;
   @Output() verDetalleEvent = new EventEmitter<string>();
 
+
+  ngOnInit() {
+    this.imageUrl =
+      this.registro.observation === null || this.registro.observation === undefined
+        ? '/generic.webp'
+
+        : this.registro.observation?.photos?.[0]?.photo
+
+    console.log(this.registro.observation, this.registro.clients)
+  }
   public verDetalle(idObservacion?: string) {
     this.verDetalleEvent.emit(idObservacion);
   }

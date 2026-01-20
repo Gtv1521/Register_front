@@ -1,17 +1,20 @@
 <div class="card">
   <div class="card-header">
-    <h3>{{ registro?.cliente?.name }}</h3>
+    <h3>{{ registro.clients?.name }}</h3>
+    <h3>{{ registro.clients?.phone}}</h3>
   </div>
   <div class="card-body">
-    <img class="imagen" [src]="registro?.observaciones?.photos?.[0]?.url">
-    <p><strong>Estado:</strong> {{ registro?.registro?.statusRegister }}</p>
-    <p><strong>Descripción:</strong> {{ registro?.observaciones?.description }}</p>
+
+    <img class="imagen" [src]="imageUrl" />
+
+    <p><strong>Estado:</strong> {{ registro.statusRegister }}</p>
+    <p><strong>Descripción:</strong> {{registro.observation?.description || 'Sin description' }}</p>
   </div>
   <div class="card-footer">
-    <button class="btn btn-secondary" (click)="verDetalle(registro?.observaciones?.id)">
+    <button class="btn btn-secondary" (click)="verDetalle(registro.id)">
       Ver detalle
     </button>
-    <button class="btn btn-primary" (click)="crearObservacion(registro?.registro?.id)">
+    <button class="btn btn-primary" (click)="crearObservacion(registro.id)">
       Nueva observación
     </button>
   </div>

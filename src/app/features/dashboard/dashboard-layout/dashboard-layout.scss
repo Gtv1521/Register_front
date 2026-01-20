@@ -139,6 +139,7 @@
   .footer-right {
     display: flex;
     align-items: center;
+    text-align: center;
   }
 
   /* ===== Usuario ===== */
@@ -147,6 +148,12 @@
     display: flex;
     flex-direction: column;
     line-height: 1.1;
+  }
+
+  .footer-left .user-icon {
+    margin-right: 7px;
+    font-size: 25px;
+    color: var.$white;
   }
 
   .user-name {
