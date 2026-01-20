@@ -9,14 +9,14 @@ import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.
   styleUrl: './session-component.css',
 })
 export class SessionComponent {
+  
   private auth = inject(AuthService);
-  private route = inject(Router);
+  private route = inject(Router)
+
 
   ngOnInit() {
-
-    console.log(this.auth.getSession())
-    if (this.auth.getSession() == null) {
-      this.route.navigate(['/login']);
+    if(this.auth.getSession == null) {
+      this.route.navigate(['/login'])    
     }
   }
 }
