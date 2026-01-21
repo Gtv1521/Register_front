@@ -10,6 +10,7 @@ import {
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 export class TokenInterceptor implements HttpInterceptor {
   private Url = `${environment.apiUrl}/Session`;
@@ -17,6 +18,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
   private http = inject(HttpClient); // conexion con backend
   private route = inject(Router); // Rutas de la app
+  private auth = inject(AuthService);
 
   intercept(
     req: HttpRequest<any>,
@@ -39,7 +41,9 @@ export class TokenInterceptor implements HttpInterceptor {
           console.warn('🔄 Token expirado, intentando refrescar...');
 
           return this.http
-            .get(`${this.Url}/refresh`, { withCredentials: true })
+            .post(`${this.Url}/refresh`, this.auth.getUserId(), {
+              withCredentials: true,
+            })
             .pipe(
               switchMap(() => {
                 this.isRefreshing = false;
