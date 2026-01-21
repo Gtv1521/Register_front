@@ -32,7 +32,8 @@
   <div class="content">
     <div class="registers">
       @for (registro of registrosFiltrados; track registro.id) {
-      <app-card-component [registro]="registro" (verDetalleEvent)="verDetalle($event)">
+      <app-card-component [registro]="registro" (verDetalleEvent)="verDetalle($event)"
+        (crearObservacionEvent)="crearObservacion($event)">
       </app-card-component>
       }
     </div>

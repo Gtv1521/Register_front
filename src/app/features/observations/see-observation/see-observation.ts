@@ -11,6 +11,7 @@ import { CardObservation } from '../card-observation/card-observation';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ClientGetUseCase } from 'src/app/core/aplication/use-cases/client-useCase/client-get.useCase';
+import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
 
 type filterMode = 'todo' | 'Ultimos' | 'Primeros';
 
@@ -25,8 +26,8 @@ export class SeeObservation implements OnInit {
   private observations = inject(ObservartionGetAllUseCase);
   private registers = inject(RegisterUseCase);
   private clients = inject(ClientGetUseCase);
-  // private user = inject(RegisterUseCase);
-  // usuario: UserEntity | any;
+  private user = inject(UserGetUseCase);
+  usuario: UserEntity | any;
   client: ClientEntity | any;
   register: RegisterEntity | any;
   observationsList: ObservationEntity[] = [];
@@ -51,19 +52,14 @@ export class SeeObservation implements OnInit {
         this.clients.execute(this.register.idClient),
       );
       console.log('Cliente obtenido:', this.client);
+
+      this.usuario = await firstValueFrom(
+        this.user.execute(this.observationsList[0].idUser!),
+
+      );
+      console.log('Usuario obtenido:', this.usuario);
+
     }
-
-
-
-
-    // this.user.execute(this.register.idUser).subscribe({
-    //   next: res => {
-    //     this.usuario = res;
-    //     console.log('Usuario obtenido:', this.usuario);
-    //   },
-    //   error: err => console.error(err),
-    // });
-    // faltante obtener cliente
 
   }
   goBack(): void {

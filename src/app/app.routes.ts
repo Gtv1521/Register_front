@@ -21,9 +21,10 @@ export const routes: Routes = [
   },
   { path: 'dashboard', component: DashboardLayout },
   { path: 'register/:id', component: DashboardLayout }, //  esta es la ruta para mostrar los registros
-  { path: '**', component: NotFound },
   { path: 'dashboard/see-observation/:id', component: SeeObservation },
   { path: 'dashboard/new-observation/:registerId', component: NewObservation },
+  { path: '**', component: NotFound },
+
 
 
 ];

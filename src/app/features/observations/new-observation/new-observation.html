@@ -1,50 +1,74 @@
-<div class="observation-create">
+<div class="container">
+  <div class="observation-create">
 
-  <header class="header">
-    <h2>Nueva observación</h2>
-    <span class="register">
-      Registro #{{ registerId }}
-    </span>
-  </header>
+    <header class="header">
+      <h2>Nueva observación</h2>
+      <span class="register">
+        Registro #{{ registerId }}
+      </span>
+    </header>
 
-  <form [formGroup]="form" class="form">
+    <form [formGroup]="form" class="form">
 
-    <!-- DESCRIPCIÓN -->
-    <div class="field">
-      <label>Descripción</label>
-      <textarea formControlName="description" placeholder="Describe la observación realizada...">
+      <!-- DESCRIPCIÓN -->
+      <div class="field">
+        <label>Descripción</label>
+        <textarea formControlName="description" placeholder="Describe la observación realizada...">
       </textarea>
 
-      @if (form.controls.description.touched && form.controls.description.invalid) {
-      <small class="error">
-        La descripción es obligatoria (mínimo 10 caracteres)
-      </small>
-      }
-    </div>
+        @if (form.controls.description.touched && form.controls.description.invalid) {
+        <small class="error">
+          La descripción es obligatoria (mínimo 10 caracteres)
+        </small>
+        }
+      </div>
 
-    <!-- ESTADO -->
-    <div class="field">
-      <label>Estado</label>
-      <select formControlName="status">
-        <option value="PENDIENTE">Pendiente</option>
-        <option value="EN_PROCESO">En proceso</option>
-        <option value="COMPLETADO">Completado</option>
-        <option value="CANCELADO">Cancelado</option>
-      </select>
-    </div>
-    <!-- Imagenes -->
+      <!-- ESTADO -->
+      <div class="field">
+        <label>Estado</label>
+        <select formControlName="status">
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="EN_PROCESO">En proceso</option>
+          <option value="COMPLETADO">Completado</option>
+          <option value="CANCELADO">Cancelado</option>
+        </select>
+      </div>
+      <!-- Imagenes -->
+      <div class="photo-upload">
+        <div class="photo-preview" *ngIf="photoPreviews.length">
+          <img *ngFor="let photo of photoPreviews" [src]="photo" alt="preview" />
+        </div>
+        <label class="upload-btn">
+          <mat-icon>photo_camera</mat-icon>
+          Agregar fotos
+          <input type="file" accept="image/*" multiple hidden (change)="onPhotosSelected($event)">
+        </label>
 
-    <!-- ACCIONES -->
-    <div class="actions">
-      <button type="button" class="btn cancel" (click)="cancelar()">
-        Cancelar
-      </button>
+      </div>
+      <!-- Checks de envio a redes -->
+      <div class="field checkbox-group">
+        <label>
+          <input type="checkbox" formControlName="notificaEmail">
+          Notificar por correo
+        </label>
 
-      <button type="button" class="btn save" (click)="guardar()">
-        Guardar observación
-      </button>
-    </div>
+        <label>
+          <input type="checkbox" formControlName="notificaWhatsapp">
+          Notificar por WhatsApp
+        </label>
+      </div>
+      <!-- ACCIONES -->
+      <div class="actions">
+        <button type="button" class="btn-cancel" (click)="cancelar()">
+          Cancelar
+        </button>
 
-  </form>
+        <button type="button" class="btn-save" (click)="guardar()">
+          Guardar observación
+        </button>
+      </div>
 
+    </form>
+
+  </div>
 </div>

@@ -21,23 +21,23 @@ import { TokenInterceptor } from './core/infrastructure/http/interceptors/token.
 import { ObservationHttpService } from './core/infrastructure/http/http-api/observation-http.service';
 import { OBSERVATION_TOKEN } from './core/aplication/tokens/observation.token';
 import { ClientHttpService } from './core/infrastructure/http/http-api/client-http.service';
+import { CLIENT_TOKEN } from './core/aplication/tokens/client.token';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(withInterceptorsFromDi()),
-    provideHttpClient(),
+    { provide: SESSION_TOKEN, useClass: SessionHttpService }, // inyeccion de repository
+    { provide: REGISTER_TOKEN, useClass: RegisterHttpService },
+    { provide: USER_TOKEN, useClass: UserHttpService },
+    { provide: OBSERVATION_TOKEN, useClass: ObservationHttpService },
+    { provide: CLIENT_TOKEN, useClass: ClientHttpService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
     },
-    { provide: SESSION_TOKEN, useClass: SessionHttpService }, // inyeccion de repository
-    { provide: REGISTER_TOKEN, useClass: RegisterHttpService },
-    { provide: USER_TOKEN, useClass: UserHttpService },
-    { provide: OBSERVATION_TOKEN, useClass: ObservationHttpService },
-    { provide: 'CLIENT_TOKEN', useClass: ClientHttpService },
     provideRouter(routes),
     // -- ADD THIS LINE --
   ]

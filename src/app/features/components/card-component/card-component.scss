@@ -2,7 +2,7 @@
 
 
 .card {
-  height: 100%;
+  height: auto;
   margin: 15px;
   background-color: var.$card_bg;
   border: 1px solid var.$card_border;
@@ -19,6 +19,7 @@
   }
 
   bottom: unset;
+
 
 }
 
@@ -130,6 +131,11 @@
 }
 
 @media (max-width: 900px) {
+  .card {
+    width: 100%;
+    margin: 10px 0;
+  }
+
   .card-header {
     flex-direction: column;
     align-items: flex-start;

@@ -17,14 +17,9 @@ export class CardComponent {
   ngOnInit() {
     this.imageUrl =
       this.registro.observation === null ||
-      this.registro.observation === undefined
+        this.registro.observation === undefined
         ? '/generic.webp'
-<<<<<<< HEAD
         : this.registro.observation?.photos?.[0]?.photo;
-=======
-
-        : this.registro.observation?.photos?.[0]?.photo
->>>>>>> 3f96a00 (feat: Add service for view details of observation with qr data)
   }
   public verDetalle(idObservacion?: string) {
     this.verDetalleEvent.emit(idObservacion);
