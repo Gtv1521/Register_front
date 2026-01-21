@@ -8,21 +8,17 @@ import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
   styleUrl: './card-component.scss',
 })
 export class CardComponent {
-
   imageUrl!: string | null | undefined;
 
   @Input() registro!: RegisterEntity;
   @Output() verDetalleEvent = new EventEmitter<string>();
 
-
   ngOnInit() {
     this.imageUrl =
-      this.registro.observation === null || this.registro.observation === undefined
+      this.registro.observation === null ||
+      this.registro.observation === undefined
         ? '/generic.webp'
-
-        : this.registro.observation?.photos?.[0]?.photo
-
-    console.log(this.registro.observation, this.registro.clients)
+        : this.registro.observation?.photos?.[0]?.photo;
   }
   public verDetalle(idObservacion?: string) {
     this.verDetalleEvent.emit(idObservacion);
@@ -30,6 +26,4 @@ export class CardComponent {
   public crearObservacion(idRegistro?: string) {
     console.log('Crear nueva observación con ID de registro:', idRegistro);
   }
-
-
 }

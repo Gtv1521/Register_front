@@ -1,0 +1,19 @@
+@use "./../../../../_styles/variables" as var;
+
+
+.container {
+    width: 100%;
+    height: 100dvb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .container-fluid {
+        width: 10%;
+        height: 10%;
+
+        .loader {
+            color: var.$azul;
+        }
+    }
+}

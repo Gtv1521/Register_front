@@ -6,6 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "start:local": "ng serve --host register.local --ssl --ssl-key ssl/register.key --ssl-cert ssl/register.crt",
+    "start:local-all": "ng serve --ssl --ssl-key ssl/register.key --ssl-cert ssl/register.crt --host register.local --port 4200 --allowed-hosts=register.local,localhost,127.0.0.1",
+    "start:https": "ng serve --ssl --ssl-key ssl/register.key --ssl-cert ssl/register.crt",
+    "build:local": "ng build --configuration=local",
+    "test:local": "ng test --watch=false --browsers=Chrome",
     "test": "ng test"
   },
   "prettier": {

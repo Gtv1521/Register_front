@@ -1,7 +1,7 @@
 // entidad de usuario
 export interface UserEntity {
     id: string,
-    name: string,
-    email: string,
-    password: string
+    name: string | null,
+    email: string | null,
+    password: string | null
 }

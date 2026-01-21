@@ -1,4 +1,4 @@
-import { Injectable, linkedSignal } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +16,8 @@ export class AuthService {
   setAuth(id: string, session: string): void {
     localStorage.setItem('userId', id);
     localStorage.setItem('sessionId', session);
-    this.userId = id;
-    this.sessionId = session;
+    // this.userId = id;
+    // this.sessionId = session;
   }
 
   // obtiene el id de usuario que ya esta en la session

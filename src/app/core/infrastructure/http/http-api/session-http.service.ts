@@ -5,7 +5,7 @@ import { SigInRequestDto } from '../../dto/request/sig-in-request.dto';
 import { SessionEntity } from 'src/app/core/domain/entitys/session.entity';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SessionResponseDto } from '../../dto/response/session-response.dto';
 import { SessionMapper } from 'src/app/core/aplication/mappers/session.mapper';
 
@@ -24,7 +24,12 @@ export class SessionHttpService implements ISession<
 
   Login(user: LoginRequestDto): Observable<SessionEntity> {
     return this.http
-      .post<SessionResponseDto>(`${this.apiUrl}/login`, user)
+      .post<SessionResponseDto>(`${this.apiUrl}/login`, user, {
+        withCredentials: true, // ESTO ES ESENCIAL
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
       .pipe(map((res) => this.mapper.fromDto(res)));
   }
 
