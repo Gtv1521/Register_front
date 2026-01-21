@@ -1,0 +1,50 @@
+<div class="observation-create">
+
+  <header class="header">
+    <h2>Nueva observación</h2>
+    <span class="register">
+      Registro #{{ registerId }}
+    </span>
+  </header>
+
+  <form [formGroup]="form" class="form">
+
+    <!-- DESCRIPCIÓN -->
+    <div class="field">
+      <label>Descripción</label>
+      <textarea formControlName="description" placeholder="Describe la observación realizada...">
+      </textarea>
+
+      @if (form.controls.description.touched && form.controls.description.invalid) {
+      <small class="error">
+        La descripción es obligatoria (mínimo 10 caracteres)
+      </small>
+      }
+    </div>
+
+    <!-- ESTADO -->
+    <div class="field">
+      <label>Estado</label>
+      <select formControlName="status">
+        <option value="PENDIENTE">Pendiente</option>
+        <option value="EN_PROCESO">En proceso</option>
+        <option value="COMPLETADO">Completado</option>
+        <option value="CANCELADO">Cancelado</option>
+      </select>
+    </div>
+    <!-- Imagenes -->
+
+    <!-- ACCIONES -->
+    <div class="actions">
+      <button type="button" class="btn cancel" (click)="cancelar()">
+        Cancelar
+      </button>
+
+      <button type="button" class="btn save" (click)="guardar()">
+        Guardar observación
+      </button>
+    </div>
+
+  </form>
+
+</div>

@@ -11,6 +11,7 @@ import { SessionComponent } from '../../components/session-component/session-com
 import { LoaderSessionComponent } from '../../components/floads/loader-session-component/loader-session-component';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 type FilterMode =
   | 'todo'
@@ -49,15 +50,14 @@ export class DashboardLayout implements OnInit {
   private auth = inject(AuthService);
 
   private router = inject(Router);
-  ngOnInit(): void {
-    this.registers.execute().subscribe({
-      next: (res) => {
-        this.todosRegistros = res;
-        console.log(res)
-        this.aplicarFiltroYBusqueda();
-      },
-      error: (err) => console.error(err),
-    });
+  async ngOnInit(): Promise<void> {
+    this.todosRegistros = await firstValueFrom(
+      this.registers.execute()
+    );
+    this.registrosFiltrados = [...this.todosRegistros];
+    this.usuario = await firstValueFrom(
+      this.user.execute(this.todosRegistros[0]?.observation?.idUser!)
+    );
 
     console.log(this.auth.getUserId())
     this.user.execute(`${this.auth.getUserId()}`).subscribe({
@@ -163,7 +163,7 @@ export class DashboardLayout implements OnInit {
     this.router.navigate(['/dashboard/see-observation', id]);
   }
 
-  crearObservacion(id: number): void {
-    console.log('Crear observación:', id);
+  crearObservacion(id: string): void {
+    this.router.navigate(['/dashboard/new-observation', id]);
   }
 }

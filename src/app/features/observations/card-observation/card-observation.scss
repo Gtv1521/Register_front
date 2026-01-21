@@ -1,0 +1,141 @@
+@use "../../../_styles/variables" as var;
+
+.card-observation {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: var.$white;
+  border-radius: 12px;
+  color: var.$black;
+  width: 96%;
+  min-height: 260px;
+  box-shadow: 0 0 5px var.$black;
+  margin-top: 2%;
+}
+
+/* =========================
+   DESCRIPCIÓN (50%)
+   ========================= */
+.description {
+  flex: 1;
+  padding-right: 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.description h2 {
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.description h4 {
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var.$black;
+}
+
+/* =========================
+   PANEL DERECHO (50%)
+   ========================= */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* =========================
+   BOTONES (ESQUINA DERECHA)
+   ========================= */
+.buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 10px;
+  text-align: center;
+  align-items: center;
+
+  .boton {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    // padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: rgb(var.$fondo_modal, 0.3);
+
+    span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .editar {
+    // border: 1px solid rgb(var.$fondo_modal, 0.8);
+    // background: transparent;
+    color: var.$black;
+
+    &:hover {
+      background: var.$fondo_modal;
+      color: var.$white;
+    }
+  }
+
+  .eliminar {
+    // border: 1px solid var.$fondo_modal;
+    // background: transparent;
+    color: var.$black;
+
+    &:hover {
+      background: var.$rojo;
+      color: var.$white;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+/* =========================
+   GALERÍA / COLLAGE
+   ========================= */
+.photos {
+  margin-top: 40px;
+}
+
+.photos h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* COLLAGE */
+.photo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.observation-photo {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.observation-photo:hover {
+  transform: scale(1.05);
+}

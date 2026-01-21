@@ -20,6 +20,7 @@ import { RegisterHttpService } from './core/infrastructure/http/http-api/registe
 import { TokenInterceptor } from './core/infrastructure/http/interceptors/token.interceptor';
 import { ObservationHttpService } from './core/infrastructure/http/http-api/observation-http.service';
 import { OBSERVATION_TOKEN } from './core/aplication/tokens/observation.token';
+import { ClientHttpService } from './core/infrastructure/http/http-api/client-http.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,8 +36,9 @@ export const appConfig: ApplicationConfig = {
     { provide: SESSION_TOKEN, useClass: SessionHttpService }, // inyeccion de repository
     { provide: REGISTER_TOKEN, useClass: RegisterHttpService },
     { provide: USER_TOKEN, useClass: UserHttpService },
-    provideRouter(routes),
-  ],
     { provide: OBSERVATION_TOKEN, useClass: ObservationHttpService },
+    { provide: 'CLIENT_TOKEN', useClass: ClientHttpService },
+    provideRouter(routes),
+    // -- ADD THIS LINE --
   ]
 };

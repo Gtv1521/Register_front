@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 
 @Component({
@@ -12,18 +12,24 @@ export class CardComponent {
 
   @Input() registro!: RegisterEntity;
   @Output() verDetalleEvent = new EventEmitter<string>();
+  @Output() crearObservacionEvent = new EventEmitter<string>();
 
   ngOnInit() {
     this.imageUrl =
       this.registro.observation === null ||
       this.registro.observation === undefined
         ? '/generic.webp'
+<<<<<<< HEAD
         : this.registro.observation?.photos?.[0]?.photo;
+=======
+
+        : this.registro.observation?.photos?.[0]?.photo
+>>>>>>> 3f96a00 (feat: Add service for view details of observation with qr data)
   }
   public verDetalle(idObservacion?: string) {
     this.verDetalleEvent.emit(idObservacion);
   }
   public crearObservacion(idRegistro?: string) {
-    console.log('Crear nueva observación con ID de registro:', idRegistro);
+    this.crearObservacionEvent.emit(idRegistro);
   }
 }

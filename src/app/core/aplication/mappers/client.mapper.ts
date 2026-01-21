@@ -6,12 +6,7 @@ import { ClientResponseDto } from "../../infrastructure/dto/response/client/clie
 @Injectable({ providedIn: "root" })
 export class ClientMapper implements IMapper<ClientResponseDto, ClientEntity> {
   fromDto(dto: ClientResponseDto): ClientEntity {
-    return {
-      id: dto.id,
-      name: dto.name,
-      email: dto.email,
-      phone: dto.phone
-    }
+    return dto as ClientEntity;
   }
   toDto(entity: ClientEntity): ClientResponseDto {
     return entity as ClientResponseDto;

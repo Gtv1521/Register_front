@@ -1,0 +1,36 @@
+<div class="card-observation">
+
+  <!-- LADO IZQUIERDO -->
+  <div class="description">
+    <h2>Detalles</h2>
+    <h4>{{ Observation?.description }}</h4>
+  </div>
+
+  <!-- LADO DERECHO -->
+  <div class="right-panel">
+
+    <!-- BOTONES -->
+    <div class="buttons">
+      <button class="boton editar">
+        <span><mat-icon>edit</mat-icon>
+        </span>
+      </button>
+      <button class="boton eliminar">
+        <span>
+          <mat-icon>delete</mat-icon>
+        </span>
+      </button>
+    </div>
+
+    <!-- GALERÍA -->
+    <div class="photos">
+      <h3>Evidencias:</h3>
+      <div class="photo-list">
+        @for (photo of Observation?.photos; track photo.id) {
+        <img [src]="photo.photo" [id]="photo.id" class="observation-photo" />
+        }
+      </div>
+    </div>
+
+  </div>
+</div>
