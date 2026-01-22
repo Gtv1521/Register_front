@@ -9,7 +9,12 @@ import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { firstValueFrom } from 'rxjs';
 
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
-
+const statusMap: Record<string, number> = {
+  PENDIENTE: 0,
+  EN_PROCESO: 1,
+  COMPLETADO: 2,
+  CANCELADO: 3
+};
 @Component({
   selector: 'app-observation-create',
   standalone: true,
@@ -39,6 +44,7 @@ export class NewObservation {
   registerData: RegisterEntity | any;
   userId = this.auth.getUserId()
 
+
   //datos del formulario
   form = this.fb.nonNullable.group({
     description: ['', [Validators.required, Validators.minLength(10)]],
@@ -47,7 +53,8 @@ export class NewObservation {
     notificaWhatsapp: [false]
   });
 
-  // funcion de guardado y pasadoi de datos
+
+  // funcion de guardado y pasado de datos
   guardar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -58,7 +65,7 @@ export class NewObservation {
 
     formData.append('IdRegister', this.registerId!);
     formData.append('IdUser', this.userId!); // 🔑
-    formData.append('Type', this.form.value.type!.toString());
+    formData.append('Type', statusMap[this.form.value.type!].toString());
     formData.append('Description', this.form.value.description!);
     formData.append('NotificaEmail', this.form.value.notificaEmail!.toString());
     formData.append('NotificaWhatsapp', this.form.value.notificaWhatsapp!.toString());
@@ -69,9 +76,16 @@ export class NewObservation {
 
     console.log('Observación a crear:', formData);
 
-    this.observationService.execute(formData).subscribe(() => {
-      this.router.navigate(['/dashboard']);
+    this.observationService.execute(formData).subscribe({
+      next: (response) => {
+        console.log('Observación creada', response);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Error al crear observación', err);
+      }
     });
+
   }
   onPhotosSelected(event: Event) {
     const input = event.target as HTMLInputElement;

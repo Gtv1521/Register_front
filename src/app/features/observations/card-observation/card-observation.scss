@@ -7,10 +7,14 @@
   background: var.$white;
   border-radius: 12px;
   color: var.$black;
-  width: 96%;
+  width: 94%;
   min-height: 260px;
   box-shadow: 0 0 5px var.$black;
   margin-top: 2%;
+
+  @media (max-width: 425px) {
+    width: 87%;
+  }
 }
 
 /* =========================
