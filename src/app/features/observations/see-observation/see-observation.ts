@@ -13,6 +13,7 @@ import { ClientGetUseCase } from 'src/app/core/aplication/use-cases/client-useCa
 import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
 import { DatePipe } from '@angular/common';
 import { PhonePipe } from "../../../core/infrastructure/http/pipes/phone-pipe";
+import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 
 type filterMode = 'todo' | 'Ultimos' | 'Primeros';
 
