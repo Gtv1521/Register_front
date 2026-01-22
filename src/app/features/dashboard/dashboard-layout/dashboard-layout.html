@@ -7,7 +7,7 @@
 <div class="container">
   <div class="container-fluid">
     <!-- componente de busqueda -->
-    <mat-icon class="icons" (click)="busqueda = ''; onBuscar()">delete</mat-icon>
+    <mat-icon class="icons" title="Borrar Registro" (click)="busqueda = ''; onBuscar()">delete</mat-icon>
     <div class="card-search">
       <div class="search-box">
         <input type="text" [(ngModel)]="busqueda" [placeholder]="
@@ -24,8 +24,8 @@
         <mat-icon class="search-icon" (click)="onBuscar()">search</mat-icon>
       </div>
     </div>
-
-    <mat-icon class="icons">exit_to_app</mat-icon>
+    <span class="caja-icono" title="Nuevo Registro"><mat-icon class="icons">note_add</mat-icon></span>
+    <span class="caja-icono" title="Salir"><mat-icon class="icons">exit_to_app</mat-icon></span>
   </div>
 
   <!-- mapeo de registros -->
