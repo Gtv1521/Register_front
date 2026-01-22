@@ -28,75 +28,58 @@
     <span class="caja-icono" title="Salir"><mat-icon class="icons">exit_to_app</mat-icon></span>
   </div>
 
-    <!-- mapeo de registros -->
-    <div class="content">
-      <div class="registers">
-        @for (registro of registrosFiltrados; track registro.id) {
-          <app-card-component
-            [registro]="registro"
-            (verDetalleEvent)="verDetalle($event)"
-          >
-          </app-card-component>
-        }
+  <!-- mapeo de registros -->
+  <div class="content">
+    <div class="registers">
+      @for (registro of registrosFiltrados; track registro.id) {
+      <app-card-component [registro]="registro" (verDetalleEvent)="verDetalle($event)"
+        (crearObservacionEvent)="crearObservacion($event)">
+      </app-card-component>
+      }
+    </div>
+  </div>
+
+  <footer class="dashboard-footer">
+    <!-- usuario logeado -->
+    <div class="footer-left">
+      <mat-icon class="user-icon">account_circle</mat-icon>
+      <div class="user-info">
+        <span class="user-name">{{ usuario?.name }}</span>
+        <span class="user-role">Técnico</span>
       </div>
     </div>
 
-    <footer class="dashboard-footer">
-      <!-- usuario logeado -->
-      <div class="footer-left">
-        <mat-icon class="user-icon">account_circle</mat-icon>
-        <div class="user-info">
-          <span class="user-name">{{ usuario?.name }}</span>
-          <span class="user-role">Técnico</span>
+    <div class="footer-center">
+      <span class="system-name">Centro de Reparación Electrónica</span>
+      <span class="system-version">v1.0.0</span>
+    </div>
+
+    <div class="footer-right">
+      <!-- filtros del buscador -->
+      <div class="filters">
+        <div class="modos">
+          <button [class.active]="filtroActual === 'todo'" (click)="cambiarFiltro('todo')">
+            Todo
+          </button>
+
+          <button [class.active]="filtroActual === 'En progreso'" (click)="cambiarFiltro('En progreso')">
+            En Progreso
+          </button>
+
+          <button [class.active]="filtroActual === 'Pendiente'" (click)="cambiarFiltro('Pendiente')">
+            Pendiente
+          </button>
+
+          <button [class.active]="filtroActual === 'Completado'" (click)="cambiarFiltro('Completado')">
+            Completado
+          </button>
+
+          <button [class.active]="filtroActual === 'cancelado'" (click)="cambiarFiltro('cancelado')">
+            Cancelado
+          </button>
         </div>
       </div>
-
-      <div class="footer-center">
-        <span class="system-name">Centro de Reparación Electrónica</span>
-        <span class="system-version">v1.0.0</span>
-      </div>
-
-      <div class="footer-right">
-        <!-- filtros del buscador -->
-        <div class="filters">
-          <div class="modos">
-            <button
-              [class.active]="filtroActual === 'todo'"
-              (click)="cambiarFiltro('todo')"
-            >
-              Todo
-            </button>
-
-            <button
-              [class.active]="filtroActual === 'En progreso'"
-              (click)="cambiarFiltro('En progreso')"
-            >
-              En Progreso
-            </button>
-
-            <button
-              [class.active]="filtroActual === 'Pendiente'"
-              (click)="cambiarFiltro('Pendiente')"
-            >
-              Pendiente
-            </button>
-
-            <button
-              [class.active]="filtroActual === 'Completado'"
-              (click)="cambiarFiltro('Completado')"
-            >
-              Completado
-            </button>
-
-            <button
-              [class.active]="filtroActual === 'cancelado'"
-              (click)="cambiarFiltro('cancelado')"
-            >
-              Cancelado
-            </button>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </div>
+    </div>
+  </footer>
+</div>
 }
