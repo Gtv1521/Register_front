@@ -14,10 +14,10 @@ import { AuthService } from './auth.service';
 
 export class TokenInterceptor implements HttpInterceptor {
   private Url = `${environment.apiUrl}/Session`;
-  isRefreshing: boolean = false; // habilita refresh
+  isRefreshing: boolean = false;
 
-  private http = inject(HttpClient); // conexion con backend
-  private route = inject(Router); // Rutas de la app
+  private http = inject(HttpClient); 
+  private route = inject(Router);
   private auth = inject(AuthService);
 
   intercept(
@@ -41,9 +41,13 @@ export class TokenInterceptor implements HttpInterceptor {
           console.warn('🔄 Token expirado, intentando refrescar...');
 
           return this.http
-            .post(`${this.Url}/refresh`, this.auth.getUserId(), {
-              withCredentials: true,
-            })
+            .post(
+              `${this.Url}/refresh`,
+              { id: this.auth.getUserId() },
+              {
+                withCredentials: true,
+              },
+            )
             .pipe(
               switchMap(() => {
                 this.isRefreshing = false;

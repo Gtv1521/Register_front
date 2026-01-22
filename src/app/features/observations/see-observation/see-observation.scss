@@ -10,7 +10,6 @@
 }
 
 .see-observation-container {
-
   border: 1px solid #ccc;
   border-radius: 3px;
   padding: 16px;
@@ -70,21 +69,38 @@
 
   .footer {
     display: flex;
+    width: 92%;
     justify-content: space-between;
     align-items: center;
-    margin-top: 24px;
+    margin: 24px auto 0 auto;
     border-top: 1px solid #ccc;
     padding-top: 12px;
+    box-sizing: border-box;
+    padding: 5px 20px;
+    // background-color: var.$rojo;
 
     .image-logo {
       width: 120px;
-      height: auto;
+      height: 120px;
     }
+    .right {
+      padding: 5px;
+      position: relative;
+      border: 2px solid var.$black;
+      border-radius: 15px;
+      width: 150px;
+      height: 150px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-    .qr-code {
-      width: 100px;
-      height: 100px;
-    }
+      .qr-code {
+        // position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    }    
   }
 }
 
@@ -93,7 +109,6 @@
   font-weight: 800;
   margin-bottom: 24px;
   font-size: 20px;
-
 }
 
 .observations-section {
@@ -101,14 +116,17 @@
   display: flex;
   flex-direction: column;
 
-
+  h2 {
+    width: 92%;
+    margin: 10px auto;
+    font-size: 2rem !important;
+  }
   .header {
     margin: 4px 0 0 0;
 
     .search-box {
       position: relative;
       width: 80%;
-
     }
 
     .search-box input {
@@ -161,7 +179,15 @@
       background-color: var.$fondo_modal;
       color: var.$white;
       border: 1px solid var.$fondo_modal;
+    }
+  }
 
+  .observations {
+    width: 95%;
+    margin: auto;
+
+    .no_data {
+      text-align: center;
     }
   }
 }

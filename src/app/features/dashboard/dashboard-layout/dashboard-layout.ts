@@ -11,7 +11,7 @@ import { SessionComponent } from '../../components/session-component/session-com
 import { LoaderSessionComponent } from '../../components/floads/loader-session-component/loader-session-component';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, switchMap } from 'rxjs';
 
 type FilterMode =
   | 'todo'
@@ -51,22 +51,23 @@ export class DashboardLayout implements OnInit {
   private router = inject(Router);
   // funcion inicial para hacer las consultas
   async ngOnInit(): Promise<void> {
-    this.todosRegistros = await firstValueFrom(
-      this.registers.execute()
-    );
+    this.todosRegistros = await firstValueFrom(this.registers.execute());
     this.registrosFiltrados = [...this.todosRegistros];
+    this.usuario = await firstValueFrom(
+      this.user.execute(`${this.auth.getUserId()}`),
+    );
 
+    console.log(this.auth.getUserId());
     this.user.execute(`${this.auth.getUserId()}`).subscribe({
       next: (res) => {
-        console.log(res)
+        console.log(res);
         this.usuario = res;
+        setTimeout(() => {
+          this.loader = false;
+        }, 1000);
       },
       error: (err) => console.error(err),
     });
-
-    setTimeout(() => {
-      this.loader = false;
-    }, 3000);
   }
   // cambio de filtro para filtrar los datos
   cambiarFiltro(filtro: FilterMode): void {

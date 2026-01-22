@@ -9,16 +9,16 @@ import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { UserEntity } from 'src/app/core/domain/entitys/user.entity';
 import { CardObservation } from '../card-observation/card-observation';
 import { FormsModule } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
 import { ClientGetUseCase } from 'src/app/core/aplication/use-cases/client-useCase/client-get.useCase';
 import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
-import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
+import { DatePipe } from '@angular/common';
+import { PhonePipe } from "../../../core/infrastructure/http/pipes/phone-pipe";
 
 type filterMode = 'todo' | 'Ultimos' | 'Primeros';
 
 @Component({
   selector: 'app-see-observation',
-  imports: [MatIconModule, CardObservation, FormsModule],
+  imports: [MatIconModule, CardObservation, FormsModule, DatePipe, PhonePipe],
   templateUrl: './see-observation.html',
   styleUrl: './see-observation.scss',
 })
@@ -41,26 +41,49 @@ export class SeeObservation implements OnInit {
 
   // funcion principal para la traida de datos
   async ngOnInit(): Promise<void> {
-    const observationId = this.route.snapshot.paramMap.get('id');
+    const registro = this.route.snapshot.paramMap.get('id');
 
-    this.observationsList = await firstValueFrom(
-      this.observations.execute(observationId!, 1, 30)
-    );
-
-    this.register = await firstValueFrom(
-      this.registers.execute(this.observationsList[0].idRegister),
-    );
-
-    this.client = await firstValueFrom(
-      this.clients.execute(this.register.idClient),
-    );
-
-    this.usuario = await firstValueFrom(
-      this.user.execute(`${this.auth.getUserId()}`),
-
-    );
-
+    if (registro !== null) {
+      await this.LoadRegister(registro);
+      await this.LoadObservations(registro);
+    }
   }
+
+  async LoadObservations(registro: string) {
+    this.observations.execute(registro, 1, 30).subscribe({
+      next: (res) => (this.observationsList = res),
+      error: (err) => console.log(err),
+    });
+  }
+
+  // carga data
+  async LoadRegister(register: string) {
+    this.registers.execute(register).subscribe({
+      next: (res) => {
+        this.register = res;
+        this.LoadClient(res.idClient);
+      },
+      error: (err) => console.log(err),
+    });
+  }
+
+  // carga da cliente
+  async LoadClient(cliente: string) {
+    this.clients.execute(cliente).subscribe({
+      next: (res) => {
+        this.client = res;
+      },
+      error: (err) => console.log(err),
+    });
+  }
+
+  async LoadUser(userId: string) {
+    this.user.execute(userId).subscribe({
+      next: (res) => (this.usuario = res),
+      error: (err) => console.log(err),
+    });
+  }
+
   goBack(): void {
     window.history.back();
   }
@@ -81,4 +104,3 @@ export class SeeObservation implements OnInit {
     this.busqueda = '';
   }
 }
-

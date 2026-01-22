@@ -3,17 +3,15 @@
 .card-observation {
   display: flex;
   gap: 20px;
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 10px;
   background: var.$white;
+  // background-color: red;
   border-radius: 12px;
   color: var.$black;
-  width: 97%;
+  width: 95%;
   min-height: 260px;
   box-shadow: 0 0 5px var.$black;
-  margin-top: 2%;
-
-
+  margin: 2% auto 0 auto;
 }
 
 /* =========================
@@ -104,13 +102,6 @@
   }
 }
 
-
-
-
-
-
-
-
 /* =========================
    GALERÍA / COLLAGE
    ========================= */
@@ -119,6 +110,7 @@
 }
 
 .photos h3 {
+  text-align: center;
   margin-bottom: 10px;
   font-size: 16px;
 }
@@ -128,6 +120,11 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 10px;
+  width: 90%;
+  padding: 20px;
+  margin: auto;
+  border-radius: 15px;
+  background-color: var.$photos_fond;
 }
 
 .observation-photo {
