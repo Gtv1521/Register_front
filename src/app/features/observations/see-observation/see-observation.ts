@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ClientGetUseCase } from 'src/app/core/aplication/use-cases/client-useCase/client-get.useCase';
 import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
+import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 
 type filterMode = 'todo' | 'Ultimos' | 'Primeros';
 
@@ -22,11 +23,15 @@ type filterMode = 'todo' | 'Ultimos' | 'Primeros';
   styleUrl: './see-observation.scss',
 })
 export class SeeObservation implements OnInit {
+  // llamado a los casos de uso
   private route = inject(ActivatedRoute);
   private observations = inject(ObservartionGetAllUseCase);
   private registers = inject(RegisterUseCase);
   private clients = inject(ClientGetUseCase);
-  private user = inject(UserGetUseCase);
+  private user = inject(UserGetUseCase)
+  private auth = inject(AuthService)
+
+  // datos para usar en el formulario
   usuario: UserEntity | any;
   client: ClientEntity | any;
   register: RegisterEntity | any;
@@ -34,6 +39,7 @@ export class SeeObservation implements OnInit {
   busqueda: string = '';
   filterActual: filterMode = 'todo';
 
+  // funcion principal para la traida de datos
   async ngOnInit(): Promise<void> {
     const observationId = this.route.snapshot.paramMap.get('id');
 
@@ -41,25 +47,18 @@ export class SeeObservation implements OnInit {
       this.observations.execute(observationId!, 1, 30)
     );
 
-    if (this.observationsList.length > 0 && this.observationsList[0].idRegister) {
-      console.log('ID de registro obtenido:', this.observationsList[0].idRegister);
+    this.register = await firstValueFrom(
+      this.registers.execute(this.observationsList[0].idRegister),
+    );
 
-      this.register = await firstValueFrom(
-        this.registers.execute(this.observationsList[0].idRegister),
-      );
-      console.log('Registro obtenido:', this.register);
-      this.client = await firstValueFrom(
-        this.clients.execute(this.register.idClient),
-      );
-      console.log('Cliente obtenido:', this.client);
+    this.client = await firstValueFrom(
+      this.clients.execute(this.register.idClient),
+    );
 
-      this.usuario = await firstValueFrom(
-        this.user.execute(this.observationsList[0].idUser!),
+    this.usuario = await firstValueFrom(
+      this.user.execute(`${this.auth.getUserId()}`),
 
-      );
-      console.log('Usuario obtenido:', this.usuario);
-
-    }
+    );
 
   }
   goBack(): void {

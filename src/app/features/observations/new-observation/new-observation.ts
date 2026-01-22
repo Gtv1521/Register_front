@@ -39,6 +39,7 @@ export class NewObservation {
   registerData: RegisterEntity | any;
   userId = this.auth.getUserId()
 
+  //datos del formulario
   form = this.fb.nonNullable.group({
     description: ['', [Validators.required, Validators.minLength(10)]],
     type: ['PENDIENTE', Validators.required],
@@ -46,6 +47,7 @@ export class NewObservation {
     notificaWhatsapp: [false]
   });
 
+  // funcion de guardado y pasadoi de datos
   guardar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

@@ -34,32 +34,28 @@ type FilterMode =
   styleUrl: './dashboard-layout.scss',
 })
 export class DashboardLayout implements OnInit {
-  /* =======================
-     ESTADO DE LA VISTA
-     ======================= */
+  // datos para la pagina
   filtroActual: FilterMode = 'todo';
   busqueda: string = '';
   page: number = 1;
   loader: boolean = true;
 
+  // datos para mapear en la pagina
   todosRegistros: RegisterEntity[] = [];
   registrosFiltrados: RegisterEntity[] = [];
   usuario!: UserEntity | any;
+  // casos de uso utilizados
   private user = inject(UserGetUseCase);
   private registers = inject(RegisterGetAllUsecase);
   private auth = inject(AuthService);
-
   private router = inject(Router);
+  // funcion inicial para hacer las consultas
   async ngOnInit(): Promise<void> {
     this.todosRegistros = await firstValueFrom(
       this.registers.execute()
     );
     this.registrosFiltrados = [...this.todosRegistros];
-    this.usuario = await firstValueFrom(
-      this.user.execute(this.todosRegistros[0]?.observation?.idUser!)
-    );
 
-    console.log(this.auth.getUserId())
     this.user.execute(`${this.auth.getUserId()}`).subscribe({
       next: (res) => {
         console.log(res)
@@ -72,12 +68,13 @@ export class DashboardLayout implements OnInit {
       this.loader = false;
     }, 3000);
   }
+  // cambio de filtro para filtrar los datos
   cambiarFiltro(filtro: FilterMode): void {
     this.filtroActual = filtro;
     this.busqueda = '';
     this.aplicarFiltroYBusqueda();
   }
-
+  // funcion de busqueda segun la descripcion
   onBuscar(): void {
     this.aplicarFiltroYBusqueda();
   }
@@ -90,6 +87,7 @@ export class DashboardLayout implements OnInit {
 
     this.registrosFiltrados = resultado;
   }
+  // uso del filtro segun el esdato del registro
   private filtrarPorEstado(registros: RegisterEntity[]): RegisterEntity[] {
     switch (this.filtroActual) {
       case 'Pendiente':
@@ -111,6 +109,7 @@ export class DashboardLayout implements OnInit {
         return registros;
     }
   }
+  // buscar segun el filtro aplicado, busca en un solo estado
   private buscarSegunFiltro(registros: RegisterEntity[]): RegisterEntity[] {
     const texto = this.busqueda.toLowerCase().trim();
 
@@ -137,6 +136,7 @@ export class DashboardLayout implements OnInit {
         return this.buscarGlobal(registros, texto);
     }
   }
+  // busca en todo
   private buscarGlobal(
     registros: RegisterEntity[],
     texto: string,
@@ -158,11 +158,11 @@ export class DashboardLayout implements OnInit {
       return contenido.includes(texto);
     });
   }
-
+  // paso de datos para el ver detalle
   verDetalle(id: string): void {
     this.router.navigate(['/dashboard/see-observation', id]);
   }
-
+  // paso de datos para crear la observacion
   crearObservacion(id: string): void {
     this.router.navigate(['/dashboard/new-observation', id]);
   }
