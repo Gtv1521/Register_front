@@ -17,6 +17,7 @@ export class RegisterMapper implements IMapper<RegisterResponseDto, RegisterEnti
       observation: this.mapObservation.fromDto(dto.observation),
       id: dto.id,
       idClient: dto.idClient,
+      idUser: dto.idUser,
       idQr: dto.idQr,
       urlQr: dto.urlQr,
       createdAt: dto.createdAt,

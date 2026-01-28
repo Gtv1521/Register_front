@@ -55,27 +55,33 @@
             (keyup.enter)="onBuscar()"
           />
           <mat-icon class="search-icon" (click)="onBuscar()">search</mat-icon>
-          <div class="modos">
-            <button
-              [class.active]="filterActual === 'todo'"
-              (click)="onVerTodos()"
-            >
-              Todo
-            </button>
+          <div class="panel-opciones">
+            <section class="modos">
+              <button
+                [class.active]="filterActual === 'todo'"
+                (click)="onVerTodos()"
+              >
+                Todo
+              </button>
 
-            <button
-              [class.active]="filterActual === 'Ultimos'"
-              (click)="onVerUltimos()"
-            >
-              Ultimos
-            </button>
+              <button
+                [class.active]="filterActual === 'Ultimos'"
+                (click)="onVerUltimos()"
+              >
+                Ultimos
+              </button>
 
-            <button
-              [class.active]="filterActual === 'Primeros'"
-              (click)="onVerPrimeros()"
-            >
-              Primeros
-            </button>
+              <button
+                [class.active]="filterActual === 'Primeros'"
+                (click)="onVerPrimeros()"
+              >
+                Primeros
+              </button>
+            </section>
+            <section class="options">
+              <button class="btn"><p>n</p></button>
+              <button class="btn"><p>d</p></button>
+            </section>
           </div>
         </div>
       </div>

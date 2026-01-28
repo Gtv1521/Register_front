@@ -63,6 +63,7 @@ export class SeeObservation implements OnInit {
       next: (res) => {
         this.register = res;
         this.LoadClient(res.idClient);
+        this.LoadUser(res.idUser);
       },
       error: (err) => console.log(err),
     });

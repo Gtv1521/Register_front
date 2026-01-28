@@ -7,6 +7,7 @@ export interface RegisterResponseDto {
   observation: ObservationResponseDto,
   id: string,
   idClient: string,
+  idUser: string,
   statusRegister: string,
   urlQr: string,
   idQr: string,

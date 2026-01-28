@@ -6,6 +6,7 @@ export interface RegisterEntity {
   observation: ObservationEntity | null,
   id: string,
   idClient: string,
+  idUser: string,
   urlQr: string,
   statusRegister: string,
   idQr: string,
