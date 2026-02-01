@@ -1,19 +1,17 @@
 <div class="card-observation">
-
   <!-- LADO IZQUIERDO -->
-  <div class="description">
-    <h2>Detalles</h2>
-    <h4>{{ Observation?.description }}</h4>
+  <div class="container_description">
+    <h2 class="title">Detalles</h2>
+    <div class="description">{{ Observation.description }}</div>
+    <p class="date">Fecha: {{ Observation.createdAt | date: "EEEE, d MMMM yyyy HH:mm" }}</p>
   </div>
 
   <!-- LADO DERECHO -->
   <div class="right-panel">
-
     <!-- BOTONES -->
     <div class="buttons">
       <button class="boton editar">
-        <span><mat-icon>edit</mat-icon>
-        </span>
+        <span><mat-icon>edit</mat-icon> </span>
       </button>
       <button class="boton eliminar">
         <span>
@@ -26,11 +24,10 @@
     <div class="photos">
       <h3>Evidencias:</h3>
       <div class="photo-list">
-        @for (photo of Observation?.photos; track photo.id) {
-        <img [src]="photo.photo" [id]="photo.id" class="observation-photo" />
+        @for (photo of Observation.photos; track photo.id) {
+          <img [src]="photo.photo" [id]="photo.id" class="observation-photo" />
         }
       </div>
     </div>
-
   </div>
 </div>

@@ -4,3 +4,12 @@ export interface SessionEntity {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface SessionInfo {
+  id: string;
+  userId: string;
+  startTime: Date;
+  endTime: Date;
+  status: string;
+  token: string;
+}

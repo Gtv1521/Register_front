@@ -13,8 +13,6 @@ export class SessionComponent {
   private route = inject(Router);
 
   ngOnInit() {
-
-    console.log(this.auth.getSession())
     if (this.auth.getSession() == null) {
       this.route.navigate(['/login']);
     }

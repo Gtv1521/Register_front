@@ -1,5 +1,5 @@
 export interface ClientRequestDto {
-  name: string;
-  email: string;
-  phone: string;
+  Name: string;
+  Email: string;
+  Phone: string;
 }

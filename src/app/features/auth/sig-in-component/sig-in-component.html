@@ -133,7 +133,12 @@
       </section>
 
       <section class="enviar">
-        <input type="submit" value="Registrar" />
+        <button type="submit" class="submit">
+          @if (loader) {
+            <app-loader-component />
+          }
+          <p>Registrar</p>
+        </button>
       </section>
 
       <section class="link" (click)="goLogin()">
@@ -142,7 +147,9 @@
     </form>
     @if (error) {
       @if (error.status === 400) {
-        {{ error.message }}
+        <div class="error_message">
+          {{ error.error }}
+        </div>
       }
     }
   </div>

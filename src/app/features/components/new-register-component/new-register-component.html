@@ -1,0 +1,134 @@
+<div class="contenedor">
+  <div class="container-fluid">
+    <button class="back">Volver</button>
+    <div class="panel_data">
+      <div class="title">Nuevo registro</div>
+      <form [formGroup]="register" (ngSubmit)="onSubmit()" class="registro">
+        <div class="form_group">
+          <label for="email">Email: </label>
+          <div class="box_mail">
+            <input
+              [class.active_search]="loader_mail"
+              type="text"
+              name="email"
+              id="email"
+              (blur)="goEmail()"
+              placeholder="Email"
+              formControlName="email"
+            />
+            @if (loader_mail) {
+              <span><app-loader-component /></span>
+            }
+
+            @if (client) {
+              <strong class="ok">Datos cargados </strong>
+            }
+            @if (errores?.status == 404) {
+              <strong class="err">No registrado</strong>
+            }
+
+            @if (
+              register.get("email")?.touched && register.get("email")?.invalid
+            ) {
+              <div class="error-message">
+                @if (register.get("email")?.errors?.["required"]) {
+                  <span>El correo es obligatorio</span>
+                } @else if (register.get("email")?.errors?.["minlength"]) {
+                  <span>
+                    El correo debe tener al menos
+                    {{
+                      register.get("email")?.errors?.["minlength"]
+                        .requiredLength
+                    }}
+                  </span>
+                } @else {
+                  <span>El correo tiene un error desconocido</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="form_group">
+          <label for="cliente">Nombre: </label
+          ><input
+            type="text"
+            name="cliente"
+            id="cliente"
+            placeholder="Nombre"
+            formControlName="name"
+          />
+
+          @if (register.get("name")?.touched && register.get("name")?.invalid) {
+            <div class="error-message">
+              @if (register.get("name")?.errors?.["required"]) {
+                <span>El cliente es obligatorio</span>
+              } @else if (register.get("name")?.errors?.["minlength"]) {
+                <span>
+                  El cliente debe tener al menos
+                  {{
+                    register.get("name")?.errors?.["minlength"].requiredLength
+                  }}
+                </span>
+              } @else {
+                <span>El cliente tiene un error desconocido</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="form_group">
+          <label for="telefono">Telefono: </label
+          ><input
+            type="number"
+            name="telefono"
+            id="telefono"
+            placeholder="Telefono"
+            formControlName="phone"
+          />
+
+          @if (
+            register.get("phone")?.touched && register.get("phone")?.invalid
+          ) {
+            <div class="error-message">
+              @if (register.get("phone")?.errors?.["required"]) {
+                <span>El telefono es obligatorio</span>
+              } @else if (register.get("email")?.errors?.["minlength"]) {
+                <span>
+                  El telefono debe tener al menos
+                  {{
+                    register.get("phone")?.errors?.["minlength"].requiredLength
+                  }}
+                </span>
+              } @else {
+                <span>El telefono tiene un error desconocido</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form_group">
+          <label for="status">Estado</label>
+          <select name="status" formControlName="type" id="status">
+            <option [ngValue]="null" disabled>Seleccione un estado</option>
+            @for (item of estados; track item.value) {
+              <option [ngValue]="item.value">
+                {{ item.label }}
+              </option>
+            }
+          </select>
+          @if (register.get("type")?.touched && register.get("type")?.invalid) {
+            <div class="error-message">
+              @if (register.get("type")?.errors?.["required"]) {
+                <span>El estado es obligatorio</span>
+              } @else {
+                <span>El estado tiene un error desconocido</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="form_submit">
+          <button type="submit" class="btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

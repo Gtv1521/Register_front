@@ -72,7 +72,12 @@
       </section>
 
       <section class="exit">
-        <input type="submit" value="Entrar" />
+        <button type="submit" class="submit">
+          @if (loading) {
+            <app-loader-component />
+          }
+          <p>Entrar</p>
+        </button>
       </section>
     </div>
     <div (click)="goSigIn()" class="add_user">
@@ -84,7 +89,12 @@
           {{ error.error.message }}
         </div>
         <div class="sessions">
-          <p>Ver sesiones</p>
+          <p (click)="goSessions()">Ver sesiones</p>
+        </div>
+      }
+      @else {
+        <div class="error">
+          {{ error.error.message }} 
         </div>
       }
     }

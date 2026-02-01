@@ -24,6 +24,7 @@ export class ObservationHttpService implements IObservation<ObservationRequestDt
     return this.http.get<ObservationResponseDto[]>(`${this.Url}/${id}/${page}/${size}`).pipe(map(res => res.map(c => this.mapper.fromDto(c))));
   }
   Create(dto: ObservationRequestDto): Observable<string> {
+    console.log('HTTP Service - Creating observation with DTO:', dto, {Headers: 'form-data/content-type'});
     return this.http.post<string>(`${this.Url}`, dto);
   }
   Update(dto: ObservationRequestDto): Observable<boolean> {

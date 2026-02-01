@@ -8,10 +8,11 @@ import { SigInRequestDto } from 'src/app/core/infrastructure/dto/request/sig-in-
 import { confirmPasswordValidator } from 'src/app/core/infrastructure/http/interceptors/password.validator';
 import { BidiModule } from "@angular/cdk/bidi";
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
+import { LoaderComponent } from "../../components/floads/loader-component/loader-component";
 
 @Component({
   selector: 'app-sig-in-component',
-  imports: [ReactiveFormsModule, BidiModule],
+  imports: [ReactiveFormsModule, BidiModule, LoaderComponent],
   templateUrl: './sig-in-component.html',
   styleUrl: './sig-in-component.scss',
 })
@@ -20,6 +21,7 @@ export class SigInComponent {
   estado: boolean = false;
   error!: HttpErrorResponse;
   resonse!: SessionEntity;
+  loader: boolean = false;
 
   // constructor
   private router = inject(Router);
@@ -45,14 +47,18 @@ export class SigInComponent {
 
   onSubmit() {
     if (this.sigin.valid) {
+      this.loader = true;
       const user = this.sigin.value as SigInRequestDto;
       this.singIn.execute(user).subscribe({
         next: (res) => {
           this.resonse = res;
           this.auth.setAuth(res.idUser, res.idSession);
+          this.router.navigate(['/dashboard']);
+          this.loader = false;
         },
         error: (err) => {
           this.error = err;
+          this.loader = false;
         },
       });
     }

@@ -11,7 +11,8 @@ import { SessionComponent } from '../../components/session-component/session-com
 import { LoaderSessionComponent } from '../../components/floads/loader-session-component/loader-session-component';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { Router } from '@angular/router';
-import { catchError, firstValueFrom, switchMap } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
+import { NewRegisterComponent } from "../../components/new-register-component/new-register-component";
 
 type FilterMode =
   | 'todo'
@@ -29,7 +30,8 @@ type FilterMode =
     MatIconModule,
     SessionComponent,
     LoaderSessionComponent,
-  ],
+    NewRegisterComponent
+],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.scss',
 })
@@ -39,16 +41,19 @@ export class DashboardLayout implements OnInit {
   busqueda: string = '';
   page: number = 1;
   loader: boolean = true;
+  newRegister: boolean = false;
 
   // datos para mapear en la pagina
   todosRegistros: RegisterEntity[] = [];
   registrosFiltrados: RegisterEntity[] = [];
   usuario!: UserEntity | any;
+
   // casos de uso utilizados
   private user = inject(UserGetUseCase);
   private registers = inject(RegisterGetAllUsecase);
   private auth = inject(AuthService);
   private router = inject(Router);
+
   // funcion inicial para hacer las consultas
   async ngOnInit(): Promise<void> {
     this.todosRegistros = await firstValueFrom(this.registers.execute());
@@ -57,10 +62,8 @@ export class DashboardLayout implements OnInit {
       this.user.execute(`${this.auth.getUserId()}`),
     );
 
-    console.log(this.auth.getUserId());
     this.user.execute(`${this.auth.getUserId()}`).subscribe({
       next: (res) => {
-        console.log(res);
         this.usuario = res;
         setTimeout(() => {
           this.loader = false;
@@ -93,17 +96,17 @@ export class DashboardLayout implements OnInit {
     switch (this.filtroActual) {
       case 'Pendiente':
         return this.todosRegistros.filter(
-          (r) => r.statusRegister === 'Pending',
+          (r) => r.statusRegister === 0,
         );
 
       case 'En progreso':
-        return registros.filter((r) => r.statusRegister === 'InProgress');
+        return registros.filter((r) => r.statusRegister === 1);
 
       case 'Completado':
-        return registros.filter((r) => r.statusRegister == 'Completed');
+        return registros.filter((r) => r.statusRegister == 2);
 
       case 'cancelado':
-        return registros.filter((r) => r.statusRegister == 'Cancelled');
+        return registros.filter((r) => r.statusRegister == 3);
 
       case 'todo':
       default:
@@ -166,5 +169,9 @@ export class DashboardLayout implements OnInit {
   // paso de datos para crear la observacion
   crearObservacion(id: string): void {
     this.router.navigate(['/dashboard/new-observation', id]);
+  }
+
+  openNewRegister(): void {
+    this.newRegister = true;
   }
 }

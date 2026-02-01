@@ -7,3 +7,7 @@ export interface ISession<dto, dto1, entity> {
   VerifyMail(mail: string): Observable<boolean>;
   Logout(id: string): Observable<boolean>;
 }
+
+export interface ISessionInfo<entity> {
+  GetSessionsInfo(idUser: string): Observable<entity[]>;
+}

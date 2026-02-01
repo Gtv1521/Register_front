@@ -1,33 +1,37 @@
 import { Injectable } from '@angular/core';
 import { IClient } from 'src/app/core/domain/interfaces/ICrud';
-import { RegisterRequestDto } from '../../dto/request/register/register-request.dto';
-import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { ClientRequestDto } from '../../dto/request/client/client-request.dto';
 import { ClientEntity } from 'src/app/core/domain/entitys/client.entity';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environment';
-import { IMapper } from 'src/app/core/domain/interfaces/IMapper';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ClientMapper } from 'src/app/core/aplication/mappers/client.mapper';
 import { ClientResponseDto } from '../../dto/response/client/client-response.dto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ClientHttpService implements IClient<ClientRequestDto, ClientEntity> {
+export class ClientHttpService implements IClient<
+  ClientRequestDto,
+  ClientEntity
+> {
   Url = `${environment.apiUrl}/Client`;
   constructor(
     private http: HttpClient,
-    private mapper: ClientMapper
-  ) { }
+    private mapper: ClientMapper,
+  ) {}
   Filter(data: string): Observable<ClientEntity[]> {
-    return this.http.get<ClientResponseDto[]>(`${this.Url}/Filter`)
-      .pipe(map(res => res.map(c => this.mapper.fromDto(c))));
+    return this.http
+      .get<ClientResponseDto[]>(`${this.Url}/filter/${data}`)
+      .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));
   }
   Get(id: string): Observable<ClientEntity> {
-    return this.http.get<ClientResponseDto>(`${this.Url}/${id}`).pipe(map(res => this.mapper.fromDto(res)));
+    return this.http
+      .get<ClientResponseDto>(`${this.Url}/${id}`)
+      .pipe(map((res) => this.mapper.fromDto(res)));
   }
   Create(dto: ClientRequestDto): Observable<string> {
+    console.log(dto);
     return this.http.post<string>(`${this.Url}`, dto);
   }
   Update(dto: ClientRequestDto): Observable<boolean> {

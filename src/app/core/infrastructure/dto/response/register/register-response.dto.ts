@@ -1,3 +1,4 @@
+import { EstadoRegistro } from "src/app/core/domain/entitys/register.entity";
 import { ClientResponseDto } from "../client/client-response.dto";
 import { ObservationResponseDto } from "../observation/observation-response.dto";
 
@@ -8,7 +9,7 @@ export interface RegisterResponseDto {
   id: string,
   idClient: string,
   idUser: string,
-  statusRegister: string,
+  statusRegister: EstadoRegistro,
   urlQr: string,
   idQr: string,
   createdAt: string

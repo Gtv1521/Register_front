@@ -1,19 +1,21 @@
 import { Inject, Injectable } from '@angular/core';
-import { SESSION_TOKEN } from '../../tokens/session.token';
+import { SessionEntity } from 'src/app/core/domain/entitys/session.entity';
 import { ISession } from 'src/app/core/domain/interfaces/Isession';
 import { LoginRequestDto } from 'src/app/core/infrastructure/dto/request/login-request.dto';
+import { SESSION_TOKEN } from '../../tokens/session.token';
 import { SigInRequestDto } from 'src/app/core/infrastructure/dto/request/sig-in-request.dto';
-import { SessionEntity } from 'src/app/core/domain/entitys/session.entity';
-import {  Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
-export class LoginUseCase {
+@Injectable({
+  providedIn: 'root',
+})
+export class LogoutUseCase {
   constructor(
     @Inject(SESSION_TOKEN)
     private repo: ISession<LoginRequestDto, SigInRequestDto, SessionEntity>,
   ) {}
 
-  execate(data: LoginRequestDto): Observable<SessionEntity> {
-    return this.repo.Login(data);
+  execute(id: string): Observable<boolean> {
+    return this.repo.Logout(id);
   }
 }

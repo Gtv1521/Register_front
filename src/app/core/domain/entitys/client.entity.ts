@@ -1,5 +1,5 @@
 export interface ClientEntity {
-    id: string | null,
+    id: string,
     name: string,
     email: string,
     phone: number

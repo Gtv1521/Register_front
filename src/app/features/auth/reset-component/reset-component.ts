@@ -2,11 +2,11 @@ import { NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { environment } from '@environment';
+import { LoaderComponent } from "../../components/floads/loader-component/loader-component";
 
 @Component({
   selector: 'app-reset-component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LoaderComponent],
   templateUrl: './reset-component.html',
   styleUrl: './reset-component.scss',
 })
@@ -14,6 +14,7 @@ export class ResetComponent {
   // estados
   estado: boolean = false;
   loading: boolean = false;
+
   // constructor
   private router = inject(Router);
   private fb = inject(FormBuilder);

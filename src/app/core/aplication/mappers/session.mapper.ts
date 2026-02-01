@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SessionEntity } from '../../domain/entitys/session.entity';
 import { IMapper } from '../../domain/interfaces/IMapper';
-import { SessionResponseDto } from '../../infrastructure/dto/response/session-response.dto';
+import { SessionResponseDto } from '../../infrastructure/dto/response/session/session-response.dto';
 @Injectable({ providedIn: 'root' })
 export class SessionMapper
   implements IMapper<SessionResponseDto, SessionEntity>

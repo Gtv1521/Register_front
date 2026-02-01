@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="container-fluid">
+    <section class="title">Sesiones activas</section>
+    <div class="panel_sesiones">
+      @for (session of sessiomsList; track session.id) {
+        @if (session.status === 'Active') {
+            <div class="session-item">
+              <span>{{ session.token }}</span>
+              <span>{{ session.status }}</span>
+              <button type="button" (click)="onLogout(session.id)">Cerrar session</button>
+            </div>
+        } 
+      }
+    </div>
+  </div>
+</div>

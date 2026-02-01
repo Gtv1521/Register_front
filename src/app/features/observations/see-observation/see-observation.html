@@ -79,21 +79,29 @@
               </button>
             </section>
             <section class="options">
-              <button class="btn"><p>n</p></button>
+              <button class="btn" (click)="toogleNueva()" title="add observation">
+                <mat-icon class="icon">add</mat-icon>
+              </button>
               <button class="btn"><p>d</p></button>
             </section>
           </div>
         </div>
       </div>
       <section class="observations">
+
+        @if (nueva) {
+          <app-observation-create [IdRegister]="register?.id" (CloseModal)="onCloseModal($event)"/>
+        }
         @for (observacion of observationsList; track observacion?.id) {
           <app-card-observation
             [Observation]="observacion"
           ></app-card-observation>
         } @empty {
-          <section class="no_data">
-            <strong>No hay obsevasiones</strong>
-          </section>
+          @if (!nueva) {
+            <section class="no_data">
+              <strong>No hay obsevasiones</strong>
+            </section>
+          }
         }
       </section>
     </div>

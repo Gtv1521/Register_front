@@ -12,14 +12,22 @@ import { FormsModule } from '@angular/forms';
 import { ClientGetUseCase } from 'src/app/core/aplication/use-cases/client-useCase/client-get.useCase';
 import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
 import { DatePipe } from '@angular/common';
-import { PhonePipe } from "../../../core/infrastructure/http/pipes/phone-pipe";
+import { PhonePipe } from '../../../core/infrastructure/http/pipes/phone-pipe';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
+import { NewObservation } from '../new-observation/new-observation';
 
 type filterMode = 'todo' | 'Ultimos' | 'Primeros';
 
 @Component({
   selector: 'app-see-observation',
-  imports: [MatIconModule, CardObservation, FormsModule, DatePipe, PhonePipe],
+  imports: [
+    MatIconModule,
+    CardObservation,
+    FormsModule,
+    DatePipe,
+    PhonePipe,
+    NewObservation,
+  ],
   templateUrl: './see-observation.html',
   styleUrl: './see-observation.scss',
 })
@@ -29,8 +37,8 @@ export class SeeObservation implements OnInit {
   private observations = inject(ObservartionGetAllUseCase);
   private registers = inject(RegisterUseCase);
   private clients = inject(ClientGetUseCase);
-  private user = inject(UserGetUseCase)
-  private auth = inject(AuthService)
+  private user = inject(UserGetUseCase);
+  private auth = inject(AuthService);
 
   // datos para usar en el formulario
   usuario: UserEntity | any;
@@ -39,6 +47,7 @@ export class SeeObservation implements OnInit {
   observationsList: ObservationEntity[] = [];
   busqueda: string = '';
   filterActual: filterMode = 'todo';
+  nueva: boolean = false;
 
   // funcion principal para la traida de datos
   async ngOnInit(): Promise<void> {
@@ -104,5 +113,13 @@ export class SeeObservation implements OnInit {
   onVerPrimeros(): void {
     this.filterActual = 'Primeros';
     this.busqueda = '';
+  }
+
+  onCloseModal($event: boolean) {
+    this.nueva = $event;
+  }
+
+  toogleNueva(): void {
+    this.nueva = true;
   }
 }

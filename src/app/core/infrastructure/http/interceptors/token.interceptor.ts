@@ -1,34 +1,37 @@
-import { inject } from '@angular/core';
+// src/app/interceptors/auth.interceptor.ts
 import {
-  HttpRequest,
+  HttpClient,
+  HttpErrorResponse,
+  HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpClient,
-  HttpEvent,
-  HttpErrorResponse,
+  HttpRequest,
 } from '@angular/common/http';
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { environment } from '@environment';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
+@Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   private Url = `${environment.apiUrl}/Session`;
-  isRefreshing: boolean = false;
+  isRefreshing: boolean = false; // habilita refresh
 
-  private http = inject(HttpClient); 
-  private route = inject(Router);
+  private http = inject(HttpClient); // conexion con backend
+  private route = inject(Router); // Rutas de la app
   private auth = inject(AuthService);
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    const excludedRoutes = ['/api/Session/login', '/Session/signin'];
+    const excludedRoutes = ['api/Session/login', 'api/Session/signin'];
 
     if (excludedRoutes.some((url) => req.url.includes(url))) {
       return next.handle(req); // sale limpio, no toca headers ni cookies
     }
+
     // Clona la petición y añade el token de autenticación
     const authReq = req.clone({ withCredentials: true });
 
@@ -46,6 +49,7 @@ export class TokenInterceptor implements HttpInterceptor {
               { id: this.auth.getUserId() },
               {
                 withCredentials: true,
+                headers: { 'Content-Type': 'application/json' },
               },
             )
             .pipe(
@@ -57,7 +61,7 @@ export class TokenInterceptor implements HttpInterceptor {
               catchError((refreshError) => {
                 this.isRefreshing = false;
                 console.error('❌ Error al refrescar el token', refreshError);
-                this.route.navigate(['/login']); // cierra session
+                this.route.navigate(['/logout']); // cierra session
                 return throwError(() => refreshError);
               }),
             );

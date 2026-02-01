@@ -11,6 +11,10 @@
         >delete</mat-icon
       >
 
+      <mat-icon (click)="openNewRegister()" class="icons"
+        >add_to_queue</mat-icon
+      >
+
       <div class="card-search">
         <div class="search-box">
           <input
@@ -45,12 +49,11 @@
             (verDetalleEvent)="verDetalle($event)"
           >
           </app-card-component>
-        }
-        @empty {
+        } @empty {
           <section class="no_data">
             <p>No hay registros</p>
           </section>
-        } 
+        }
       </div>
     </div>
 
@@ -111,5 +114,10 @@
         </div>
       </div>
     </footer>
+
   </div>
+}
+
+@if (newRegister) {
+  <app-new-register-component />
 }

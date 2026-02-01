@@ -6,7 +6,7 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { SESSION_TOKEN } from './core/aplication/tokens/session.token';
+import { SESSION_TOKEN, SESSIONES_TOKEN } from './core/aplication/tokens/session.token';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
@@ -33,12 +33,12 @@ export const appConfig: ApplicationConfig = {
     { provide: USER_TOKEN, useClass: UserHttpService },
     { provide: OBSERVATION_TOKEN, useClass: ObservationHttpService },
     { provide: CLIENT_TOKEN, useClass: ClientHttpService },
+    { provide: SESSIONES_TOKEN, useClass: SessionHttpService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
     },
     provideRouter(routes),
-    // -- ADD THIS LINE --
   ]
 };

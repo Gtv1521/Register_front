@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IFiter } from 'src/app/core/domain/interfaces/ICrud';
 import { map, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '@environment';
 import { RegisterRequestDto } from '../../dto/request/register/register-request.dto';
 import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
@@ -11,25 +11,31 @@ import { RegisterMapper } from 'src/app/core/aplication/mappers/register.mapper'
 @Injectable({
   providedIn: 'root',
 })
-export class RegisterHttpService implements IFiter<RegisterRequestDto, RegisterEntity> {
+export class RegisterHttpService implements IFiter<
+  RegisterRequestDto,
+  RegisterEntity
+> {
   Url = `${environment.apiUrl}/Register`;
 
   constructor(
     private http: HttpClient,
-    private mapper: RegisterMapper
-  ) {
-
-  }
+    private mapper: RegisterMapper,
+  ) {}
   GetAll(): Observable<RegisterEntity[]> {
-    return this.http.get<RegisterResponseDto[]>(`${this.Url}`)
-      .pipe(map(res => res.map(c => this.mapper.fromDto(c))));
+    let params = new HttpParams().set('pageNumber', 1).set('pageSize', 40);
+    return this.http
+      .get<RegisterResponseDto[]>(`${this.Url}`, { params })
+      .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));
   }
   Filter(): Observable<RegisterEntity[]> {
-    return this.http.get<RegisterResponseDto[]>(`${this.Url}/Filter`)
-      .pipe(map(res => res.map(c => this.mapper.fromDto(c))));
+    return this.http
+      .get<RegisterResponseDto[]>(`${this.Url}/Filter`)
+      .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));
   }
   Get(id: string): Observable<RegisterEntity> {
-    return this.http.get<RegisterResponseDto>(`${this.Url}/${id}`).pipe(map(res => this.mapper.fromDto(res)));
+    return this.http
+      .get<RegisterResponseDto>(`${this.Url}/${id}`)
+      .pipe(map((res) => this.mapper.fromDto(res)));
   }
   Create(dto: RegisterRequestDto): Observable<string> {
     return this.http.post<string>(`${this.Url}`, dto);
@@ -37,5 +43,4 @@ export class RegisterHttpService implements IFiter<RegisterRequestDto, RegisterE
   Update(dto: RegisterRequestDto): Observable<boolean> {
     return this.http.put<boolean>(`${this.Url}/${dto.id}`, dto);
   }
-
 }

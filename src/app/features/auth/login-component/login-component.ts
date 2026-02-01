@@ -1,14 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoginUseCase } from 'src/app/core/aplication/use-cases/session-usecase/login.useCase';
 import { LoginRequestDto } from 'src/app/core/infrastructure/dto/request/login-request.dto';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
+import { LoaderComponent } from '../../components/floads/loader-component/loader-component';
 
 @Component({
   selector: 'app-login-component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LoaderComponent],
   templateUrl: './login-component.html',
   styleUrl: './login-component.scss',
 })
@@ -39,6 +40,10 @@ export class LoginComponent {
     this.router.navigate(['/reset']);
   }
 
+  goSessions() {
+    this.router.navigate([`/sessions/${this.error.error?.id}`]);
+  }
+
   onSubmit() {
     if (this.login.valid) {
       this.loading = true;
@@ -51,7 +56,7 @@ export class LoginComponent {
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-          this.error = err; 
+          this.error = err;
           this.loading = false;
         },
       });

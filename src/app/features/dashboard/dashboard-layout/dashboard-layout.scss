@@ -4,28 +4,21 @@
   width: 100%;
   height: 100vh;
   position: relative;
-  // padding: 0;
   background-color: var.$dashboard_bg;
-  // justify-content: space-between;
-
-  // height: 100vh;          // OBLIGATORIO
   display: grid;
   grid-template-rows:
     1fr // header
-    // 1fr    // search
     8fr // content
     1fr; // footer
 
   .container-fluid {
     top: 0;
     width: 100%;
-    // height: 8%;
     display: flex;
     justify-content: space-between;
     background-color: var.$fondo_modal;
     align-items: center;
     position: sticky;
-    z-index: 100;
 
     .caja-icono {
       .icons {
@@ -131,7 +124,6 @@
     align-items: center;
     justify-content: space-around;
 
-    z-index: 100;
     color: var.$white;
   }
 
