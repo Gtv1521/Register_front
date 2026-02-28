@@ -22,6 +22,8 @@ import { ObservationHttpService } from './core/infrastructure/http/http-api/obse
 import { OBSERVATION_TOKEN } from './core/aplication/tokens/observation.token';
 import { ClientHttpService } from './core/infrastructure/http/http-api/client-http.service';
 import { CLIENT_TOKEN } from './core/aplication/tokens/client.token';
+import { COMPANY_TOKEN } from './core/aplication/tokens/company.token';
+import { CompanyHttpService } from './core/infrastructure/http/http-api/company-http.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -34,6 +36,7 @@ export const appConfig: ApplicationConfig = {
     { provide: OBSERVATION_TOKEN, useClass: ObservationHttpService },
     { provide: CLIENT_TOKEN, useClass: ClientHttpService },
     { provide: SESSIONES_TOKEN, useClass: SessionHttpService },
+    { provide: COMPANY_TOKEN, useClass: CompanyHttpService},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

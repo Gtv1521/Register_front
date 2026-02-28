@@ -58,6 +58,7 @@
         margin-top: 40px;
 
         .submit {
+          position: relative;
           width: 100%;
           border-radius: 10px;
           padding: 5px;
@@ -65,12 +66,21 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 10px;
 
           &:hover {
-              border: 2px solid var.$azul;
-              box-shadow: 0 0 10px var.$azul;
-          } 
+            border: 2px solid var.$azul;
+            box-shadow: 0 0 10px var.$azul;
+          }
+
+          .load {
+            position: absolute;
+            top: 50%;
+            left: 40%;
+            transform: translateY(-50%);
+            width: 25px !important;
+            height: 25px !important;
+            color: var.$azul;
+          }
         }
       }
     }
@@ -87,7 +97,6 @@
       padding: 10px;
       box-sizing: border-box;
       background-color: var.$red_dark;
-
     }
     .sessions {
       p {
@@ -103,7 +112,7 @@
 .link {
   color: var.$rojo;
   font-weight: 800;
-  &:hover{
+  &:hover {
     color: var.$white;
   }
 }

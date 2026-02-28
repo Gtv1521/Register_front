@@ -1,9 +1,11 @@
 <div class="contenedor">
   <div class="container-fluid">
-    <button class="back">Volver</button>
+    <button class="back" (click)="onBack()">Volver</button>
     <div class="panel_data">
-      <div class="title">Nuevo registro</div>
-      <form [formGroup]="register" (ngSubmit)="onSubmit()" class="registro">
+      <div class="title">
+        {{ saveCliente ? "Editar Cliente" : "Nuevo registro" }}
+      </div>
+      <form [formGroup]="register" class="registro">
         <div class="form_group">
           <label for="email">Email: </label>
           <div class="box_mail">
@@ -17,37 +19,43 @@
               formControlName="email"
             />
             @if (loader_mail) {
-              <span><app-loader-component /></span>
-            }
-
-            @if (client) {
-              <strong class="ok">Datos cargados </strong>
-            }
-            @if (errores?.status == 404) {
-              <strong class="err">No registrado</strong>
-            }
-
-            @if (
-              register.get("email")?.touched && register.get("email")?.invalid
-            ) {
-              <div class="error-message">
-                @if (register.get("email")?.errors?.["required"]) {
-                  <span>El correo es obligatorio</span>
-                } @else if (register.get("email")?.errors?.["minlength"]) {
-                  <span>
-                    El correo debe tener al menos
-                    {{
-                      register.get("email")?.errors?.["minlength"]
-                        .requiredLength
-                    }}
-                  </span>
-                } @else {
-                  <span>El correo tiene un error desconocido</span>
-                }
-              </div>
+              <span class="icon"><app-loader-component /></span>
             }
           </div>
+
+          @if (errores?.status == 404) {
+            <strong class="err">No registrado</strong>
+          }
+          @if (
+            register.get("email")?.touched && register.get("email")?.invalid
+          ) {
+            <div class="error-message">
+              @if (register.get("email")?.errors?.["required"]) {
+                <span>El correo es obligatorio</span>
+              } @else if (register.get("email")?.errors?.["minlength"]) {
+                <span>
+                  El correo debe tener al menos
+                  {{
+                    register.get("email")?.errors?.["minlength"].requiredLength
+                  }}
+                </span>
+              } @else {
+                <span>El correo tiene un error desconocido</span>
+              }
+            </div>
+          }
         </div>
+        <!-- si el cliente existe lo puede editar -->
+        @if (client) {
+          <div class="client_carge">
+            <strong class="ok">Datos cargados </strong>
+            @if (editar) {
+              <button class="btn change" (click)="onChangeEdit()">
+                Modificar datos
+              </button>
+            }
+          </div>
+        }
         <div class="form_group">
           <label for="cliente">Nombre: </label
           ><input
@@ -108,7 +116,9 @@
         <div class="form_group">
           <label for="status">Estado</label>
           <select name="status" formControlName="type" id="status">
-            <option [ngValue]="null" disabled>Seleccione un estado</option>
+            <option value="" disabled selected hidden>
+              Seleccione un estado
+            </option>
             @for (item of estados; track item.value) {
               <option [ngValue]="item.value">
                 {{ item.label }}
@@ -125,10 +135,60 @@
             </div>
           }
         </div>
-        <div class="form_submit">
-          <button type="submit" class="btn">Guardar</button>
-        </div>
       </form>
+      @if (loadObservation) {
+        <div class="observation">
+          <app-observation-create
+            #observation
+            [onRegister]="true"
+            [IdRegister]="idRegister"
+          />
+        </div>
+      }
+
+      <div class="form_submit">
+        @if (!loadObservation) {
+          <button
+            (click)="onSeguir()"
+            [class.disabled]="saveCliente"
+            [disabled]="saveCliente"
+            class="btn save"
+          >
+            @if (loadIcono) {
+              <span class="icon">
+                <app-loader-component />
+              </span>
+            }
+            <p>Guardar</p>
+          </button>
+        }
+        @if (loadObservation) {
+          <!-- <div class="options"> -->
+          <button type="reset" class="btn">Limpiar</button>
+          <button type="button" class="btn cancel" (click)="Cancelar()">
+            Cancelar
+          </button>
+          <button (click)="onSubmit()" class="btn save">
+            @if (loadIcono) {
+              <span class="icon">
+                <app-loader-component />
+              </span>
+            }
+            <p>Crear Registro</p>
+          </button>
+          <!-- </div> -->
+        }
+
+        @if (saveCliente) {
+          <button class="btn cancel" (click)="onCancelar()">Cancelar</button>
+          <button class="btn save" (click)="onEditar()">
+            @if (loadIcono) {
+              <span class="icono"> <app-loader-component /> </span>
+            }
+            Guardar
+          </button>
+        }
+      </div>
     </div>
   </div>
 </div>

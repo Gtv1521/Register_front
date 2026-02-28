@@ -12,5 +12,10 @@ import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entit
 export class CardObservation {
   @Input() Observation!: ObservationEntity;
 
-  ngOnInit() {}
+  textoFormateado: string = '';
+  
+  ngOnInit() {
+    // En tu componente
+    this.textoFormateado = this.Observation.description?.replace(/\n/g, '<br>') || '';
+  }
 }

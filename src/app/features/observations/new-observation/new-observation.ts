@@ -17,6 +17,14 @@ import { firstValueFrom } from 'rxjs';
 
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { HttpResponse } from '@angular/common/http';
+import { L } from '@angular/cdk/keycodes';
+import { ObservationRequestDto } from 'src/app/core/infrastructure/dto/request/observation/observation-request.dto';
+import {
+  LIST_TYPE,
+  LISTA_ESTADOS,
+} from 'src/app/core/domain/reusables/estados.constant';
+import { types } from 'src/app/core/domain/entitys/observation.entity';
+import { UpperCaseConstant } from 'src/app/core/domain/reusables/upper-case.constant';
 const statusMap: Record<string, number> = {
   PENDIENTE: 0,
   EN_PROCESO: 1,
@@ -31,41 +39,32 @@ const statusMap: Record<string, number> = {
   styleUrl: './new-observation.scss',
 })
 export class NewObservation {
+  readonly estados = LIST_TYPE;
   //servicios
   private fb = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private observationService = inject(ObservationCreateUseCase);
-  private register = inject(RegisterUseCase);
   private auth = inject(AuthService);
+  private upperCase = inject(UpperCaseConstant);
 
   @Input() IdRegister: string | null = null;
+  @Input() onRegister: boolean = false;
   @Output() CloseModal = new EventEmitter<boolean>();
+  @Output() ChangeEditar = new EventEmitter<boolean>();
 
   // datos
   photos: File[] = [];
   photoPreviews: string[] = [];
-  // registerId = this.route.snapshot.paramMap.get('registerId');
-  registerData: RegisterEntity | any;
   userId = this.auth.getUserId();
-  responseData!: HttpResponse<any>; // respuesta de la peticion
-
+  responseData!: string; // respuesta de la peticion
   loader: boolean = false;
 
   //datos del formulario
-  form = this.fb.nonNullable.group({
+  form = this.fb.group({
     description: ['', [Validators.required, Validators.minLength(10)]],
     type: ['', Validators.required],
     notificaEmail: [false],
     notificaWhatsapp: [false],
   });
-
-  async ngOnInit() {
-    this.registerData = await firstValueFrom(
-      this.register.execute(this.IdRegister!),
-    );
-  }
-
 
   onPhotosSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -89,41 +88,74 @@ export class NewObservation {
     this.CloseModal.emit(false);
   }
 
-  onSubmit(): void {
-    if (this.form.valid) {
+  public valid(): boolean {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return false;
+    }
+    return true;
+  }
+
+  // Esta es la función que usará el Padre
+  public async obtenerDatos(
+    idregister: string,
+  ): Promise<ObservationRequestDto> {
+    return {
+      id: null!, // El ID se generará en el backend
+      IdRegister: idregister,
+      IdUser: this.userId!,
+      Type: this.form.value.type! as types,
+      Description: this.upperCase.formatParagraphs(
+        this.form.value.description!,
+      ),
+      NotificaEmail: this.form.value.notificaEmail!,
+      NotificaWhatsapp: this.form.value.notificaWhatsapp!,
+      Photos: this.photos,
+    };
+  }
+
+  handleTab(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault(); // Evita que el cursor salte al siguiente input
+
+      const textarea = event.target as HTMLTextAreaElement;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const spaces = '  '; // Aquí defines cuántos espacios o qué caracteres insertar
+
+      // 1. Modificamos el valor del texto insertando los espacios en la posición del cursor
+      textarea.value =
+        textarea.value.substring(0, start) +
+        spaces +
+        textarea.value.substring(end);
+
+      // 2. Reposicionamos el cursor justo después de los espacios insertados
+      textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
+
+      // 3. Importante: Si usas Reactive Forms, hay que avisarle al control que el valor cambió
+      this.form.get('description')?.setValue(textarea.value);
+    }
+  }
+
+  async onSubmit(): Promise<void> {
+    if (!this.valid()) {
+      return;
+    }
+
+    try {
       this.loader = true;
-      const formData = new FormData();
+      const formData = await this.obtenerDatos(this.IdRegister!);
 
-      formData.append('IdRegister', this.IdRegister!); // 🔑
-      formData.append('IdUser', this.userId!); // 🔑
-      formData.append('Type', statusMap[this.form.value.type!].toString());
-      formData.append('Description', this.form.value.description!);
-      formData.append(
-        'NotificaEmail',
-        this.form.value.notificaEmail!.toString(),
+      const response = await firstValueFrom(
+        this.observationService.execute(formData),
       );
-      formData.append(
-        'NotificaWhatsapp',
-        this.form.value.notificaWhatsapp!.toString(),
-      );
-
-      this.photos.forEach((photo, index) => {
-        formData.append('Photos', photo);
-      });
-
-      console.log('Observación a crear:', formData);
-
-      this.observationService.execute(formData).subscribe({
-        next: (response) => {
-          this.loader = false;
-          this.responseData = response;
-          this.CloseModal.emit(false);
-        },
-        error: (err) => {
-          this.loader = false;
-          console.error('Error al crear observación', err);
-        },
-      });
+      this.responseData = response;
+    } catch (error) {
+      throw error;
+    } finally {
+      this.loader = false;
+      this.ChangeEditar.emit(false);
+      this.CloseModal.emit(false);
     }
   }
 }

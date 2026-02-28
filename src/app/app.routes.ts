@@ -7,8 +7,8 @@ import { DashboardLayout } from './features/dashboard/dashboard-layout/dashboard
 import { NotFound } from './features/not-found/not-found';
 import { SeeObservation } from './features/observations/see-observation/see-observation';
 import { NewObservation } from './features/observations/new-observation/new-observation';
-import { SessionComponent } from './features/components/session-component/session-component';
 import { SessionsComponent } from './features/components/floads/sessions-component/sessions-component';
+import { LogoutComponent } from './features/auth/logout-component/logout-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -26,5 +26,6 @@ export const routes: Routes = [
   { path: 'sessions/:id', component: SessionsComponent }, // esta es la ruta para mostrar las sesiones
   { path: 'dashboard/see-observation/:id', component: SeeObservation },
   { path: 'dashboard/new-observation/:registerId', component: NewObservation },
+  { path: 'logout', component: LogoutComponent },
   { path: '**', component: NotFound },
 ];

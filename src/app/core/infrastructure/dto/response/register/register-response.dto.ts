@@ -9,6 +9,7 @@ export interface RegisterResponseDto {
   id: string,
   idClient: string,
   idUser: string,
+  registroNumber: string,
   statusRegister: EstadoRegistro,
   urlQr: string,
   idQr: string,

@@ -2,87 +2,114 @@
 
 .container {
   width: 100%;
-  height: 100lvh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 0 10px var.$azul;
+  overflow-y: scroll;
 
   .container-fluid {
-    background-color: var.$fondo_modal;
-    width: 50%;
-    // height: 50%;
-    border-radius: 20px;
-    padding: 50px 30px;
+    width: 60%;
+    height: 97vh;
+    // border-radius: 20px;
+    // padding: 50px 30px;
+    overflow-y: scroll;
     color: var.$white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px var.$azul;
 
-    .title {
-      width: 100%;
-      margin: 30px 0 40px 0;
-      text-align: center;
-      font-size: 2rem;
-    }
+    .panel_forms {
+      width: 70%;
+      padding: 10px 10px 40px 10px;
+      margin: auto;
+      height: auto;
+      border-radius: 15px;
+      background-color: var.$fondo_modal;
 
-    .container-form {
-      width: 100%;
-      .group_item {
+      .title {
         width: 100%;
         height: auto;
-        margin-bottom: 20px;
-
-        label {
-          width: 100%;
-          font-weight: 800;
-        }
-
-        input {
-          width: 90%;
-          margin-top: 10px;
-          padding: 4px 5%;
-          font-weight: 600;
-          border-radius: 8px;
-        }
-      }
-
-      .options {
-        height: 40px;
-      }
-
-      .enviar {
-        .submit {
-          display: flex;
-          gap: 10px;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          border-radius: 10px;
-          padding: 5px;
-          font-weight: 700;
-
-          &:hover {
-            border: 2px solid var.$azul;
-            box-shadow: 0 0 10px var.$azul;
-          }
-        }
+        margin: 30px 0 40px 0;
+        text-align: center;
+        font-size: 2rem;
       }
 
       .link {
+        // width: 20%;
+        margin-left: 5%;
         color: var.$rojo;
+        text-align: center;
+        font-size: 1.1rem;
         font-weight: 800;
         margin-top: 10px;
+
         &:hover {
+          cursor: pointer;
           color: var.$white;
+        }
+      }
+
+      .opciones {
+        width: 90%;
+        height: 35px;
+        margin: auto;
+        text-align: end;
+
+        .btn {
+          width: 150px;
+          height: 100%;
+          font-weight: 800;
+          border-radius: 10px;
+        }
+
+        .save {
+          position: relative;
+          border: 2px solid var.$black;
+        
+          &:hover {
+            border-color: var.$azul;
+            box-shadow: 0 0 10px var.$azul;
+            cursor: pointer;
+          }
+
+          .icon {
+            color: var.$azul;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+          }
+        }
+
+        .cancel {
+          margin-right: 10px;
+          border: 2px solid var.$black;
+          &:hover {
+            border-color: var.$rojo;
+            box-shadow: 0 0 10px var.$rojo;
+            cursor: pointer;
+          }
         }
       }
     }
 
-    .error_message {
-      text-align: center;
-      margin-top: 20px;
-      color: var.$white;
-      font-family:Verdana, Geneva, Tahoma, sans-serif;
-      font-weight: 600;
-      background-color: var.$red_dark;
-      padding: 10px;
-    }
+    // .error_message {
+    //   text-align: center;
+    //   margin-top: 20px;
+    //   color: var.$white;
+    //   font-family:Verdana, Geneva, Tahoma, sans-serif;
+    //   font-weight: 600;
+    //   background-color: var.$red_dark;
+    //   padding: 10px;
+    // }
   }
+}
+
+.disabled {
+  display: none;
 }

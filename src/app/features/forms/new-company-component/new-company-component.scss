@@ -1,0 +1,80 @@
+@use "../../../_styles/variables" as var;
+
+.container {
+  width: 90%;
+  margin: auto;
+
+  .container-fluid {
+    width: 100%;
+    height: auto;
+    // padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .title {
+      width: 100%;
+      text-align: start;
+      font-size: 1.3rem;
+      margin: 15px 0;
+    }
+
+    .container-form {
+      width: 100%;
+      .form_group {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+
+        label {
+          width: 100%;
+          font-weight: 800;
+        }
+
+        input {
+          background-color: var.$white;
+          width: 100%;
+          box-sizing: border-box;
+          margin: 10px auto 0 auto;
+          padding: 4px 13px;
+          font-weight: 600;
+          border-radius: 8px;
+          color: var.$black;
+        }
+
+        input.ng-invalid.ng-touched {
+          border-color: #e74c3c; /* Rojo de error */
+          background-color: #fdf2f2;
+        }
+
+        /* Cuando el campo es válido */
+        input.ng-valid.ng-touched {
+          border-color: var.$azul; /* Verde de éxito */
+        }
+      }
+
+      .options {
+        height: 40px;
+      }
+
+      .enviar {
+        .submit {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          border-radius: 10px;
+          padding: 5px;
+          font-weight: 700;
+
+          &:hover {
+            border: 2px solid var.$azul;
+            box-shadow: 0 0 10px var.$azul;
+          }
+        }
+      }
+    }
+  }
+}

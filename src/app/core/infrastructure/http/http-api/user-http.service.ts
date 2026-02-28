@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IFiter, IUser } from "src/app/core/domain/interfaces/ICrud";
+import { IUser } from "src/app/core/domain/interfaces/ICrud";
 import { UserRequestDto } from "../../dto/request/user/user-request.dto";
 import { UserEntity } from "src/app/core/domain/entitys/user.entity";
 import { environment } from "@environment";

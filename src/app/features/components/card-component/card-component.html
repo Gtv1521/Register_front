@@ -1,21 +1,44 @@
 <div class="card">
-  <div class="card-header">
-    <h3>{{ registro.clients?.name }}</h3>
-    <h3>{{ registro.clients?.phone}}</h3>
-  </div>
-  <div class="card-body">
+  <div class="container">
+    <div class="registro">
+      <h2>{{ registro.registroNumber }}</h2>
+    </div>
 
-    <img class="imagen" [src]="imageUrl" />
+    <div class="card-header">
+      <h3>{{ registro.clients?.name }}</h3>
+      <h3>{{ registro.clients?.phone }}</h3>
+    </div>
 
-    <p><strong>Estado:</strong> {{ registro.statusRegister }}</p>
-    <p><strong>Descripción:</strong> {{registro.observation?.description || 'Sin description' }}</p>
-  </div>
-  <div class="card-footer">
-    <button class="btn btn-secondary" (click)="verDetalle(registro.id)">
-      Ver detalle
-    </button>
-    <button class="btn btn-primary" (click)="crearObservacion(registro.id)">
-      Nueva observación
-    </button>
+    <div class="card-body">
+      <div class="panel_imagen">
+        <img class="imagen" [src]="imageUrl" />
+      </div>
+
+      <div class="date">
+        <strong>
+          {{ registro.createdAt | date: "EEEE, d MMMM yyyy" }}
+        </strong>
+      </div>
+
+      <div class="muestras">
+        <section class="status">
+          <strong>Estado:</strong> {{ registro.statusRegister }}
+        </section>
+        <section class="description">
+          <strong>Descripción:</strong>
+
+          <div [innerHTML]="descripcion" class="description-text"></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button class="btn btn-secondary" (click)="verDetalle(registro.id)">
+        Ver detalle
+      </button>
+      <button class="btn btn-primary" (click)="crearObservacion()">
+        Nueva observación
+      </button>
+    </div>
   </div>
 </div>

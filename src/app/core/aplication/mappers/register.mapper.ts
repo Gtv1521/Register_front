@@ -18,6 +18,7 @@ export class RegisterMapper implements IMapper<RegisterResponseDto, RegisterEnti
       id: dto.id,
       idClient: dto.idClient,
       idUser: dto.idUser,
+      registroNumber: dto.registroNumber,
       idQr: dto.idQr,
       urlQr: dto.urlQr,
       createdAt: dto.createdAt,

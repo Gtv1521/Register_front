@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -11,8 +11,11 @@ import { SessionComponent } from '../../components/session-component/session-com
 import { LoaderSessionComponent } from '../../components/floads/loader-session-component/loader-session-component';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
-import { NewRegisterComponent } from "../../components/new-register-component/new-register-component";
+import { lastValueFrom } from 'rxjs';
+import { NewRegisterComponent } from '../../components/new-register-component/new-register-component';
+import { LogoutUseCase } from 'src/app/core/aplication/use-cases/session-usecase/logout.useCase';
+import { HttpErrorResponse } from '@angular/common/http';
+import { RegisterStateService } from 'src/app/core/infrastructure/services/effect/register-state.service';
 
 type FilterMode =
   | 'todo'
@@ -30,148 +33,146 @@ type FilterMode =
     MatIconModule,
     SessionComponent,
     LoaderSessionComponent,
-    NewRegisterComponent
-],
+    NewRegisterComponent,
+  ],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.scss',
 })
 export class DashboardLayout implements OnInit {
   // datos para la pagina
-  filtroActual: FilterMode = 'todo';
+  // filtroActual: FilterMode = 'todo';
   busqueda: string = '';
-  page: number = 1;
-  loader: boolean = true;
+  // page: number = 1;
+  // loader: boolean = true;
   newRegister: boolean = false;
-
-  // datos para mapear en la pagina
-  todosRegistros: RegisterEntity[] = [];
-  registrosFiltrados: RegisterEntity[] = [];
-  usuario!: UserEntity | any;
+  errores!: HttpErrorResponse;
 
   // casos de uso utilizados
+  private auth = inject(AuthService);
   private user = inject(UserGetUseCase);
   private registers = inject(RegisterGetAllUsecase);
-  private auth = inject(AuthService);
   private router = inject(Router);
+  private logout = inject(LogoutUseCase); // cierra session
+
+  // data signals
+  public filterType = signal<FilterMode>('todo');
+  public registerList = signal<RegisterEntity[]>([]);
+  public usuario = signal<UserEntity | null>(null);
+  public loader = signal<boolean>(false);
+  public size = signal<number>(30);
+  public page = signal<number>(1);
+  public isLastPage = signal<boolean>(false);
+  public isLoading = signal<boolean>(false);
 
   // funcion inicial para hacer las consultas
   async ngOnInit(): Promise<void> {
-    this.todosRegistros = await firstValueFrom(this.registers.execute());
-    this.registrosFiltrados = [...this.todosRegistros];
-    this.usuario = await firstValueFrom(
-      this.user.execute(`${this.auth.getUserId()}`),
-    );
+    this.loader.set(true);
+    try {
+      await this.GetUser();
+      await this.loadMore();
+    } catch (error: any) {
+      this.errores = error;
+    } finally {
+      this.loader.set(false);
+    }
+  }
 
-    this.user.execute(`${this.auth.getUserId()}`).subscribe({
-      next: (res) => {
-        this.usuario = res;
-        setTimeout(() => {
-          this.loader = false;
-        }, 1000);
-      },
-      error: (err) => console.error(err),
-    });
+  public filteredObservations = computed(() => {
+    const list = this.registerList();
+    const filter = this.filterType();
+
+    switch (filter) {
+      case 'Pendiente':
+        return list.filter((item) => item.statusRegister === 'Pendiente'); // Ajusta según tu Entity
+      case 'En progreso':
+        return list.filter((item) => item.statusRegister === 'EnProgreso');
+      case 'Completado':
+        return list.filter((item) => item.statusRegister === 'Completado');
+      case 'cancelado':
+        return list.filter((item) => item.statusRegister === 'Cancelado');
+      default:
+        return list;
+    }
+  });
+
+
+  setFilter(status: FilterMode) {
+    this.filterType.set(status);
   }
-  // cambio de filtro para filtrar los datos
-  cambiarFiltro(filtro: FilterMode): void {
-    this.filtroActual = filtro;
-    this.busqueda = '';
-    this.aplicarFiltroYBusqueda();
+
+  onCloseNewRegister() {
+    this.newRegister = false;
   }
+
+  // trae todos los usuarios
+  async GetUser(): Promise<UserEntity> {
+    const res = await lastValueFrom(this.user.execute(this.auth.getUserId()!));
+    if (!res) throw new Error('El usuario no se encontro');
+    this.usuario.set(res);
+    return res;
+  }
+
   // funcion de busqueda segun la descripcion
   onBuscar(): void {
-    this.aplicarFiltroYBusqueda();
+    // this.aplicarFiltroYBusqueda();
   }
-  private aplicarFiltroYBusqueda(): void {
-    let resultado = this.filtrarPorEstado(this.todosRegistros);
 
-    if (this.busqueda.trim()) {
-      resultado = this.buscarSegunFiltro(resultado);
-    }
-
-    this.registrosFiltrados = resultado;
+  onLogout() {
+    this.logout.execute(this.auth.getSession()!);
+    this.router.navigate(['logout']);
   }
-  // uso del filtro segun el esdato del registro
-  private filtrarPorEstado(registros: RegisterEntity[]): RegisterEntity[] {
-    switch (this.filtroActual) {
-      case 'Pendiente':
-        return this.todosRegistros.filter(
-          (r) => r.statusRegister === 0,
-        );
 
-      case 'En progreso':
-        return registros.filter((r) => r.statusRegister === 1);
-
-      case 'Completado':
-        return registros.filter((r) => r.statusRegister == 2);
-
-      case 'cancelado':
-        return registros.filter((r) => r.statusRegister == 3);
-
-      case 'todo':
-      default:
-        return registros;
-    }
-  }
-  // buscar segun el filtro aplicado, busca en un solo estado
-  private buscarSegunFiltro(registros: RegisterEntity[]): RegisterEntity[] {
-    const texto = this.busqueda.toLowerCase().trim();
-
-    switch (this.filtroActual) {
-      case 'Pendiente':
-        return registros.filter((r) =>
-          r.observation?.description?.toLowerCase().includes(texto),
-        );
-      case 'En progreso':
-        return registros.filter((r) =>
-          r.observation?.description?.toLowerCase().includes(texto),
-        );
-      case 'Completado':
-        return registros.filter((r) =>
-          r.observation?.description?.toLowerCase().includes(texto),
-        );
-      case 'cancelado':
-        return registros.filter((r) =>
-          r.observation?.description?.toLowerCase().includes(texto),
-        );
-
-      case 'todo':
-      default:
-        return this.buscarGlobal(registros, texto);
-    }
-  }
-  // busca en todo
-  private buscarGlobal(
-    registros: RegisterEntity[],
-    texto: string,
-  ): RegisterEntity[] {
-    return registros.filter((r) => {
-      const contenido = [
-        r.id,
-        r.idClient,
-        r.statusRegister,
-        r.observation?.description,
-        ...(r.clients
-          ? [`${r.clients.name} ${r.clients.email} ${r.clients.phone}`]
-          : []),
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-
-      return contenido.includes(texto);
-    });
-  }
   // paso de datos para el ver detalle
   verDetalle(id: string): void {
     this.router.navigate(['/dashboard/see-observation', id]);
   }
-  // paso de datos para crear la observacion
-  crearObservacion(id: string): void {
-    this.router.navigate(['/dashboard/new-observation', id]);
-  }
 
   openNewRegister(): void {
     this.newRegister = true;
+  }
+
+  //  refresh de registros con paginado
+
+  onScroll(event: any) {
+    const element = event.target;
+    // Si la distancia del scroll + el alto visible es >= al alto total del contenido
+    if (
+      element.scrollHeight - element.scrollTop <=
+      element.clientHeight + 100
+    ) {
+      this.loadMore();
+    }
+  }
+
+  async loadMore() {
+    // Si ya estamos cargando o llegamos al final, no hacemos nada
+    if (this.isLoading() || this.isLastPage()) return;
+
+    this.isLoading.set(true);
+
+    try {
+      // Llamamos a la API con la página actual
+      const newData = await lastValueFrom(
+        this.registers.execute(
+          this.auth.companyId()!,
+          this.page(),
+          this.size(),
+        ),
+      );
+
+      if (newData.length < 10) {
+        this.isLastPage.set(true); // Si trajo menos de 10, es la última página
+      }
+
+      // LA CLAVE: Concatenamos los datos nuevos con los anteriores
+      this.registerList.update((current) => [...current, ...newData]);
+
+      // Incrementamos la página para la siguiente vez
+      this.page.update((p) => p + 1);
+    } catch (error) {
+      console.error('Error cargando más datos', error);
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

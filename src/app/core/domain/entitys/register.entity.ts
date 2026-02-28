@@ -8,14 +8,15 @@ export interface RegisterEntity {
   idClient: string;
   idUser: string;
   urlQr: string;
+  registroNumber: string;
   statusRegister: EstadoRegistro;
   idQr: string;
   createdAt: string;
 }
 
 export enum EstadoRegistro {
-  Pending = 0,
-  InProgress = 1,
-  Completed = 2,
-  Cancelled = 3,
+  Pendiente = "Pendiente",
+  EnProgreso = "EnProgreso",
+  Completado = "Completado",
+  Cancelado = "Cancelado",
 }

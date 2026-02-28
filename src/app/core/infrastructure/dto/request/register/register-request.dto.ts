@@ -4,6 +4,8 @@ export interface RegisterRequestDto {
   id: string,
   idClient: string,
   idUser: string,
+  idCompany: string,
+  registroNumber: string,
   statusRegister?: EstadoRegistro,
-  url: string, // para en qr del registro
+  urlRuta: string, // para en qr del registro
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-not-found',
@@ -8,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class NotFound {
 
+  private readonly route = inject(Router);
+
+  goLogin() {
+    this.route.navigate(["/login"]);
+  }
 }

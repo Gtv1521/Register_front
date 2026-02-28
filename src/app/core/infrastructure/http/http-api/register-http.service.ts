@@ -21,8 +21,15 @@ export class RegisterHttpService implements IFiter<
     private http: HttpClient,
     private mapper: RegisterMapper,
   ) {}
-  GetAll(): Observable<RegisterEntity[]> {
-    let params = new HttpParams().set('pageNumber', 1).set('pageSize', 40);
+  GetAll(
+    company: string,
+    page: number,
+    siza: number,
+  ): Observable<RegisterEntity[]> {
+    let params = new HttpParams()
+      .set('pageNumber', page)
+      .set('pageSize', siza)
+      .set('idCompany', company);
     return this.http
       .get<RegisterResponseDto[]>(`${this.Url}`, { params })
       .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));

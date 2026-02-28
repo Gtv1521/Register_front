@@ -237,3 +237,12 @@
     }
   }
 }
+
+@media (400px <= width <= 1360px) {
+  .padre {
+    padding: 10px;
+  }
+  .see-observation-container {
+    width: 95%;
+  }
+}

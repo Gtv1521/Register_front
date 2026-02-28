@@ -3,5 +3,6 @@ export interface UserResponseDto {
   name: string,
   email: string,
   password: string,
+  idCompany: string,
   rol: number
 }

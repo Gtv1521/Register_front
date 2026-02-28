@@ -45,14 +45,19 @@ export class SessionHttpService
 
   SigIn(data: SigInRequestDto): Observable<SessionEntity> {
     return this.http
-      .post<SessionResponseDto>(`${this.apiUrl}/signin`, data)
+      .post<SessionResponseDto>(`${this.apiUrl}/signin`, data, {
+        withCredentials: true, // ESTO ES ESENCIAL
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
       .pipe(map((res) => this.mapper.fromDto(res)));
   }
   ResetPassword(mail: string): Observable<boolean> {
     throw new Error('Method not implemented.');
   }
   VerifyMail(mail: string): Observable<boolean> {
-    throw new Error('Method not implemented.');
+    return this.http.get<boolean>(`${this.apiUrl}/verifyEmail/${mail}`);
   }
 
   GetSessionsInfo(idUser: string): Observable<SessionInfo[]> {

@@ -94,7 +94,7 @@
 
   // contenido de las card
   .content {
-    width: 97%;
+    width: 99%;
     height: 100%;
     margin: auto;
     overflow-y: scroll;
@@ -102,10 +102,9 @@
     .registers {
       padding: 10px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(32%, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+      gap: 20px;
       justify-content: space-around;
-      grid-auto-rows: 1fr;
       align-items: stretch;
     }
   }

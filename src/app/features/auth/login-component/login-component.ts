@@ -51,8 +51,8 @@ export class LoginComponent {
 
       this.loginSession.execate(data).subscribe({
         next: (res) => {
+          this.auth.setAuth(res.idUser, res.idSession, res.idCompany);
           this.loading = false;
-          this.auth.setAuth(res.idUser, res.idSession);
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {

@@ -1,6 +1,6 @@
 <!-- session de usuario  -->
 <app-session-component />
-@if (loader) {
+@if (loader()) {
   <app-loader-session-component />
 } @else {
   <!-- componentes de dashboard -->
@@ -21,13 +21,13 @@
             type="text"
             [(ngModel)]="busqueda"
             [placeholder]="
-              filtroActual === 'todo'
+              filterType() === 'todo'
                 ? 'Buscar en todo'
-                : filtroActual === 'En progreso'
+                : filterType() === 'En progreso'
                   ? 'Buscar en progreso'
-                  : filtroActual === 'Completado'
+                  : filterType() === 'Completado'
                     ? 'Buscar en alertas'
-                    : filtroActual === 'cancelado'
+                    : filterType() === 'cancelado'
                       ? 'Buscar por código o registro'
                       : 'Buscar por cliente'
             "
@@ -37,13 +37,13 @@
         </div>
       </div>
 
-      <mat-icon class="icons">exit_to_app</mat-icon>
+      <mat-icon class="icons" (click)="onLogout()">exit_to_app</mat-icon>
     </div>
 
     <!-- mapeo de registros -->
-    <div class="content">
+    <div class="content" (scroll)="onScroll($event)">
       <div class="registers">
-        @for (registro of registrosFiltrados; track registro.id) {
+        @for (registro of filteredObservations(); track registro.id) {
           <app-card-component
             [registro]="registro"
             (verDetalleEvent)="verDetalle($event)"
@@ -54,6 +54,9 @@
             <p>No hay registros</p>
           </section>
         }
+        @if (isLoading()) {
+          <div class="loader">Cargando más...</div>
+        }
       </div>
     </div>
 
@@ -62,7 +65,7 @@
       <div class="footer-left">
         <mat-icon class="user-icon">account_circle</mat-icon>
         <div class="user-info">
-          <span class="user-name">{{ usuario?.name }}</span>
+          <span class="user-name">{{ usuario()?.name }}</span>
           <span class="user-role">Técnico</span>
         </div>
       </div>
@@ -77,36 +80,36 @@
         <div class="filters">
           <div class="modos">
             <button
-              [class.active]="filtroActual === 'todo'"
-              (click)="cambiarFiltro('todo')"
+              [class.active]="filterType() === 'todo'"
+              (click)="setFilter('todo')"
             >
               Todo
             </button>
 
             <button
-              [class.active]="filtroActual === 'En progreso'"
-              (click)="cambiarFiltro('En progreso')"
+              [class.active]="filterType() === 'En progreso'"
+              (click)="setFilter('En progreso')"
             >
               En Progreso
             </button>
 
             <button
-              [class.active]="filtroActual === 'Pendiente'"
-              (click)="cambiarFiltro('Pendiente')"
+              [class.active]="filterType() === 'Pendiente'"
+              (click)="setFilter('Pendiente')"
             >
               Pendiente
             </button>
 
             <button
-              [class.active]="filtroActual === 'Completado'"
-              (click)="cambiarFiltro('Completado')"
+              [class.active]="filterType() === 'Completado'"
+              (click)="setFilter('Completado')"
             >
               Completado
             </button>
 
             <button
-              [class.active]="filtroActual === 'cancelado'"
-              (click)="cambiarFiltro('cancelado')"
+              [class.active]="filterType() === 'cancelado'"
+              (click)="setFilter('cancelado')"
             >
               Cancelado
             </button>
@@ -114,10 +117,9 @@
         </div>
       </div>
     </footer>
-
   </div>
 }
 
 @if (newRegister) {
-  <app-new-register-component />
+  <app-new-register-component (Close)="onCloseNewRegister()"/>
 }
