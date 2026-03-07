@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entity';
 
@@ -10,12 +10,12 @@ import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entit
   styleUrl: './card-observation.scss',
 })
 export class CardObservation {
-  @Input() Observation!: ObservationEntity;
+  Observation = input<ObservationEntity>();
 
   textoFormateado: string = '';
   
   ngOnInit() {
     // En tu componente
-    this.textoFormateado = this.Observation.description?.replace(/\n/g, '<br>') || '';
+    this.textoFormateado = this.Observation()?.description?.replace(/\n/g, '<br>') || '';
   }
 }

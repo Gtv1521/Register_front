@@ -1,20 +1,8 @@
 <div class="container">
   <div class="card-observation">
-    <!-- LADO IZQUIERDO -->
-    <div class="panel_left">
-      <div class="container_description">
-        <h2 class="title">Detalles</h2>
-        <div class="description" [innerHTML]="textoFormateado">
-        </div>
-        <p class="date">
-          Fecha:
-          {{ Observation.createdAt | date: "EEEE, d MMMM yyyy HH:mm" }}
-        </p>
-      </div>
-    </div>
-
-    <!-- LADO DERECHO -->
-    <div class="right-panel">
+    <div class="panel_title">
+      <h3>Observación</h3>
+      <h3>{{ Observation()?.id }}</h3>
       <!-- BOTONES -->
       <div class="buttons">
         <button class="boton editar">
@@ -26,20 +14,40 @@
           </span>
         </button>
       </div>
+    </div>
 
-      <!-- GALERÍA -->
-      <div class="photos">
-        <h3>Evidencias:</h3>
-        <div class="photo-list">
-          @for (photo of Observation.photos; track photo.id) {
-            <img
-              [src]="photo.photo"
-              [id]="photo.id"
-              class="observation-photo"
-            />
-          }
+    <div class="panel_contenido">
+      <!-- LADO IZQUIERDO -->
+      <div class="panel_left" [class.size]="Observation()?.photos?.length! === 0">
+        <div class="container_description">
+          <h3 class="title">Detalles</h3>
+          <div class="description" [innerHTML]="textoFormateado"></div>
         </div>
       </div>
+
+      <!-- LADO DERECHO -->
+      @if (Observation()?.photos?.length! > 0) {
+        <div class="panel_right">
+          <h3>Evidencias:</h3>
+          <!-- GALERÍA -->
+          <div class="photos">
+            <div class="photo-list">
+              @for (photo of Observation()?.photos; track photo.id) {
+                <img
+                  [src]="photo.photo"
+                  [id]="photo.id"
+                  class="observation-photo"
+                />
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="date">
+      Fecha:
+      {{ Observation()?.createdAt | date: "EEEE, d MMMM yyyy HH:mm" }}
     </div>
   </div>
 </div>

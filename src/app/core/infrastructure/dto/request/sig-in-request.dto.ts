@@ -10,5 +10,5 @@ export enum Rol {
   Usuario = 'Usuario',
   Cliente = 'Cliente',
   Administrador = 'Administrador',
-  User = 'Super',
+  Super = 'Super',
 }

@@ -17,8 +17,10 @@ export interface IFiter<dto, entity> extends Omit<
 }
 export interface IUser<dto, entity> extends Omit<
   ICrud<dto, entity>,
-  'Create' | 'Delete'
-> {}
+  'Create' | 'Delete' | 'Get'
+> {
+  Get(): Observable<entity>
+}
 
 export interface IGeneral<dto, entity> extends Omit<
   ICrud<dto, entity>,

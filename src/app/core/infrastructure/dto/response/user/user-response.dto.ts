@@ -4,5 +4,5 @@ export interface UserResponseDto {
   email: string,
   password: string,
   idCompany: string,
-  rol: number
+  rol: string
 }

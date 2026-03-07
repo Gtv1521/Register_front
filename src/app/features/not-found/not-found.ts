@@ -5,13 +5,12 @@ import { Router } from '@angular/router';
   selector: 'app-not-found',
   imports: [],
   templateUrl: './not-found.html',
-  styleUrl: './not-found.css',
+  styleUrl: './not-found.scss',
 })
 export class NotFound {
-
   private readonly route = inject(Router);
 
   goLogin() {
-    this.route.navigate(["/login"]);
+    this.route.navigate(['/dashboard']);
   }
 }

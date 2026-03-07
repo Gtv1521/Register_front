@@ -16,8 +16,8 @@ export class UserHttpService implements IUser<UserRequestDto, UserEntity> {
     private map: UserMapper,
 
   ) { }
-  Get(id: string): Observable<UserEntity> {
-    return this.http.get<UserResponseDto>(`${this.Url}/${id}`).pipe(map(res => this.map.fromDto(res)));
+  Get(): Observable<UserEntity> {
+    return this.http.get<UserResponseDto>(`${this.Url}/me`).pipe(map(res => this.map.fromDto(res)));
   }
   GetAll(): Observable<UserEntity[]> {
     return this.http.get<UserResponseDto[]>(`${this.Url}`)

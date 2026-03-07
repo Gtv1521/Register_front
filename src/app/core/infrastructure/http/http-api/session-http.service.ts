@@ -40,7 +40,9 @@ export class SessionHttpService
   }
 
   Logout(id: string): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/logout/${id}`, {});
+    const response = this.http.post<boolean>(`${this.apiUrl}/logout/${id}`, {});
+    console.log(response);
+    return response;
   }
 
   SigIn(data: SigInRequestDto): Observable<SessionEntity> {

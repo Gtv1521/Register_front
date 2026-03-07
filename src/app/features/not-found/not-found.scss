@@ -1,0 +1,54 @@
+@use "../../_styles/variables" as var;
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var.$fondo_modal;
+
+  .container-fluid {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var.$black;
+    border-radius: 30px;
+    padding: 30px;
+    margin: auto;
+    // display: block;
+    color: var.$white;
+    position: relative;
+
+    .title {
+      position: absolute;
+      top: 40px;
+      color: var.$white;
+      text-align: center;
+      margin: auto;
+      font-weight: 800;
+      font-size: 1.3rem;
+    }
+
+    .image {
+      text-align: center;
+      width: 80%;
+    }
+
+    .btn {
+      width: 200px;
+      position: absolute;
+      bottom: 40px;
+      right: 13%;
+      padding: 4px 30px;
+      font-weight: 800;
+      border-radius: 10px;
+
+      &:hover {
+        box-shadow: 0 0 20px var.$azul;
+        border: 2px solid var.$azul;
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ import { LoaderComponent } from '../../components/floads/loader-component/loader
 import { ValidaEmailUseCase } from 'src/app/core/aplication/use-cases/session-usecase/valida-email.useCase';
 import { lastValueFrom } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
+import { UserEntity } from 'src/app/core/domain/entitys/user.entity';
 
 @Component({
   selector: 'app-sig-in-form-component',
@@ -59,6 +60,14 @@ export class SigInFormComponent {
       return false;
     }
     return true;
+  }
+
+  onInsertData(data: UserEntity) {
+    this.sigin.patchValue({
+      name: data.name,
+      email: data.email,
+
+    });
   }
 
   async ValidaEmail() {

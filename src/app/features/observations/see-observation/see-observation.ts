@@ -133,7 +133,7 @@ export class SeeObservation implements OnInit {
   // carga datos de ususario
   async LoadUser(userId: string): Promise<UserEntity> {
     try {
-      const res = await lastValueFrom(this.user.execute(userId));
+      const res = await lastValueFrom(this.user.execute());
       if (!res) throw new Error('No se cargo usuario');
       return res;
     } catch (error) {

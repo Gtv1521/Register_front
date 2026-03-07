@@ -64,9 +64,9 @@
       <!-- usuario logeado -->
       <div class="footer-left">
         <mat-icon class="user-icon">account_circle</mat-icon>
-        <div class="user-info">
+        <div class="user-info" (click)="onSettings()">
           <span class="user-name">{{ usuario()?.name }}</span>
-          <span class="user-role">Técnico</span>
+          <span class="user-role"> {{ usuario()?.rol }} </span>
         </div>
       </div>
 
@@ -121,5 +121,8 @@
 }
 
 @if (newRegister) {
-  <app-new-register-component (Close)="onCloseNewRegister()"/>
+  <app-new-register-component (Close)="onCloseNewRegister()" />
+}
+@if (settings()) {
+  <app-settings-component [company]="usuario()?.idCompany" [role]="usuario()?.rol" [id]="usuario()?.id" (Closed)="onSettings()" />
 }

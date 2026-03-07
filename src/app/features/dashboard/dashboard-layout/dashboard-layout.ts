@@ -16,6 +16,7 @@ import { NewRegisterComponent } from '../../components/new-register-component/ne
 import { LogoutUseCase } from 'src/app/core/aplication/use-cases/session-usecase/logout.useCase';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RegisterStateService } from 'src/app/core/infrastructure/services/effect/register-state.service';
+import { SettingsComponent } from '../../components/floads/settings-component/settings-component';
 
 type FilterMode =
   | 'todo'
@@ -34,16 +35,14 @@ type FilterMode =
     SessionComponent,
     LoaderSessionComponent,
     NewRegisterComponent,
+    SettingsComponent,
   ],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.scss',
 })
 export class DashboardLayout implements OnInit {
   // datos para la pagina
-  // filtroActual: FilterMode = 'todo';
   busqueda: string = '';
-  // page: number = 1;
-  // loader: boolean = true;
   newRegister: boolean = false;
   errores!: HttpErrorResponse;
 
@@ -55,14 +54,15 @@ export class DashboardLayout implements OnInit {
   private logout = inject(LogoutUseCase); // cierra session
 
   // data signals
-  public filterType = signal<FilterMode>('todo');
-  public registerList = signal<RegisterEntity[]>([]);
-  public usuario = signal<UserEntity | null>(null);
-  public loader = signal<boolean>(false);
-  public size = signal<number>(30);
-  public page = signal<number>(1);
-  public isLastPage = signal<boolean>(false);
-  public isLoading = signal<boolean>(false);
+  filterType = signal<FilterMode>('todo');
+  registerList = signal<RegisterEntity[]>([]);
+  usuario = signal<UserEntity | null>(null);
+  loader = signal<boolean>(false);
+  size = signal<number>(30);
+  page = signal<number>(1);
+  isLastPage = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
+  settings = signal<boolean>(false);
 
   // funcion inicial para hacer las consultas
   async ngOnInit(): Promise<void> {
@@ -83,7 +83,7 @@ export class DashboardLayout implements OnInit {
 
     switch (filter) {
       case 'Pendiente':
-        return list.filter((item) => item.statusRegister === 'Pendiente'); // Ajusta según tu Entity
+        return list.filter((item) => item.statusRegister === 'Pendiente');
       case 'En progreso':
         return list.filter((item) => item.statusRegister === 'EnProgreso');
       case 'Completado':
@@ -95,7 +95,6 @@ export class DashboardLayout implements OnInit {
     }
   });
 
-
   setFilter(status: FilterMode) {
     this.filterType.set(status);
   }
@@ -106,7 +105,7 @@ export class DashboardLayout implements OnInit {
 
   // trae todos los usuarios
   async GetUser(): Promise<UserEntity> {
-    const res = await lastValueFrom(this.user.execute(this.auth.getUserId()!));
+    const res = await lastValueFrom(this.user.execute());
     if (!res) throw new Error('El usuario no se encontro');
     this.usuario.set(res);
     return res;
@@ -117,9 +116,13 @@ export class DashboardLayout implements OnInit {
     // this.aplicarFiltroYBusqueda();
   }
 
-  onLogout() {
-    this.logout.execute(this.auth.getSession()!);
-    this.router.navigate(['logout']);
+  async onLogout() {
+    try {
+      await lastValueFrom(this.logout.execute(this.auth.getSession()!));
+      this.router.navigate(['logout']);
+    } catch (error) {
+      console.log('no se pudo cerrar sesion', error);
+    }
   }
 
   // paso de datos para el ver detalle
@@ -132,7 +135,6 @@ export class DashboardLayout implements OnInit {
   }
 
   //  refresh de registros con paginado
-
   onScroll(event: any) {
     const element = event.target;
     // Si la distancia del scroll + el alto visible es >= al alto total del contenido
@@ -142,6 +144,10 @@ export class DashboardLayout implements OnInit {
     ) {
       this.loadMore();
     }
+  }
+
+  onSettings() {
+    this.settings.set(!this.settings());
   }
 
   async loadMore() {

@@ -1,0 +1,145 @@
+@use "../../../_styles/variables" as var;
+
+.container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  //   background-color: red;
+  .nav {
+    width: 100%;
+    height: 7%;
+    background-color: var.$fondo_modal;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn {
+      position: absolute;
+      left: 10px;
+      padding: 3px 30px;
+      border-color: transparent;
+      background-color: transparent;
+      color: var.$white;
+      font-weight: 700;
+      border-radius: 7px;
+
+      &:hover {
+        color: var.$black;
+        background-color: var.$white;
+      }
+    }
+
+    .title {
+      text-align: center;
+      margin: auto;
+      color: var.$white;
+    }
+  }
+
+  .container-fluid {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    background-color: var.$dashboard_bg; //opcional color
+    // background-color: var.$white;
+
+    .panel_rigth {
+      width: 20%;
+      padding: 10px 0px 10px 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var.$white;
+      box-sizing: border-box;
+
+      .panel_opciones {
+        width: 100%;
+        height: 98%;
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 20px;
+        box-shadow: 0 0 10px var.$black;
+        background-color: var.$fondo_modal;
+
+        .title {
+          text-align: center;
+          margin: 20px auto 0 auto;
+        }
+
+        .acciones {
+            margin-top: 30px;
+            width: 100%;
+            
+            .item {
+                display: flex;
+                margin-top: 20px;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 50px;
+                text-align: center;
+                font-size: 1rem;
+                font-weight: 800;
+                border-radius: 10px;
+                background-color: rgba($color: var.$white, $alpha: 0.4);
+                border: 1px solid var.$azul;
+                text-decoration: none;
+                color: var.$white;
+
+                &:hover {
+                    color: var.$black;
+                    background-color: var.$white;
+                    border-color: var.$azul;
+                    box-shadow: 0 0 15px var.$white;
+                }
+            }
+        }
+      }
+    }
+
+    .panel_left {
+      width: 80%;
+      padding: 10px;
+
+      //   height: 90%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .contanido {
+        width: 99%;
+        height: 98%;
+        // background-color: var.$dashboard_bg;
+        background-color: var.$white;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 10px var.$black;
+
+        .panel_muestra {
+          width: 98%;
+          height: 95%;
+
+          overflow-y: scroll;
+        }
+      }
+    }
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    height: 3%;
+    width: 100%;
+    background-color: var.$fondo_modal;
+  }
+}
+
+
+.activebutton {
+    background-color: var.$white !important;
+    color: var.$azul !important;
+    box-shadow: inset 0 0 10px var.$azul;
+}

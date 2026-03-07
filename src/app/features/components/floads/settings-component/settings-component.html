@@ -1,0 +1,13 @@
+<div class="overlay">
+  <div class="config_title"><h2>Configuraciones</h2></div>
+  <div class="opciones">
+    <button (click)="onEditUser()" class="item">Editar perfil</button>
+    @if (role() === "Administrador" || role() === "Super") {
+      <button (click)="onUsers()" class="item">Usuarios</button>
+      <button (click)="onDataCompany()" class="item">Datos empresa</button>
+    }
+    @if (role() === "Super") {
+      <button (click)="onCompanys()" class="item">Empresas</button>
+    }
+  </div>
+</div>

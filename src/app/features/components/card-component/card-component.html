@@ -10,23 +10,27 @@
     </div>
 
     <div class="card-body">
-      <div class="panel_imagen">
-        <img class="imagen" [src]="imageUrl" />
-      </div>
-
-      <div class="date">
-        <strong>
-          {{ registro.createdAt | date: "EEEE, d MMMM yyyy" }}
-        </strong>
-      </div>
+      @if (imageUrl!) {
+        <div class="panel_imagen">
+          <img class="imagen" [src]="imageUrl" />
+        </div>
+      }
 
       <div class="muestras">
+        <div class="date">
+          <strong>
+            {{ registro.createdAt | date: "EEEE, d MMMM yyyy" }}
+          </strong>
+        </div>
+
         <section class="status">
           <strong>Estado:</strong> {{ registro.statusRegister }}
         </section>
-        <section class="description">
-          <strong>Descripción:</strong>
+        <div class="title_description">
+          <strong >Descripción:</strong>
+        </div>
 
+        <section [class]="imageUrl ? 'description' : 'solo_texto'">
           <div [innerHTML]="descripcion" class="description-text"></div>
         </section>
       </div>

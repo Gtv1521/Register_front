@@ -9,6 +9,15 @@ import { SeeObservation } from './features/observations/see-observation/see-obse
 import { NewObservation } from './features/observations/new-observation/new-observation';
 import { SessionsComponent } from './features/components/floads/sessions-component/sessions-component';
 import { LogoutComponent } from './features/auth/logout-component/logout-component';
+import { UsersComponent } from './features/dashboard/users-component/users-component';
+import { DataUserComponent } from './features/dashboard/data-user-component/data-user-component';
+import { CompaniesComponent } from './features/dashboard/companies-component/companies-component';
+import { DataCompanyComponent } from './features/dashboard/data-company-component/data-company-component';
+import { Rol } from './core/infrastructure/dto/request/sig-in-request.dto';
+import { roleGuard } from './core/infrastructure/services/permisos/role-guard';
+import { NoAccessComponent } from './features/no-access-component/no-access-component';
+import { NewUserComponent } from './features/components/new-user-component/new-user-component';
+import { EditRolComponet } from './features/components/edit-rol-componet/edit-rol-componet';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -27,5 +36,29 @@ export const routes: Routes = [
   { path: 'dashboard/see-observation/:id', component: SeeObservation },
   { path: 'dashboard/new-observation/:registerId', component: NewObservation },
   { path: 'logout', component: LogoutComponent },
+  { path: 'user/:id', component: DataUserComponent },
+  {
+    path: 'users',
+    component: UsersComponent,
+    canActivate: [roleGuard],
+    data: { roles: [Rol.Administrador, Rol.Super] },
+    children: [
+      { path: 'add_user', component: NewUserComponent },
+      { path: 'edit_rol', component: EditRolComponet },
+    ],
+  },
+  {
+    path: 'componies',
+    component: CompaniesComponent,
+    canActivate: [roleGuard],
+    data: { roles: [Rol.Administrador, Rol.Super] },
+  },
+  {
+    path: 'company/:id',
+    component: DataCompanyComponent,
+    canActivate: [roleGuard],
+    data: { roles: [Rol.Administrador, Rol.Super] },
+  },
+  { path: 'no-access', component: NoAccessComponent },
   { path: '**', component: NotFound },
 ];
