@@ -1,0 +1,172 @@
+<h2 class="title">Registrar usuario</h2>
+
+<form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" class="form-container">
+  @if (successMessage) {
+    <div class="success-message">
+      <span>✓ {{ successMessage }}</span>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-container">
+      <span>✕ {{ errorMessage }}</span>
+    </div>
+  }
+  <div class="form-group">
+    <label for="name">Nombre:</label>
+    <input
+      type="text"
+      id="name"
+      formControlName="name"
+      class="form-control"
+      placeholder="Ingrese el nombre del usuario"
+    />
+    @if (usuarioForm.get("name")?.invalid && usuarioForm.get("name")?.touched) {
+      <div class="error-message">
+        @if (usuarioForm.get("name")?.errors?.["required"]) {
+          <span>El nombre es requerido</span>
+        }
+        @if (usuarioForm.get("name")?.errors?.["minlength"]) {
+          <span>El nombre debe tener al menos 3 caracteres</span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <div class="email-input-wrapper">
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+        placeholder="Ingrese el email"
+        (blur)="validarEmail()"
+      />
+      @if (loadingEmail) {
+        <span class="loading-spinner">⟳</span>
+      }
+    </div>
+    @if (
+      usuarioForm.get("email")?.invalid && usuarioForm.get("email")?.touched
+    ) {
+      <div class="error-message">
+        @if (usuarioForm.get("email")?.errors?.["required"]) {
+          <span>El email es requerido</span>
+        }
+        @if (usuarioForm.get("email")?.errors?.["email"]) {
+          <span>El email no es válido</span>
+        }
+        @if (usuarioForm.get("email")?.errors?.["emailExists"]) {
+          <span>Este email ya está registrado</span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="password">Contraseña:</label>
+    <input
+      [type]="pass ? 'text': 'password'"
+      id="password"
+      formControlName="password"
+      class="form-control"
+      placeholder="Ingrese la contraseña"
+    />
+    @if (
+      usuarioForm.get("password")?.invalid &&
+      usuarioForm.get("password")?.touched
+    ) {
+      <div class="error-message">
+        @if (usuarioForm.get("password")?.errors?.["required"]) {
+          <span>La contraseña es requerida</span>
+        }
+        @if (usuarioForm.get("password")?.errors?.["minlength"]) {
+          <span>La contraseña debe tener al menos 8 caracteres</span>
+        }
+        @if (usuarioForm.get("password")?.errors?.["strongPassword"]) {
+          <div>
+            @if (!usuarioForm.get("password")?.errors?.["strongPassword"]["hasMinLength"]) {
+              <span>✗ Mínimo 8 caracteres</span>
+            }
+            @if (!usuarioForm.get("password")?.errors?.["strongPassword"]["hasSpecialChar"]) {
+              <span>✗ Al menos 1 carácter especial (!@#$%^&*)</span>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="confPassword">Confirmar Contraseña:</label>
+    <input
+      [type]="pass ? 'text': 'password'"
+      id="confPassword"
+      formControlName="confPassword"
+      class="form-control"
+      placeholder="Confirme la contraseña"
+    />
+    @if (
+      usuarioForm.get("confPassword")?.invalid &&
+      usuarioForm.get("confPassword")?.touched
+    ) {
+      <div class="error-message">
+        @if (usuarioForm.get("confPassword")?.errors?.["required"]) {
+          <span>Debe confirmar la contraseña</span>
+        }
+        @if (usuarioForm.get("confPassword")?.errors?.["minlength"]) {
+          <span>La confirmación debe tener al menos 8 caracteres</span>
+        }
+        @if (usuarioForm.get("confPassword")?.errors?.["passwordMismatch"]) {
+          <span>Las contraseñas no coinciden</span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="rol">Rol:</label>
+    <select id="rol" formControlName="rol" class="form-control">
+      <option value="">Seleccione un rol</option>
+      @for (rol of rolesOptions; track rol.value) {
+        <option [value]="rol.value">{{ rol.label }}</option>
+      }
+    </select>
+    @if (usuarioForm.get("rol")?.invalid && usuarioForm.get("rol")?.touched) {
+      <div class="error-message">
+        @if (usuarioForm.get("rol")?.errors?.["required"]) {
+          <span>El rol es requerido</span>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="form-group-check">
+    <input type="checkbox" name="pass" id="pass" (change)="changePass()">
+    <label for="pass"> {{ pass ? "Ocultar": "Mostrar"}} contraseñas</label>
+  </div>
+
+  <div class="button-group">
+    <button
+      type="submit"
+      [disabled]="!usuarioForm.valid || loadingSubmit || emailExiste"
+      class="btn-submit"
+    >
+      @if (loadingSubmit) {
+        <span class="button-spinner">⟳</span> Creando...
+      } @else {
+        Crear Usuario
+      }
+    </button>
+    <button
+      type="button"
+      (click)="onReset()"
+      [disabled]="loadingSubmit"
+      class="btn-reset"
+    >
+      Limpiar
+    </button>
+  </div>
+</form>

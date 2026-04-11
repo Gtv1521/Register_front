@@ -1,0 +1,16 @@
+<div class="overlay-alert" [class.active]="animado()" (click)="onOverlayClick($event)">
+  <div class="alert-content">
+    <div class="alert-header">
+      <h2>Confirmación</h2>
+    </div>
+
+    <div class="alert-body">
+      <div [innerHTML]="getPreguntaHtml()"></div>
+    </div>
+
+    <div class="alert-footer">
+      <button class="btn btn-cancel" (click)="cerrar()">Cancelar</button>
+      <button class="btn btn-confirm" (click)="confirmar()">Confirmar</button>
+    </div>
+  </div>
+</div>

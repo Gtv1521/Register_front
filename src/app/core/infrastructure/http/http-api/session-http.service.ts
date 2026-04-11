@@ -55,6 +55,14 @@ export class SessionHttpService
       })
       .pipe(map((res) => this.mapper.fromDto(res)));
   }
+
+  SaveSession(id: string, theme: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/saveTheme`, {
+      idUser: id,
+      theme: theme,
+    });
+  }
+
   ResetPassword(mail: string): Observable<boolean> {
     throw new Error('Method not implemented.');
   }

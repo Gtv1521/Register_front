@@ -27,7 +27,7 @@
           <strong>Estado:</strong> {{ registro.statusRegister }}
         </section>
         <div class="title_description">
-          <strong >Descripción:</strong>
+          <strong>Descripción:</strong>
         </div>
 
         <section [class]="imageUrl ? 'description' : 'solo_texto'">
@@ -37,12 +37,17 @@
     </div>
 
     <div class="card-footer">
-      <button class="btn btn-secondary" (click)="verDetalle(registro.id)">
-        Ver detalle
+      <button class="btn btn-download" (click)="imprimirDocumento()" title="download">
+        <mat-icon class="icon">download</mat-icon>
       </button>
-      <button class="btn btn-primary" (click)="crearObservacion()">
-        Nueva observación
-      </button>
+      <div class="options">
+        <button class="btn btn-secondary" (click)="verDetalle(registro.id)">
+          Ver detalles
+        </button>
+        <button class="btn btn-primary" (click)="crearObservacion()">
+          Nueva observación
+        </button>
+      </div>
     </div>
   </div>
 </div>

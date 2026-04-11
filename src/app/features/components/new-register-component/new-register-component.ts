@@ -47,7 +47,7 @@ export class NewRegisterComponent {
 
   // datos de componente hijo
   @ViewChild('observation') newObservation!: NewObservation;
-  @Output() Close = new EventEmitter<boolean>();
+  // @Output() Close = new EventEmitter<boolean>();
 
   loader_mail: boolean = false;
   client!: ClientEntity[] | null;
@@ -130,7 +130,7 @@ export class NewRegisterComponent {
   }
 
   Cancelar() {
-    this.Close.emit(false);
+    this.router.navigate(['/dashboard']);
   }
 
   onEditar() {
@@ -160,7 +160,7 @@ export class NewRegisterComponent {
   }
 
   onBack() {
-    this.Close.emit(false);
+    this.router.navigate(['/dashboard']);
   }
 
   onAllDesabled() {
@@ -211,7 +211,7 @@ export class NewRegisterComponent {
         idUser: this.auth.getUserId()!,
         idCompany: this.auth.getCompany()!,
         statusRegister: this.register.value.type,
-        urlRuta: `${baseUrl}/dashboard/see-observation`,
+        urlRuta: `${baseUrl}/registro`,
       };
 
       const insert = data as RegisterRequestDto;
@@ -247,7 +247,7 @@ export class NewRegisterComponent {
       }
       this.idRegister = await this.newRegister();
       await this.addObservation(this.idRegister);
-      this.router.navigate([`dashboard/see-observation/${this.idRegister}`]);
+      this.router.navigate([`registro/${this.idRegister}`]);
     } catch (error: any) {
       console.error('Error en la secuencia de guardado:', error);
       // Aquí podrías mostrar una alerta al usuario

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IFiter } from 'src/app/core/domain/interfaces/ICrud';
+import { IRegistro } from 'src/app/core/domain/interfaces/ICrud';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '@environment';
@@ -11,7 +11,7 @@ import { RegisterMapper } from 'src/app/core/aplication/mappers/register.mapper'
 @Injectable({
   providedIn: 'root',
 })
-export class RegisterHttpService implements IFiter<
+export class RegisterHttpService implements IRegistro<
   RegisterRequestDto,
   RegisterEntity
 > {
@@ -21,6 +21,30 @@ export class RegisterHttpService implements IFiter<
     private http: HttpClient,
     private mapper: RegisterMapper,
   ) {}
+  downloadPdf(id: string): Observable<{ blob: Blob; filename: string }> {
+    return this.http
+      .get(`${this.Url}/pdf/${id}`, {
+        observe: 'response', // <--- IMPORTANTE: Para ver los Headers
+        responseType: 'blob',
+        withCredentials: true,
+      })
+      .pipe(
+        map((response) => {
+          // Extraemos el nombre del archivo del header 'content-disposition'
+          const contentDisposition = response.headers.get(
+            'content-disposition',
+          );
+          const filename =
+            this.extraerNombreArchivo(contentDisposition) ||
+            `reporte-${id}.pdf`;
+
+          return {
+            blob: response.body as Blob,
+            filename: filename,
+          };
+        }),
+      );
+  }
   GetAll(
     company: string,
     page: number,
@@ -49,5 +73,11 @@ export class RegisterHttpService implements IFiter<
   }
   Update(dto: RegisterRequestDto): Observable<boolean> {
     return this.http.put<boolean>(`${this.Url}/${dto.id}`, dto);
+  }
+
+  private extraerNombreArchivo(header: string | null): string | null {
+    if (!header) return null;
+    const match = header.match(/filename=(?<filename>[^;]+)/);
+    return match?.groups?.['filename'] ? match.groups['filename'].trim() : null;
   }
 }

@@ -1,0 +1,268 @@
+.card {
+  position: relative;
+  width: 100%;
+  height: auto;
+  background-color: var(--color-panel);
+  border: 2px solid var(--color-panel-interno);
+  border-radius: 18px;
+  color: var(--color-text);
+  box-shadow: 0 0 3px 2px var(--color-panel-interno);
+  text-align: center;
+  padding: 15px;
+  box-sizing: border-box;
+  bottom: unset;
+
+  &:hover {
+    border-color: var(--color-border-hover);
+    box-shadow: 0 0 10px var(--color-border);
+    scale: 1.01;
+  }
+
+  .container {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+
+    .registro {
+      color: var(--color-text-subtitle);
+    }
+    /* ===== Header ===== */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        font-weight: 700;
+        color: var(--color-text);
+      }
+    }
+
+    /* ===== Body ===== */
+
+    .card-body {
+      max-width: auto;
+      background-color: var(--color-panel);
+      border-radius: 10px;
+      box-sizing: border-box;
+      padding: 10px;
+
+      .panel_imagen {
+        width: 100%;
+        margin: auto;
+        height: 200px;
+        background-color: var(--color-panel-interno);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+
+        .imagen {
+          max-width: 100%;
+          height: 94%;
+          object-fit: cover;
+          object-position: center;
+          border-radius: 10px;
+          border: 1px solid var(--color-border);
+        }
+      }
+
+      .muestras {
+        width: 100%;
+        margin-top: 10px;
+        height: auto;
+        padding: 10px;
+        box-sizing: border-box;
+
+        .status {
+          width: 100%;
+          text-align: start;
+        }
+
+        .title_description {
+          text-align: start;
+        }
+
+        // si la imagen existe
+        .description {
+          width: 100%;
+          text-align: start;
+          // background-color: var(--color-panel);
+          padding: 5px;
+          box-sizing: border-box;
+
+          .description-text {
+            overflow-y: auto;
+            height: 120px;
+            line-height: 1.2;
+            text-align: start;
+            justify-content: justify;
+            padding: 5px 5px 0 0;
+          }
+        }
+
+        .solo_texto {
+          width: 100%;
+          line-height: 1.2; // disminuye el espacio entre líneas para que el texto ocupe menos espacio vertica
+          text-align: start;
+          justify-content: justify;
+          background-color: var(--color-panel-content);
+          padding: 5px;
+          box-sizing: border-box;
+
+          .description-text {
+            overflow-y: auto;
+            height: 320px;
+            text-align: start;
+            justify-content: justify;
+            padding: 5px 5px 0 0;
+          }
+        }
+      }
+    }
+
+    /* ===== Footer ===== */
+
+    .card-footer {
+      // padding-top: 5px;
+      width: 100%;
+      height: auto;
+      box-sizing: border-box;
+      // gap: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      /* ===== Botones ===== */
+      .btn {
+        // box-sizing: border-box;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        background-color: var(--color-bg-btn);
+        color: var(--color-text);
+        transition: all 0.2s ease;
+        font-weight: 700;
+      }
+
+      .options {
+        box-sizing: border-box;
+        gap: 8px;
+        display: flex;
+        width: auto;
+      }
+
+      .btn-download {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        background-color: var(--color-bg-btn);
+
+        .icon {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        &:hover {
+          border-radius: 50%;
+          scale: 1.2;
+          background-color: var(--color-bg-hover-btn);
+          color: var(--color-text-hover-btn);
+        }
+      }
+
+      /* Secundario */
+      .btn-secondary {
+        padding: 6px 12px;
+        // background-color: transparent;
+        color: var(--color-text);
+
+        &:hover {
+          color: var(--color-secondary);
+          border-color: var(--color-text);
+          background-color: var(--color-bg-hover-btn);
+        }
+      }
+
+      /* Primario */
+      .btn-primary {
+        padding: 6px 12px;
+        // background-color: transparent;
+        color: var(--color-text);
+
+        &:hover {
+          color: var(--color-secondary);
+          border-color: var(--color-text);
+          background-color: var(--color-bg-hover-btn);
+        }
+      }
+    }
+  }
+}
+
+@media (400px <= width <= 1300px) {
+  .card {
+    padding: 6px;
+
+    .container {
+      .card-header {
+        h3 {
+          font-size: 13px;
+        }
+      }
+
+      .registro {
+        font-size: 11px;
+      }
+
+      .card-body {
+        padding: 7px;
+
+        .panel_imagen {
+          height: 130px;
+        }
+
+        .muestras {
+          padding: 0 !important;
+          font-size: 0.8em !important;
+          margin-top: 0;
+
+          // background-color: red;
+
+          .title_description {
+            font-size: 11px !important;
+            padding: none;
+          }
+
+          .description {
+            padding: 2px;
+            .description-text {
+              height: 100px;
+              scrollbar-width: thin; /* Hace la barra más delgada */
+              scrollbar-color: #888 #eee;
+            }
+          }
+
+          .solo_texto {
+            .description-text {
+              height: 225px;
+              scrollbar-width: thin;
+              scrollbar-color: #888 #eee;
+            }
+          }
+        }
+      }
+
+      .card-footer {
+        button {
+          padding: 4px 8px;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}

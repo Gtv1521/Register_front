@@ -4,7 +4,7 @@ import { ClientRequestDto } from '../../dto/request/client/client-request.dto';
 import { ClientEntity } from 'src/app/core/domain/entitys/client.entity';
 import { map, Observable } from 'rxjs';
 import { environment } from '@environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ClientMapper } from 'src/app/core/aplication/mappers/client.mapper';
 import { ClientResponseDto } from '../../dto/response/client/client-response.dto';
 

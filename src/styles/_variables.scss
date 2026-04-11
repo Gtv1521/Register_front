@@ -1,0 +1,68 @@
+@use "sass:map"; // 1. Primero el módulo de Sass
+@use "themes" as t; // 2. Tu archivo de temas con un alias (recomendado)
+
+@mixin apply-theme($theme-name) {
+  // Usamos el alias 't' para acceder a tu variable $themes
+  $theme: map.get(t.$themes, $theme-name);
+
+  --color-bg: #{map.get($theme, bg)};
+  --color-nav: #{map.get($theme, nav)};
+  --color-panel: #{map.get($theme, panel)};
+  --color-panel-interno: #{map.get($theme, panel-interno)};
+  --color-panel-content: #{map.get($theme, panel-content)};
+  --color-modal: #{map.get($theme, modal)};
+  --color-resalto: #{map.get($theme, resalto)};
+
+  --color-panel-modal: #{map.get($theme, panel-modal)};
+
+  --color-text: #{map.get($theme, text-primary)};
+  --color-text-title: #{map.get($theme, text-secondary)};
+  --color-text-subtitle: #{map.get($theme, text-tertiary)};
+  --color-error: #{map.get($theme, text-error)};
+  --color-success: #{map.get($theme, text-success)};
+
+  --color-border: #{map.get($theme, border)};
+  --color-border-hover: #{map.get($theme, border-hover)};
+  
+  --color-icons: #{map.get($theme, icons)};
+  --color-icons-nav: #{map.get($theme, icons-nav)};
+  --color-alert: #{map.get($theme, alert)};
+  
+  --color-bg-btn: #{map.get($theme, bg-btn)};
+  --color-br-btn: #{map.get($theme, br-btn)};
+  --color-bg-hover-btn: #{map.get($theme, bg-hover-btn)};
+  --color-br-hover-btn: #{map.get($theme, br-hover-btn)};
+  --color-text-btn: #{map.get($theme, text-btn)};
+  --color-text-hover-btn: #{map.get($theme, text-btn-hover)};
+  --color-selected: #{map.get($theme, selected)};
+  
+  --color-blanco: #{map.get($theme, tercero)};
+  --color-negro: #{map.get($theme, cuarto)};
+  
+  --color-dif-blanco: #{map.get($theme, dif-uno)};
+  --color-dif-negro: #{map.get($theme, dif-dos)};
+  --color-dif-azul: #{map.get($theme, dif-tres)};
+  --color-dif-rojo: #{map.get($theme, dif-cuatro)};
+  
+  --color-aqua: #{map.get($theme, aquac)};
+  --color-primary: #{map.get($theme, primaro)};
+  --color-secondary: #{map.get($theme, segundo)};
+  --color-tertiary: #{map.get($theme, quinto)};
+}
+
+// Configuración de los temas en el :root
+:root {
+  @include apply-theme(light);
+}
+
+[data-theme="dark"] {
+  @include apply-theme(dark);
+}
+
+[data-theme="blue_theme"] {
+  @include apply-theme(blue_theme);
+}
+
+[data-theme="dark-blue"] {
+  @include apply-theme(dark_blue);
+}

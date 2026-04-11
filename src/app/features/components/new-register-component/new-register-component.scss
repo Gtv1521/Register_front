@@ -1,45 +1,46 @@
-@use "../../../_styles/variables" as var;
-
 .contenedor {
   position: absolute;
   top: 0%;
   left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 50px;
   box-sizing: border-box;
   width: 100%;
-  height: 100dvh;
-  z-index: auto;
-  background-color: var.$dashboard_bg;
+  min-height: 100dvh;
+  background-color: var(--color-bg);
 
-  .container-fluid {
-    width: 70%;
-    height: 95%;
-    background-color: var.$white;
-    box-shadow: 0 0 10px var.$black;
-    padding: 40px;
-    overflow-y: scroll;
+  .nav {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: var(--color-nav);
+    height: 2rem;
 
     .back {
-      padding: 8px 25px;
+      padding: 2px 25px;
       border: transparent;
       border-radius: 7px;
       font-weight: 800;
+      margin-left: 1rem;
 
       &:hover {
-        background-color: var.$photos_fond;
+        background-color: var(--color-primary);
       }
     }
+  }
+
+  .container-fluid {
+    width: 70%;
+    margin: auto;
+    background-color: var(--color-panel);
 
     .panel_data {
-      width: 85%;
-      margin: 40px auto 0 auto;
-      background-color: var.$photos_fond;
-      box-shadow: 0 0 10px var.$black;
-      border-radius: 15px;
+      width: 90%;
+      margin: auto;
+      // background-color: var(--color-);
       padding: 40px;
+      color: var(--color-text);
       box-sizing: border-box;
 
       .title {
@@ -55,7 +56,6 @@
           width: 95%;
           margin: auto;
           padding: 10px;
-          //   margin-top: 5px;
           display: flex;
           flex-direction: column;
 
@@ -76,7 +76,7 @@
               width: 25px;
               height: 25px;
               position: absolute;
-              color: var.$azul;
+              color: var(--color-primary);
               top: 50%;
               right: 1%;
               transform: translateY(-50%);
@@ -84,7 +84,7 @@
           }
 
           .err {
-            color: var.$green;
+            color: var(--color-success);
           }
 
           input,
@@ -101,6 +101,12 @@
               outline: none;
               box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
             }
+
+            &:disabled {
+              background-color: var(--color-bg);
+              color: var(--color-text);
+              cursor: not-allowed;
+            }
           }
         }
 
@@ -114,13 +120,16 @@
           justify-content: space-between;
 
           .ok {
-            color: var.$azul;
+            color: var(--color-primary);
           }
 
           .change {
-            color: var.$fondo_fload;
-            border-color: var.$fondo_modal;
-            box-shadow: 0 0 10px var.$fondo_modal;
+            color: var(--color-text-btn);
+            &:hover {
+              cursor: pointer;
+              border-color: var(--color-primary);
+              box-shadow: 0 0 10px var(--color-primary);
+            }
           }
         }
       }
@@ -134,13 +143,26 @@
         text-align: end;
 
         .save {
-          border-color: var.$azul;
-          box-shadow: 0 0 10px var.$azul;
+          border-color: var(--color-br-btn);
+
+          &:disabled {
+            background-color: var(--color-bg-hover-btn);
+            color: var(--color-text-btn);
+            cursor: not-allowed;
+          }
+          &:hover {
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--color-primary);
+          }
         }
 
         .cancel {
-          border-color: var.$rojo;
-          box-shadow: 0 0 10px var.$rojo;
+          
+          &:hover {
+            border-color: var(--color-error);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--color-error);
+          }
         }
       }
     }
@@ -154,10 +176,10 @@
 
 .btn {
   width: 140px;
-  margin-left: 20px;
   height: 100%;
-  background-color: var.$white;
-  color: var.$black;
+  margin-left: 20px;
+  background-color: var(--color-bg-btn);
+  color: var(--color-text-btn);
   position: relative;
   display: flex;
   justify-content: center;
@@ -167,25 +189,107 @@
   border: 1px solid transparent;
 
   &:hover {
-    border-color: var.$azul;
+    border-color: var(--color-br-hover-btn);
   }
 
   .icon {
     position: absolute;
     top: 50%;
-    left: 5%;
+    left: 50%;
     height: 25px;
     width: 25px;
-    transform: translateY(-50%);
-    color: var.$azul;
+    transform: translate(-50%, -50%);
+    color: var(--color-icons);
   }
 }
 
 .active_search {
-  border-color: var.$azul;
-  box-shadow: 0 0 0 3px var.$rojo;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-error);
 }
 
 .disabled {
   display: none !important;
+}
+
+@media (400px <= width <= 1300px) {
+  .contenedor {
+
+    .container-fluid {
+      padding: 20px !important;
+      width: 80% !important;
+
+      .panel_data {
+        width: 80% !important;
+        margin: 10px auto 0 auto;
+        padding: 20px;
+
+        .title {
+          font-size: 20px;
+        }
+
+        .registro {
+          margin-top: 10px;
+
+          .form_group {
+            padding: 5px !important;
+
+            .box_mail {
+              margin-top: 5px !important;
+
+              input {
+                padding: 5px;
+                font-size: 12px;
+              }
+
+              .icon {
+                width: 20px;
+                height: 20px;
+              }
+            }
+
+            label {
+              font-size: 12px;
+            }
+
+            input,
+            select {
+              padding: 5px;
+              font-size: 12px;
+              margin-top: 3px;
+            }
+          }
+
+          .client_carge {
+            height: 25px;
+            margin-top: 1px;
+
+            .ok {
+              font-size: 12px;
+            }
+
+            .change {
+              font-size: 12px;
+            }
+          }
+        }
+
+        .form_submit {
+          width: 95%;
+          height: 25px;
+          margin-top: 5px;
+
+          .save,
+          .cancel {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    padding: 1px 10px;
+    font-weight: 500;
+  }
 }

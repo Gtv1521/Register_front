@@ -1,6 +1,8 @@
 <div class="contenedor">
-  <div class="container-fluid">
+  <div class="nav">
     <button class="back" (click)="onBack()">Volver</button>
+  </div>
+  <div class="container-fluid">
     <div class="panel_data">
       <div class="title">
         {{ saveCliente ? "Editar Cliente" : "Nuevo registro" }}
@@ -168,13 +170,15 @@
           <button type="button" class="btn cancel" (click)="Cancelar()">
             Cancelar
           </button>
-          <button (click)="onSubmit()" class="btn save">
+          <button (click)="onSubmit()" [disabled]="loadIcono" class="btn save">
             @if (loadIcono) {
               <span class="icon">
                 <app-loader-component />
               </span>
             }
-            <p>Crear Registro</p>
+            @else {
+              <p>Crear Registro</p>
+            }
           </button>
           <!-- </div> -->
         }

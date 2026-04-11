@@ -7,13 +7,15 @@
   <div class="container">
     <div class="container-fluid">
       <!-- componente de busqueda -->
-      <mat-icon class="icons" (click)="busqueda = ''; onBuscar()"
-        >delete</mat-icon
-      >
+      <div class="options">
+        <mat-icon class="icons" (click)="busqueda = ''; onBuscar()"
+          >delete</mat-icon
+        >
 
-      <mat-icon (click)="openNewRegister()" class="icons"
-        >add_to_queue</mat-icon
-      >
+        <mat-icon class="icons" (click)="openNewRegister()"
+          >add_to_queue</mat-icon
+        >
+      </div>
 
       <div class="card-search">
         <div class="search-box">
@@ -44,75 +46,81 @@
     <div class="content" (scroll)="onScroll($event)">
       <div class="registers">
         @for (registro of filteredObservations(); track registro.id) {
+          <!-- <div class="registers"> -->
           <app-card-component
             [registro]="registro"
             (verDetalleEvent)="verDetalle($event)"
-          >
-          </app-card-component>
+          />
+          <!-- </div> -->
         } @empty {
-          <section class="no_data">
+          <div class="no_data">
             <p>No hay registros</p>
-          </section>
-        }
-        @if (isLoading()) {
-          <div class="loader">Cargando más...</div>
+          </div>
         }
       </div>
+      @if (isLoading()) {
+        <div class="loader">Cargando más...</div>
+      }
     </div>
 
     <footer class="dashboard-footer">
       <!-- usuario logeado -->
-      <div class="footer-left">
-        <mat-icon class="user-icon">account_circle</mat-icon>
-        <div class="user-info" (click)="onSettings()">
-          <span class="user-name">{{ usuario()?.name }}</span>
-          <span class="user-role"> {{ usuario()?.rol }} </span>
+
+      <div class="footer">
+        <div class="footer-left">
+          <mat-icon class="user-icon">account_circle</mat-icon>
+          <div class="user-info" (click)="onSettings()">
+            <span class="user-name">{{ usuario()?.name }}</span>
+            <span class="user-role"> {{ usuario()?.rol }} </span>
+          </div>
         </div>
-      </div>
 
-      <div class="footer-center">
-        <span class="system-name">Centro de Reparación Electrónica</span>
-        <span class="system-version">v1.0.0</span>
-      </div>
+        <div class="footer-center">
+          <span class="system-name">
+            <strong> {{ company()?.name }}</strong>
+          </span>
+          <!-- <span class="system-version">v1.0.0</span> -->
+        </div>
 
-      <div class="footer-right">
-        <!-- filtros del buscador -->
-        <div class="filters">
-          <div class="modos">
-            <button
-              [class.active]="filterType() === 'todo'"
-              (click)="setFilter('todo')"
-            >
-              Todo
-            </button>
+        <div class="footer-right">
+          <!-- filtros del buscador -->
+          <div class="filters">
+            <div class="modos">
+              <button
+                [class.active]="filterType() === 'todo'"
+                (click)="setFilter('todo')"
+              >
+                Todo
+              </button>
 
-            <button
-              [class.active]="filterType() === 'En progreso'"
-              (click)="setFilter('En progreso')"
-            >
-              En Progreso
-            </button>
+              <button
+                [class.active]="filterType() === 'En progreso'"
+                (click)="setFilter('En progreso')"
+              >
+                En Progreso
+              </button>
 
-            <button
-              [class.active]="filterType() === 'Pendiente'"
-              (click)="setFilter('Pendiente')"
-            >
-              Pendiente
-            </button>
+              <button
+                [class.active]="filterType() === 'Pendiente'"
+                (click)="setFilter('Pendiente')"
+              >
+                Pendiente
+              </button>
 
-            <button
-              [class.active]="filterType() === 'Completado'"
-              (click)="setFilter('Completado')"
-            >
-              Completado
-            </button>
+              <button
+                [class.active]="filterType() === 'Completado'"
+                (click)="setFilter('Completado')"
+              >
+                Completado
+              </button>
 
-            <button
-              [class.active]="filterType() === 'cancelado'"
-              (click)="setFilter('cancelado')"
-            >
-              Cancelado
-            </button>
+              <button
+                [class.active]="filterType() === 'cancelado'"
+                (click)="setFilter('cancelado')"
+              >
+                Cancelado
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -123,6 +131,12 @@
 @if (newRegister) {
   <app-new-register-component (Close)="onCloseNewRegister()" />
 }
+
 @if (settings()) {
-  <app-settings-component [company]="usuario()?.idCompany" [role]="usuario()?.rol" [id]="usuario()?.id" (Closed)="onSettings()" />
+  <app-settings-component
+    [company]="usuario()?.idCompany"
+    [role]="usuario()?.rol"
+    [id]="usuario()?.id"
+    (Closed)="onSettings()"
+  />
 }

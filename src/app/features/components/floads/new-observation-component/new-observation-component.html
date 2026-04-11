@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="container-fluid">
+    <app-observation-create 
+      [IdRegister]="idRegister()" 
+      (CloseModal)="onCloseModal($event)"
+      (ChangeEditar)="ChangeEditar.emit($event)"
+      (NewObservationCreated)="NewObservationCreated.emit($event)"
+    />
+  </div>
+</div>

@@ -6,6 +6,7 @@ export interface RegisterEntity {
   observation: ObservationEntity | null;
   id: string;
   idClient: string;
+  idCompany: string;
   idUser: string;
   urlQr: string;
   registroNumber: string;
@@ -15,8 +16,9 @@ export interface RegisterEntity {
 }
 
 export enum EstadoRegistro {
-  Pendiente = "Pendiente",
-  EnProgreso = "EnProgreso",
-  Completado = "Completado",
-  Cancelado = "Cancelado",
+  Pendiente = 'Pendiente',
+  EnProgreso = 'EnProgreso',
+  Completado = 'Completado',
+  Entregado = 'Entregado',
+  Cancelado = 'Cancelado',
 }

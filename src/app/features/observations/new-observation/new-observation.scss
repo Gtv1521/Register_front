@@ -1,249 +1,302 @@
-@use "../../../_styles/variables" as var;
-
 .container {
-  margin: 15px auto;
-  // padding: 4%;
+ 
+  width: 100%;
+  height: 100%;
 
   .observation-create {
-    background-color: transparent;
+    background-color: var(--color-panel);
     border-radius: 16px;
     padding: 15px;
     box-sizing: border-box;
-    // max-width: 720px;
     margin: 0 auto;
-    color: var.$black;
-    box-shadow: 0 0px 6px var.$black;
+    color: var(--color-text);
+    box-shadow: 0 0px 6px var(--color-black);
     display: flex;
     flex-direction: column;
-    // gap: 20px;
-  }
 
-  // header
-  .header {
-    // margin-top: 3%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    // padding-bottom: 12px;
-
-    h2 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 600;
-      color: var.$black;
-    }
-
-    .register {
-      font-size: 13px;
-      font-weight: 500;
-      color: var.$white;
-      background-color: rgba(var.$white, 0.1);
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-  }
-
-  // forms
-  .form {
-    .panel_inputs {
+    // header
+    .header {
+      // margin-top: 3%;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
-      .descriptions {
-        background-color: res;
-        width: 50%;
-        .field {
-          display: flex;
-          flex-direction: column;
-          // gap: 6px;
+      h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--color-text);
+      }
 
-          label {
-            font-size: 13px;
-            font-weight: 500;
-            color: var.$black;
+      .register {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--color-secundary);
+        background-color: rgba(var(--color-secundary), 0.1);
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+    }
+
+    // forms
+    .form {
+      .panel_inputs {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+
+        .descriptions {
+          width: 50%;
+
+          .field {
+            display: flex;
+            flex-direction: column;
+
+            label {
+              font-weight: 600;
+              color: var(--color-text);
+              margin-top: 1rem;
+            }
+
+            textarea,
+            select {
+              border: 1px solid rgba(0, 0, 0, 0.6);
+              border-radius: 10px;
+              padding: 0.3rem;
+              &:focus {
+                border: 2px solid var(--color-primary);
+                box-shadow: 0 0 0 2px rgba(var(--color-secundary), 0.15);
+              }
+            }
+
+            textarea {
+              min-height: 150px;
+            }
+
+            .error {
+              font-size: 12px;
+              color: var(--color-error);
+              margin-top: 2px;
+            }
           }
+        }
 
-          textarea,
-          select {
-            background-color: var.$white;
-            border: 1px solid rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            padding: 12px 14px;
-            font-size: 14px;
-            resize: vertical;
-            outline: none;
-            transition:
-              border-color 0.2s ease,
-              box-shadow 0.2s ease;
+        .notify {
+          width: 50%;
 
-            &:focus {
-              border: 2px solid var.$azul;
-              box-shadow: 0 0 0 2px rgba(var.$white, 0.15);
+          .checkbox-group {
+            width: 90%;
+            margin: auto;
+
+            .title_notify {
+              width: 100%;
+              margin: auto;
+              text-align: center;
+              color: var(--color-text);
+            }
+            .notify_panel {
+              display: flex;
+              width: 70%;
+              margin: 10px auto;
+              justify-content: space-around;
+              font-size: 13px;
+              font-weight: 500;
+              color: var(--color-text);
+
+              .form_group {
+                font-weight: 800;
+              }
+              mat-checkbox {
+                margin-bottom: 8px;
+              }
             }
           }
 
-          textarea {
-            min-height: 150px;
+          // photos
+          .photo-upload {
+            width: 100%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .photo-preview {
+              display: flex;
+              background-color: var(--color-panel-interno);
+              border: 1px solid var(--color-br-btn);
+              padding: 10px;
+              box-sizing: border-box;
+              width: 98%;
+              height: 135px;
+              overflow-x: auto;
+              border-radius: 15px;
+              margin-bottom: 5px;
+
+              img {
+                max-width: 190px;
+                border-radius: 15px;
+                margin-left: 10px;
+                height: 100px;
+              }
+            }
+
+            .upload-btn {
+              width: 99%;
+              display: inline-flex;
+              justify-content: center;
+              align-items: center;
+              padding: 10px 16px;
+              box-sizing: border-box;
+              background-color: var(--color-card);
+              border: 2px dashed rgb(0, 0, 0);
+              border-radius: 10px;
+              cursor: pointer;
+              font-size: 13px;
+              font-weight: 700;
+              color: var(--color-text);
+              transition: all 0.2s ease;
+
+              mat-icon {
+                font-size: 20px;
+                color: var(--color-text);
+              }
+
+              &:hover {
+                background-color: var(--color-primary);
+                // color: var(--color-white);
+                border-color: var(--color-text);
+                // border: 2px dashed rgba(var(--color-text), 0.8);
+              }
+            }
+          }
+        }
+      }
+
+      .actions {
+        justify-content: space-around;
+        // padding: 2%;
+        text-align: end;
+
+        .btn-cancel {
+          padding: 0.4rem 2rem;
+          margin: 1%;
+          background-color: var(--color-bg-btn);
+          color: var(--color-secundary);
+          border: none;
+          border-radius: 10px;
+          font-weight: 600;
+
+          &:hover {
+            background-color: var(--color-bg-hover-btn);
+            color: var(--color-text-hover-btn);
+            box-shadow: 0 0 10px var(--color-error);
+            border: none;
+          }
+        }
+
+        .btn-save {
+          width: 200px;
+          padding: 0.4rem 2rem;
+          position: relative;
+          margin: 0.3rem;
+          background-color: var(--color-bg-btn);
+          border: none;
+          border-radius: 10px;
+          color: var(--color-secundary);
+          font-weight: 600;
+
+          &:hover {
+            background-color: var(--color-bg-hover-btn);
+            color: var(--color-text-hover-btn);
+            border: none;
+            box-shadow: 0 0 10px var(--color-primary);
           }
 
-          .error {
-            font-size: 12px;
-            color: #d32f2f;
-            margin-top: 2px;
+          .data_save {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .icon {
+              position: absolute;
+              left: 20px;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 26px !important;
+              height: 26px !important;
+              vertical-align: middle;
+            }
+
+            p {
+              margin: 0;
+              font-size: 16px;
+              font-weight: 800;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (400px <= width <= 1300px) {
+  .container {
+    .observation-create {
+      padding: 10px;
+      .header {
+        h2 {
+          font-size: 18px;
+        }
+      }
+
+      .panel_inputs {
+        .descriptions {
+          .field {
+            label {
+              font-size: 12px;
+            }
+
+            textarea,
+            select {
+              padding: 4px;
+              font-size: 12px;
+            }
           }
         }
       }
 
       .notify {
-        width: 50%;
+        height: auto;
 
         .checkbox-group {
-          width: 90%;
-          margin: auto;
-
           .title_notify {
-            width: 100%;
-            margin: auto;
-            text-align: center;
-            color: var.$black;
+            font-size: 13px;
           }
           .notify_panel {
-            display: flex;
-            width: 70%;
-            margin: 10px auto;
-            justify-content: space-around;
-            font-size: 13px;
-            font-weight: 500;
-            color: var.$black;
+            margin: 0 auto !important;
 
             .form_group {
-              font-weight: 800;
-            }
-            mat-checkbox {
-              margin-bottom: 8px;
+              font-weight: 600;
             }
           }
         }
 
-        // photos
         .photo-upload {
-          width: 100%;
-          margin: auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          float: left;
-
-          .upload-btn {
-            width: 92%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 16px;
-            background-color: var.$card_bg;
-            border: 2px dashed rgb(0, 0, 0);
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            color: var.$black;
-            transition: all 0.2s ease;
-
-            mat-icon {
-              font-size: 20px;
-              color: var.$black;
-            }
-
-            &:hover {
-              background-color: rgba(var.$blue_dark, 0.6);
-              color: var.$white;
-              border: 2px dashed rgba(var.$black, 0.8);
-            }
-          }
-
           .photo-preview {
-            display: flex;
-            background-color: var.$photos_fond;
-            padding: 10px;
-            box-sizing: border-box;
-            width: 98%;
-            height: 135px;
-            overflow-x: auto;
-            border-radius: 15px;
-            margin-bottom: 5px;
+            width: 100%;
+            padding: 6px 0 !important;
+            height: 125px !important;
 
             img {
-              width: 190px;
-              border-radius: 15px;
-              margin-left: 10px;
-              height: 100px;
+              height: 110px !important;
             }
           }
-        }
-      }
-    }
-  }
 
-  .actions {
-    justify-content: space-around;
-    // padding: 2%;
-    text-align: end;
-
-    .btn-cancel {
-      padding: 1% 2%;
-      margin: 1%;
-      background-color: var.$red_dark;
-      color: var.$white;
-      border: none;
-      border-radius: 10px;
-      font-weight: 800;
-
-      &:hover {
-        background-color: rgb(var.$rojo, 0.9);
-        color: var.$white;
-        border: none;
-      }
-    }
-
-    .btn-save {
-      width: 200px;
-      padding: 1% 2%;
-      position: relative;
-      margin: 1%;
-      background-color: var.$blue_dark;
-      border: none;
-      border-radius: 10px;
-      color: var.$white;
-      font-weight: 800;
-
-      &:hover {
-        background-color: rgb(var.$fondo_modal, 0.9);
-        color: var.$white;
-        border: none;
-      }
-
-      .data_save {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-
-        .icon {
-          position: absolute;
-          left: 20px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 26px !important;
-          height: 26px !important;
-          vertical-align: middle;
-          // margin-right: 6px;
-          // animation: spin 1s linear infinite;
-        }
-
-        p {
-          margin: 0;
-          font-size: 16px;
-          font-weight: 800;
+          .upload-btn {
+            padding: 4px 16px !important;
+            font-size: 12px;
+          }
         }
       }
     }

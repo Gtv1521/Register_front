@@ -18,9 +18,12 @@ import { roleGuard } from './core/infrastructure/services/permisos/role-guard';
 import { NoAccessComponent } from './features/no-access-component/no-access-component';
 import { NewUserComponent } from './features/components/new-user-component/new-user-component';
 import { EditRolComponet } from './features/components/edit-rol-componet/edit-rol-componet';
+import { ThemeComponent } from './features/components/theme-component/theme-component';
+import { NewRegisterComponent } from './features/components/new-register-component/new-register-component';
+import { qrAccessGuard } from './core/infrastructure/services/permisos/qr-access.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: '',
     component: AuthComponent,
@@ -33,8 +36,12 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardLayout },
   { path: 'register/:id', component: DashboardLayout }, //  esta es la ruta para mostrar los registros
   { path: 'sessions/:id', component: SessionsComponent }, // esta es la ruta para mostrar las sesiones
-  { path: 'dashboard/see-observation/:id', component: SeeObservation },
-  { path: 'dashboard/new-observation/:registerId', component: NewObservation },
+  {
+    path: 'registro/:id',
+    component: SeeObservation,
+    canActivate: [qrAccessGuard],
+  },
+  { path: 'new-registro', component: NewRegisterComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'user/:id', component: DataUserComponent },
   {
@@ -43,10 +50,12 @@ export const routes: Routes = [
     canActivate: [roleGuard],
     data: { roles: [Rol.Administrador, Rol.Super] },
     children: [
-      { path: 'add_user', component: NewUserComponent },
-      { path: 'edit_rol', component: EditRolComponet },
+      { path: '', redirectTo: 'edit', pathMatch: 'full' },
+      { path: 'add', component: NewUserComponent },
+      { path: 'edit', component: EditRolComponet },
     ],
   },
+  { path: 'theme', component: ThemeComponent },
   {
     path: 'componies',
     component: CompaniesComponent,

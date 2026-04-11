@@ -136,22 +136,22 @@
           name="image"
           id="image"
         />
+        @if (form.get("image")?.touched && form.get("image")?.invalid) {
+          <div class="error-message">
+            @if (form.get("image")?.errors?.["required"]) {
+              <span>La imagen es obligatoria</span>
+            } @else if (form.get("image")?.errors?.["minlength"]) {
+              <span>
+                La imagen debe tener al menos
+                {{ form.get("image")?.errors?.["minlength"].requiredLength }}
+                caracteres
+              </span>
+            } @else {
+              <span>La imagen tiene un error desconocido</span>
+            }
+          </div>
+        }
       </div>
-      @if (form.get("image")?.touched && form.get("image")?.invalid) {
-        <div class="error-message">
-          @if (form.get("image")?.errors?.["required"]) {
-            <span>La imagen es obligatoria</span>
-          } @else if (form.get("image")?.errors?.["minlength"]) {
-            <span>
-              La imagen debe tener al menos
-              {{ form.get("image")?.errors?.["minlength"].requiredLength }}
-              caracteres
-            </span>
-          } @else {
-            <span>La imagen tiene un error desconocido</span>
-          }
-        </div>
-      }
     </form>
   </div>
 </div>

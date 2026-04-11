@@ -5,23 +5,28 @@
       <h3>{{ Observation()?.id }}</h3>
       <!-- BOTONES -->
       <div class="buttons">
-        <button class="boton editar">
-          <span><mat-icon>edit</mat-icon> </span>
-        </button>
-        <button class="boton eliminar">
-          <span>
-            <mat-icon>delete</mat-icon>
-          </span>
-        </button>
+        @if (!invitado() && registerStatus() !== "Entregado") {
+          <button class="boton editar">
+            <span><mat-icon>edit</mat-icon> </span>
+          </button>
+          <button class="boton eliminar">
+            <span>
+              <mat-icon>delete</mat-icon>
+            </span>
+          </button>
+        }
       </div>
     </div>
 
     <div class="panel_contenido">
       <!-- LADO IZQUIERDO -->
-      <div class="panel_left" [class.size]="Observation()?.photos?.length! === 0">
+      <div
+        class="panel_left"
+        [class.size]="Observation()?.photos?.length! === 0"
+      >
         <div class="container_description">
           <h3 class="title">Detalles</h3>
-          <div class="description" [innerHTML]="textoFormateado"></div>
+          <div class="description" [innerHTML]="textoFormateado()"></div>
         </div>
       </div>
 
@@ -34,6 +39,7 @@
             <div class="photo-list">
               @for (photo of Observation()?.photos; track photo.id) {
                 <img
+                  (click)="openModal()"
                   [src]="photo.photo"
                   [id]="photo.id"
                   class="observation-photo"
@@ -51,3 +57,7 @@
     </div>
   </div>
 </div>
+
+@if (showModal()) {
+  <app-modal-imege [photos]="photos()" (close)="closeModal()" />
+}

@@ -1,14 +1,15 @@
-@use "../../../_styles/variables" as var;
-
 .container {
   width: 100%;
   height: 100vh;
   position: relative;
-  background-color: var.$dashboard_bg;
   display: grid;
-  grid-template-rows:
-    1fr // header
-    8fr // content
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  // justify-content: space-between;
+  grid-template-rows: 1fr // header
+    22fr // content
     1fr; // footer
 
   .container-fluid {
@@ -16,36 +17,36 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    background-color: var.$fondo_modal;
+    background-color: var(--color-nav);
     align-items: center;
     position: sticky;
 
-    .caja-icono {
-      .icons {
-        border-radius: 5px;
-        color: white;
-        padding: 6%;
+    .icons {
+      color: var(--color-icons-nav);
+      width: 30px;
+      height: 30px;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: color 0.2s ease;
 
-        &:hover {
-          color: var.$fondo_modal;
-          background-color: var.$white;
-          box-shadow: 0 0 10px var.$white ;
-          padding: 6%;
-        }
+      &:hover {
+        border-radius: 50%;
+        background-color: var(--color-dif-azul);
       }
     }
 
-    .icons {
-      color: var.$white;
-      cursor: pointer;
-      margin: 0 15px;
+    .options {
+      display: flex;
+      gap: 10px;
     }
 
     .card-search {
       display: flex;
       justify-content: center;
       align-items: center;
-
       max-width: 90%;
       width: 60%;
       margin: auto;
@@ -53,182 +54,243 @@
       .search-box {
         position: relative;
         width: 100%;
-      }
 
-      .search-box input {
-        border: 1px solid var.$white;
-        width: 100%;
-        border-radius: 50px;
-        padding: 0% 10px;
-        margin: auto;
-        text-align: center;
-        font-weight: 500;
-        justify-content: center;
-        padding: 5px 4px 5px 0px;
-        outline: none;
-      }
+        input {
+          border: 1px solid var(--color-secondary);
+          width: 100%;
+          border-radius: 20px;
+          padding: 1px 0%;
+          margin: auto;
+          text-align: center;
+          font-weight: 500;
+          font-size: 1rem;
+          justify-content: center;
+        }
 
-      .search-box .search-icon {
-        position: absolute;
-        right: 3px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: var.$white;
-        transition: color 0.2s ease;
-        margin: 1px;
-        background-color: var.$fondo_modal;
-        border-radius: 15px;
-        width: 40px;
-        justify-items: center;
-        text-align: center;
+        .search-icon {
+          position: absolute;
+          right: 1px;
+          top: 50%;
+          height: auto;
+          transform: translateY(-50%);
+          cursor: pointer;
+          color: var(--color-secondary);
+          transition: color 0.2s ease;
+          background-color: var(--color-modal);
+          border-radius: 15px;
+          font-weight: 800;
+          justify-items: center;
+          text-align: center;
 
-        &:hover {
-          color: rgba(var.$white, 0.6);
+          &:hover {
+            width: 60px;
+            background-color: red;
+          }
         }
       }
-
     }
-
   }
 
   // contenido de las card
   .content {
-    width: 99%;
-    height: 100%;
-    margin: auto;
-    overflow-y: scroll;
+    width: 100%;
+    // height: 100%;
+    // margin: auto;
+    background-color: var(--color-bg);
+    scrollbar-width: thin;
+    scrollbar-color: #888 #eee;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .registers {
       padding: 10px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
       gap: 20px;
-      justify-content: space-around;
-      align-items: stretch;
+      // justify-content: space-around;
+      // align-items: stretch;
+    }
+
+    .no_data {
+      width: 100%;
+      text-align: center;
+      color: var(--color-text);
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin: auto;
+      // background-color: blue;
     }
   }
-
 
   /* ===== Footer ===== */
   .dashboard-footer {
     position: fixed;
     bottom: 0;
     left: 0;
+    padding: 6px;
+    box-sizing: border-box;
     width: 100%;
-    height: 64px;
-    background-color: var.$fondo_modal;
-    border-top: 1px solid rgba(var.$white, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+    background-color: var(--color-nav);
+    // border-top: 1px solid rgba(var(--color-secondary), 0.08);
+    color: var(--color-secondary);
 
-    color: var.$white;
-  }
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: auto;
 
-  /* ===== Zonas ===== */
+      /* ===== Usuario ===== */
+      .footer-left {
+        &:hover {
+          cursor: pointer;
 
-  .footer-left,
-  .footer-center,
-  .footer-right {
-    display: flex;
-    align-items: center;
-    text-align: center;
-  }
+          .user-ico,
+          .user-info > .user-name,
+          .user-role {
+            // color: var(--color-primary) !important;
+            text-shadow: var(--color-primary) 1px 0  10px;
+          }
+        }
 
-  /* ===== Usuario ===== */
+        .user-icon {
+          margin-right: 7px;
+          color: var(--color-text-title);
+        }
 
-  .footer-left .user-info {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
+        .user-info {
+          display: flex;
+          line-height: 1.1;
+          flex-direction: column;
 
-  .footer-left .user-icon {
-    margin-right: 7px;
-    font-size: 25px;
-    color: var.$white;
-  }
+          .user-name {
+            font-weight: 600;
+            color: var(--color-text-title);
+          }
 
-  .user-name {
-    font-size: 14px;
-    font-weight: 600;
-    color: var.$white;
-  }
+          .user-role {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(var(--color-white), 0.6);
+          }
+        }
+      }
 
-  .user-role {
-    font-size: 12px;
-    color: rgba(var.$white, 0.6);
-  }
-
-  /* ===== Centro ===== */
-
-  .footer-center {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .system-name {
-    font-size: 13px;
-    font-weight: 500;
-  }
-
-  .system-version {
-    font-size: 11px;
-    color: rgba(var.$white, 0.5);
-  }
-
-  /* ===== Filtros ===== */
-
-  .footer-right .filters {
-    display: flex;
-  }
-
-  .footer-right .modos {
-    display: flex;
-    gap: 6px;
-  }
-
-  /* Reutilizamos botones */
-  .footer-right .modos button {
-    background-color: transparent;
-    border: 1px solid rgba(var.$white, 0.2);
-    color: rgba(var.$white, 0.8);
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .footer-right .modos button:hover {
-    background-color: rgba(var.$white, 0.08);
-    color: var.$white;
-  }
-
-  .footer-right .modos button.active {
-    background-color: var.$white;
-    color: var.$black;
-    border-color: var.$white;
-  }
-
-  /* ===== Responsive ===== */
-
-  @media (max-width: 900px) {
-    .dashboard-footer {
-      height: auto;
-      padding: 12px;
-      flex-direction: column;
-      gap: 10px;
+      /* ===== Zonas ===== */
+      .footer-left,
+      .footer-center,
+      .footer-right {
+        display: flex;
+        align-items: center;
+        text-align: center;
+      }
     }
 
+    /* ===== Centro ===== */
     .footer-center {
-      order: 3;
+      flex-direction: column;
+      text-align: center;
+
+      .system-name {
+        // font-size: 13px;
+        font-weight: 500;
+      }
+
+      .system-version {
+        font-size: 11px;
+        color: rgba(var(--color-white), 0.5);
+      }
     }
 
+    /* ===== Filtros ===== */
     .footer-right {
-      order: 2;
+      .filters {
+        display: flex;
+        .modos {
+          display: flex;
+          gap: 6px;
+          /* Reutilizamos botones */
+          button {
+            background-color: transparent;
+            border: 1px solid rgba(var(--color-white), 0.2);
+            color: rgba(var(--color-white), 0.8);
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background-color: rgba(var(--color-white), 0.08);
+              color: var(--color-white);
+            }
+            &.active {
+              background-color: var(--color-white);
+              color: var(--color-black);
+              outline: 2px solid rgba(255, 255, 255, 0.5);
+              border-color: var(--color-black);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (400px <= width <= 1300px) {
+  .container {
+    grid-template-rows: 1fr // header
+      19fr // content
+      1fr; // footer
+
+    .container-fluid {
+      .card-search {
+        .search-box {
+          input {
+            font-size: 0.9rem;
+          }
+
+          .search-icon {
+            font-size: 1rem;
+          }
+        }
+      }
     }
 
+    .dashboard-footer {
+      padding: 2px;
+      .footer {
+        .footer-left {
+          .user-info {
+            .user-name {
+              font-size: 10px;
+            }
+            .user-role {
+              font-size: 9px;
+            }
+          }
+        }
+
+        .footer-center {
+          .system-name {
+            font-size: 11px;
+            line-height: 0.6;
+          }
+        }
+
+        .footer-right {
+          .filters {
+            .modos {
+              button {
+                padding: 4px 8px;
+                font-size: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

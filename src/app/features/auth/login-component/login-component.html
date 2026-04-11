@@ -1,10 +1,28 @@
 <div class="contain">
   <form class="formulario" [formGroup]="login" (ngSubmit)="onSubmit()">
-    <h3 class="title">Inicia session</h3>
+    <h3 class="title">Iniciar sesión</h3>
+
+    @if (success()) {
+      <div class="success-message">
+        <span>✓ Sesión iniciada correctamente</span>
+      </div>
+    }
+
+    @if (error()) {
+      @if (error()?.error?.status === 400) {
+        <div class="error-alert">
+          <span>{{ error()?.error?.message }}</span>
+        </div>
+      } @else {
+        <div class="error-alert">
+          <span>{{ error()?.error?.message }}</span>
+        </div>
+      }
+    }
 
     <div class="container-fluid">
       <section class="group-items">
-        <label class="item_name" for="email">Email: </label>
+        <label class="item_name" for="email">Correo: </label>
         <input
           class="item_type"
           formControlName="email"
@@ -34,7 +52,7 @@
         <input
           id="password"
           class="item_type"
-          [type]="estado ? 'text' : 'password'"
+          [type]="estado() ? 'text' : 'password'"
           placeholder="Contraseña"
           formControlName="password"
         />
@@ -63,7 +81,7 @@
             id="show"
           />
           <label for="show">
-            {{ estado ? " Ocultar" : " Mostrar" }} contraseña</label
+            {{ estado() ? " Ocultar" : " Mostrar" }} contraseña</label
           >
         </div>
         <div class="restore" (click)="goReset()">
@@ -73,7 +91,7 @@
 
       <section class="exit">
         <button type="submit" class="submit">
-          @if (loading) {
+          @if (loading()) {
             <span class="load">
               <app-loader-component />
             </span>
@@ -85,19 +103,10 @@
     <div (click)="goSigIn()" class="add_user">
       <p class="link">Crear usuario</p>
     </div>
-    @if (error) {
-      @if (error.status === 400) {
-        <div class="error">
-          {{ error.error.message }}
-        </div>
-        <div class="sessions">
-          <p (click)="goSessions()">Ver sesiones</p>
-        </div>
-      } @else {
-        <div class="error">
-          {{ error.error.message }}
-        </div>
-      }
+    @if (error()?.error?.status === 400) {
+      <div class="sessions">
+        <p (click)="goSessions()">Ver sesiones</p>
+      </div>
     }
   </form>
 </div>

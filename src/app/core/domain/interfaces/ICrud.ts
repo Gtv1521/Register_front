@@ -15,11 +15,19 @@ export interface IFiter<dto, entity> extends Omit<
   Filter(data: string): Observable<entity[]>;
   GetAll(company: string, page: number, size: number): Observable<entity[]>;
 }
+
+export interface IRegistro<dto, entity> extends IFiter<dto, entity> {
+  downloadPdf(id: string): Observable<{ blob: Blob; filename: string }>;
+}
+
 export interface IUser<dto, entity> extends Omit<
   ICrud<dto, entity>,
-  'Create' | 'Delete' | 'Get'
+  'Get' | 'GetAll'
 > {
-  Get(): Observable<entity>
+  Get(): Observable<entity>;
+  GetId(id: string): Observable<entity>;
+  GetAll(id: string): Observable<entity[]>;
+  SaveSession(id: string, theme: string): Observable<boolean>;
 }
 
 export interface IGeneral<dto, entity> extends Omit<

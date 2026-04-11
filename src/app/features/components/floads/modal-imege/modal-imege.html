@@ -1,0 +1,46 @@
+<div class="carrusel">
+  <button class="close" (click)="cerrar()">&times;</button>
+  <div class="carousel-container">
+    <!-- El riel que se mueve -->
+    <div
+      class="carousel-track"
+      [style.transform]="getTrackTransform()"
+      [class.zoomed]="isZoomed"
+    >
+      @for (photo of photos(); track $index; let i = $index) {
+        <div
+          class="carousel-item"
+          [class.active-zoom]="i === currentIndex && isZoomed"
+        >
+          <img
+            [src]="photo"
+            [alt]="$index"
+            [style.transform]="getImageTransform()"
+            [class.grabbing]="isDragging"
+            class="zoomable-img"
+            (click)="ampliar()"
+            (contextmenu)="restaurar($event)"
+            (mousedown)="onMouseDown($event)"
+            (mousemove)="onMouseMove($event)"
+            (window:mouseup)="onMouseUp()"
+          />
+        </div>
+      }
+    </div>
+
+    <!-- Controles -->
+    <button class="btn prev" (click)="anterior()">&#10094;</button>
+    <button class="btn next" (click)="siguiente()">&#10095;</button>
+
+    <!-- Indicadores (Puntos) -->
+    <div class="dots">
+      @for (dot of photos(); track $index) {
+        <span
+          class="dot"
+          [class.active]="$index === currentIndex"
+          (click)="irA($index)"
+        ></span>
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="session-item" [class.close]="session()?.status === 'Inactive'">
+  <div class="content_data">
+    <section class="item">
+      <strong>Sesión ID: {{ session()?.id }}</strong>
+    </section>
+    <section class="item">
+      <strong>Estado: </strong>
+      <span [class]="session()?.status === 'Active' ? 'active' : 'inactive'">
+        {{ session()?.status === "Active" ? "Activa" : "Inactiva" }}
+      </span>
+    </section>
+    <section class="item">
+      <strong>Navegador: </strong>
+      <span> {{ session()?.navegador }} </span>
+    </section>
+    <section class="item">
+      <strong>Sistema Operativo: </strong>
+      <span> {{ session()?.sistemaOperativo }} </span>
+    </section>
+    <section class="item">
+      <strong>Último acceso: </strong>
+      <span>
+        @if (session()?.status === "Active") {
+          {{ session()?.startTime | date: "EEEE, d MMMM yyyy HH:mm" }}
+        } @else {
+          {{ session()?.endTime | date: "EEEE, d MMMM yyyy HH:mm" }}
+        }
+      </span>
+    </section>
+  </div>
+  <section class="actions">
+    @if (session()?.status === "Active") {
+      <button type="button" (click)="onLogout(session()?.id)">
+        @if (loaderLogout()) {
+          <app-loader-component class="icono" />
+        } @else {
+          Cerrar sesión
+        }
+      </button>
+    } @else {
+      <strong> Sesión inactiva </strong>
+    }
+  </section>
+</div>

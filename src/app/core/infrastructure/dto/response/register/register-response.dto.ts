@@ -8,6 +8,7 @@ export interface RegisterResponseDto {
   observation: ObservationResponseDto,
   id: string,
   idClient: string,
+  idCompany: string,
   idUser: string,
   registroNumber: string,
   statusRegister: EstadoRegistro,

@@ -4,33 +4,25 @@ import {
   inject,
   Input,
   Output,
-  output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ObservationCreateUseCase } from 'src/app/core/aplication/use-cases/observation-usecase/observation-create.useCase';
-import { RegisterUseCase } from 'src/app/core/aplication/use-cases/register-usecase/register.useCase';
-import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { firstValueFrom } from 'rxjs';
-
+import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entity';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
-import { HttpResponse } from '@angular/common/http';
-import { L } from '@angular/cdk/keycodes';
 import { ObservationRequestDto } from 'src/app/core/infrastructure/dto/request/observation/observation-request.dto';
-import {
-  LIST_TYPE,
-  LISTA_ESTADOS,
-} from 'src/app/core/domain/reusables/estados.constant';
+import { LIST_TYPE } from 'src/app/core/domain/reusables/estados.constant';
 import { types } from 'src/app/core/domain/entitys/observation.entity';
 import { UpperCaseConstant } from 'src/app/core/domain/reusables/upper-case.constant';
-const statusMap: Record<string, number> = {
-  PENDIENTE: 0,
-  EN_PROCESO: 1,
-  COMPLETADO: 2,
-  CANCELADO: 3,
-};
+// const statusMap: Record<string, number> = {
+//   PENDIENTE: 0,
+//   EN_PROCESO: 1,
+//   COMPLETADO: 2,
+//   CANCELADO: 3,
+// };
+
 @Component({
   selector: 'app-observation-create',
   standalone: true,
@@ -40,7 +32,8 @@ const statusMap: Record<string, number> = {
 })
 export class NewObservation {
   readonly estados = LIST_TYPE;
-  //servicios
+  
+  // servicios
   private fb = inject(FormBuilder);
   private observationService = inject(ObservationCreateUseCase);
   private auth = inject(AuthService);
@@ -50,6 +43,7 @@ export class NewObservation {
   @Input() onRegister: boolean = false;
   @Output() CloseModal = new EventEmitter<boolean>();
   @Output() ChangeEditar = new EventEmitter<boolean>();
+  @Output() NewObservationCreated = new EventEmitter<ObservationEntity>();
 
   // datos
   photos: File[] = [];
@@ -146,10 +140,27 @@ export class NewObservation {
       this.loader = true;
       const formData = await this.obtenerDatos(this.IdRegister!);
 
-      const response = await firstValueFrom(
+      const response: any = await firstValueFrom(
         this.observationService.execute(formData),
       );
       this.responseData = response;
+      
+      // Construir el objeto ObservationEntity completo con el ID retornado
+      const newObservation: ObservationEntity = {
+        id: response.id!, // El ID retornado por el backend
+        idRegister: this.IdRegister!,
+        type: this.form.value.type!,
+        description: this.form.value.description!,
+        idUser: this.userId!,
+        createdAt: new Date(),
+        photos: this.photoPreviews.map((preview, index) => ({
+          photo: preview,
+          id: `${index}`,
+        })),
+      };
+      
+      // Emitir la nueva observación con todos los datos
+      this.NewObservationCreated.emit(newObservation);
     } catch (error) {
       throw error;
     } finally {

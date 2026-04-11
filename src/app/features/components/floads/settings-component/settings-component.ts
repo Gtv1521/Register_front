@@ -1,18 +1,13 @@
 import {
   Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
   inject,
   input,
-  Input,
   output,
-  Output,
   signal,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
-
-// import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-settings-component',
@@ -23,6 +18,7 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent {
   private router = inject(Router);
+  @ViewChild('panelContent') panelContent!: ElementRef;
 
   role = input<string>();
   id = input<string>();
@@ -41,6 +37,14 @@ export class SettingsComponent {
     setTimeout(() => this.Closed.emit(), 300);
   }
 
+  onOverlayClick(event: MouseEvent) {
+    // Cerrar solo si el click fue fuera del panel-content
+    const panelElement = (event.currentTarget as HTMLElement).querySelector('.panel-content');
+    if (panelElement && !panelElement.contains(event.target as Node)) {
+      this.cerrar();
+    }
+  }
+
   onUsers() {
     this.router.navigate(['users']);
   }
@@ -50,11 +54,14 @@ export class SettingsComponent {
   }
 
   onDataCompany() {
-    console.log(this.company())
+    console.log(this.company());
     this.router.navigate([`company/${this.company()}`]);
   }
 
   onCompanys() {
     this.router.navigate(['companys']);
+  }
+  onTheme() {
+    this.router.navigate(['theme']);
   }
 }

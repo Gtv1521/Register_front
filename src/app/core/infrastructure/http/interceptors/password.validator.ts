@@ -13,3 +13,25 @@ export function confirmPasswordValidator(
     return password === confirm ? null : { passwordMismatch: true };
   };
 }
+
+// Validador para contraseña fuerte
+export function strongPasswordValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null;
+
+    const password = control.value;
+    const hasMinLength = password.length >= 8;
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+    if (!hasMinLength || !hasSpecialChar) {
+      return {
+        strongPassword: {
+          hasMinLength,
+          hasSpecialChar,
+        },
+      };
+    }
+
+    return null;
+  };
+}

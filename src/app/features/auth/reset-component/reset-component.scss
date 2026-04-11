@@ -1,4 +1,3 @@
-@use "../../../_styles/variables" as var;
 
 .container {
   width: 100%;
@@ -8,21 +7,21 @@
   align-items: center;
 
   .container-fluid {
-    background-color: var.$fondo_modal;
+    background-color: var(--color-modal);
     width: 50%;
     border-radius: 20px;
     padding: 50px 30px;
-    color: var.$white;
+    color: var(--color-white);
 
     .volver {
       widows: 10%;
       a {
-        color: var.$rojo;
+        color: var(--color-ruby);
         font-weight: 700;
         text-decoration: none;
 
         &:hover {
-          color: var.$white;
+          color: var(--color-white);
         }
       }
       button {
@@ -78,8 +77,8 @@
         cursor: pointer;
 
         &:hover {
-          background-color: var.$azul;
-          color: var.$white;
+          background-color: var(--color-blue);
+          color: var(--color-white);
         }
       }
     }

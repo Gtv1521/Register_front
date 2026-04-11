@@ -1,8 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-
-import { CardComponent } from '../../components/card-component/card-component';
 import { RegisterGetAllUsecase } from 'src/app/core/aplication/use-cases/register-usecase/registerGetAll-usecase';
 import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { UserEntity } from 'src/app/core/domain/entitys/user.entity';
@@ -15,8 +13,10 @@ import { lastValueFrom } from 'rxjs';
 import { NewRegisterComponent } from '../../components/new-register-component/new-register-component';
 import { LogoutUseCase } from 'src/app/core/aplication/use-cases/session-usecase/logout.useCase';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RegisterStateService } from 'src/app/core/infrastructure/services/effect/register-state.service';
 import { SettingsComponent } from '../../components/floads/settings-component/settings-component';
+import { CardComponent } from '../../components/cards/card-component/card-component';
+import { CompanyGetUseCase } from 'src/app/core/aplication/use-cases/company-usecase/company-get.useCase';
+import { CompanyEntity } from 'src/app/core/domain/entitys/company.entity';
 
 type FilterMode =
   | 'todo'
@@ -51,7 +51,7 @@ export class DashboardLayout implements OnInit {
   private user = inject(UserGetUseCase);
   private registers = inject(RegisterGetAllUsecase);
   private router = inject(Router);
-  private logout = inject(LogoutUseCase); // cierra session
+  private getcompany = inject(CompanyGetUseCase);
 
   // data signals
   filterType = signal<FilterMode>('todo');
@@ -63,6 +63,7 @@ export class DashboardLayout implements OnInit {
   isLastPage = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   settings = signal<boolean>(false);
+  company = signal<CompanyEntity | null>(null);
 
   // funcion inicial para hacer las consultas
   async ngOnInit(): Promise<void> {
@@ -70,6 +71,7 @@ export class DashboardLayout implements OnInit {
     try {
       await this.GetUser();
       await this.loadMore();
+      await this.loadCompany();
     } catch (error: any) {
       this.errores = error;
     } finally {
@@ -117,21 +119,16 @@ export class DashboardLayout implements OnInit {
   }
 
   async onLogout() {
-    try {
-      await lastValueFrom(this.logout.execute(this.auth.getSession()!));
-      this.router.navigate(['logout']);
-    } catch (error) {
-      console.log('no se pudo cerrar sesion', error);
-    }
+    this.router.navigate(['logout']);
   }
 
   // paso de datos para el ver detalle
   verDetalle(id: string): void {
-    this.router.navigate(['/dashboard/see-observation', id]);
+    this.router.navigate(['/registro', id]);
   }
 
   openNewRegister(): void {
-    this.newRegister = true;
+    this.router.navigate(['/new-registro']);
   }
 
   //  refresh de registros con paginado
@@ -144,6 +141,12 @@ export class DashboardLayout implements OnInit {
     ) {
       this.loadMore();
     }
+  }
+
+  async loadCompany() {
+    this.company.set(
+      await lastValueFrom(this.getcompany.execute(this.auth.companyId()!)),
+    );
   }
 
   onSettings() {

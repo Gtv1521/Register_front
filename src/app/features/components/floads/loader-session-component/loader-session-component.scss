@@ -1,5 +1,3 @@
-@use "./../../../../_styles/variables" as var;
-
 
 .container {
     width: 100%;
@@ -7,13 +5,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--color-panel);
 
     .container-fluid {
         width: 10%;
         height: 10%;
 
         .loader {
-            color: var.$azul;
+            color: var(--color-icons);
         }
     }
 }

@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  LOCALE_ID,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
@@ -24,12 +25,17 @@ import { ClientHttpService } from './core/infrastructure/http/http-api/client-ht
 import { CLIENT_TOKEN } from './core/aplication/tokens/client.token';
 import { COMPANY_TOKEN } from './core/aplication/tokens/company.token';
 import { CompanyHttpService } from './core/infrastructure/http/http-api/company-http.service';
+import { registerLocaleData } from '@angular/common';
+import localeEsCo from '@angular/common/locales/es-CO';
+
+registerLocaleData(localeEsCo);
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(withInterceptorsFromDi()),
+    { provide: LOCALE_ID, useValue: 'es-CO' },
     { provide: SESSION_TOKEN, useClass: SessionHttpService }, // inyeccion de repository
     { provide: REGISTER_TOKEN, useClass: RegisterHttpService },
     { provide: USER_TOKEN, useClass: UserHttpService },

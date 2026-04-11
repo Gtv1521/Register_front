@@ -1,16 +1,27 @@
 <div class="container">
   <div class="container-fluid">
-    <section class="title">Sesiones activas</section>
-    <div class="panel_sesiones">
-      @for (session of sessiomsList; track session.id) {
-        @if (session.status === 'Active') {
-            <div class="session-item">
-              <span>{{ session.token }}</span>
-              <span>{{ session.status }}</span>
-              <button type="button" (click)="onLogout(session.id)">Cerrar session</button>
-            </div>
-        } 
-      }
+    <div class="title">
+      <h2>Gestión de Sesiones</h2>
     </div>
+    @if (loader()) {
+      <div class="loader">
+        <app-loader-component />
+      </div>
+    } @else {
+      <div class="intro">
+        Se han alcanzado las sesiones maximas permitidas
+        <strong>(3)</strong> para un usuario.
+      </div>
+      <section class="title">Sesiones</section>
+      <div class="panel_sesiones">
+        @for (session of sessiomsList(); track session.id) {
+          <app-data-session-component [session]="session" (close)="onLogout($event)" />
+        }
+      </div>
+      <div class="options">
+        <button class="back" type="button">Regresar</button>
+        <button class="ok" type="button" (click)="onExit()">Listo</button>
+      </div>
+    }
   </div>
 </div>

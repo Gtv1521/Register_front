@@ -1,0 +1,195 @@
+.title {
+  text-align: center;
+  color: var(--color-text);
+}
+
+.form-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--color-panel);
+  border-radius: 0.4rem;
+  box-sizing: border-box;
+
+  .success-message {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(52, 211, 153, 0.1);
+    border: 1px solid var(--color-success);
+    border-radius: 0.4rem;
+    color: var(--color-success);
+    font-weight: 600;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .error-container {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 107, 107, 0.1);
+    border: 1px solid var(--color-error);
+    border-radius: 0.4rem;
+    color: var(--color-error);
+    font-weight: 600;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--color-text);
+      font-size: 0.95rem;
+    }
+
+    .email-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .form-control {
+        flex: 1;
+      }
+
+      .loading-spinner {
+        position: absolute;
+        right: 0.75rem;
+        font-size: 1.2rem;
+        animation: spin 1s linear infinite;
+      }
+    }
+
+    .form-control {
+      padding: 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.4rem;
+      font-size: 1rem;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      box-sizing: border-box;
+      font-family: inherit;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-selected);
+        box-shadow: 0 0 5px rgba(var(--color-selected), 0.5);
+        background-color: rgba(var(--white), 0.2);
+      }
+
+      &:invalid {
+        border-color: var(--color-error);
+      }
+
+      &::placeholder {
+        color: rgba(var(--color-text), 0.5);
+      }
+    }
+
+    select.form-control {
+      cursor: pointer;
+
+      option {
+        background-color: var(--color-panel);
+        color: var(--color-text);
+      }
+    }
+
+    .error-message {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--color-error);
+      font-weight: 500;
+
+      span {
+        display: block;
+
+        &:before {
+          content: "⚠ ";
+        }
+      }
+    }
+  }
+
+  .form-group-check {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+
+    button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 0.4rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    .btn-submit {
+      background-color: var(--color-selected);
+      color: var(--color-text-hover-btn);
+
+      &:hover:not(:disabled) {
+        background-color: var(--color-bg-hover-btn);
+        box-shadow: 0 4px 12px rgba(var(--color-selected), 0.3);
+        transform: translateY(-2px);
+      }
+
+      .button-spinner {
+        display: inline-block;
+        margin-right: 0.5rem;
+        animation: spin 1s linear infinite;
+      }
+    }
+
+    .btn-reset {
+      background-color: var(--color-bg-btn);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+
+      &:hover:not(:disabled) {
+        background-color: var(--color-bg-hover-btn);
+        color: var(--color-text-hover-btn);
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
