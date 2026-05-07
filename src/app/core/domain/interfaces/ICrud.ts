@@ -16,7 +16,12 @@ export interface IFiter<dto, entity> extends Omit<
   GetAll(company: string, page: number, size: number): Observable<entity[]>;
 }
 
-export interface IRegistro<dto, entity> extends IFiter<dto, entity> {
+export interface IRegistro<dto, entity> extends Omit<
+  IFiter<dto, entity>,
+  'Filter'
+> {
+  Filter(data: string, idCompany: string): Observable<entity[]>;
+  Delete(id: string): Observable<boolean>;
   downloadPdf(id: string): Observable<{ blob: Blob; filename: string }>;
 }
 
@@ -32,7 +37,7 @@ export interface IUser<dto, entity> extends Omit<
 
 export interface IGeneral<dto, entity> extends Omit<
   ICrud<dto, entity>,
-  'Delete' | 'GetAll'
+  'GetAll'
 > {
   GetAll(id: string, page: number, size: number): Observable<entity[]>;
 }

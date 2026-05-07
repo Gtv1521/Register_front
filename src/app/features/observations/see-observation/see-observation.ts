@@ -10,8 +10,7 @@ import { UserEntity } from 'src/app/core/domain/entitys/user.entity';
 import { CardObservation } from '../card-observation/card-observation';
 import { FormsModule } from '@angular/forms';
 import { ClientGetUseCase } from 'src/app/core/aplication/use-cases/client-useCase/client-get.useCase';
-import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PhonePipe } from '../../../core/infrastructure/http/pipes/phone-pipe';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { LoaderSessionComponent } from '../../components/floads/loader-session-component/loader-session-component';
@@ -23,6 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NewObservationComponent } from '../../components/floads/new-observation-component/new-observation-component';
 import { UserGetIdUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get-id.useCase';
 import { RegisterPdfUseCase } from 'src/app/core/aplication/use-cases/register-usecase/register-pdf.useCase';
+import { SignalRService } from 'src/app/core/infrastructure/services/signalr/signal-r.service';
 
 type filterMode = 'todo' | 'Ultimos' | 'Primeros';
 
@@ -33,9 +33,9 @@ type filterMode = 'todo' | 'Ultimos' | 'Primeros';
     CardObservation,
     FormsModule,
     DatePipe,
-    PhonePipe,
     LoaderSessionComponent,
     NewObservationComponent,
+    CurrencyPipe
   ],
   templateUrl: './see-observation.html',
   styleUrl: './see-observation.scss',
@@ -51,6 +51,7 @@ export class SeeObservation implements OnInit {
   private get_comapany = inject(CompanyGetUseCase);
   private auth = inject(AuthService);
   private download = inject(RegisterPdfUseCase);
+  private signalr = inject(SignalRService);
 
   // estados globales
   public register = inject(RegisterStateService);
@@ -69,6 +70,28 @@ export class SeeObservation implements OnInit {
   invitado = signal<boolean>(false);
   registro = signal<string>('');
 
+  constructor() {
+    this.signalr.deleteObservacion$.subscribe((id) => {
+      const currentObservations = this.observationsList();
+      this.observationsList.set(
+        currentObservations.filter((obs) => obs.id !== id),
+      );
+    });
+
+    this.signalr.newObservation$.subscribe((observation) => {
+      // const currentObservations = this.observationsList();
+      if (observation.idRegister === this.registro()) {
+      this.observationsList.update((lista) => [observation, ...lista]);
+      }
+    });
+
+    this.signalr.updateRegistro$.subscribe((registro) => {
+      if (registro.id === this.registro()) {
+        this.register.updateStatus(registro.statusRegister);
+      }
+    });
+  }
+
   // funcion principal para la traida de datos
   async ngOnInit(): Promise<void> {
     const registroId = this.route.snapshot.paramMap.get('id');
@@ -86,7 +109,7 @@ export class SeeObservation implements OnInit {
 
       await Promise.all([
         this.LoadClient((await dataRegistro).idClient),
-        this.usuario.set(await this.LoadUser((await dataRegistro).idUser)),
+        this.usuario.set(dataRegistro.tecnico),
         this.observationsList.set(await this.LoadObservations(registroId)),
       ]);
     } catch (error: any) {
@@ -176,12 +199,6 @@ export class SeeObservation implements OnInit {
 
   onCloseModal($event: boolean) {
     this.nueva.set($event);
-  }
-
-  onNewObservation($event: any) {
-    // Agregar la nueva observación al inicio de la lista
-    const currentObservations = this.observationsList();
-    this.observationsList.set([$event, ...currentObservations]);
   }
 
   toogleNueva(): void {

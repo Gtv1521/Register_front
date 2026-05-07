@@ -39,23 +39,21 @@ $btn_action: rgba(47, 47, 132, 0.437);
 $themes: (
   light: (
     //  fondos
-    bg: #cef3f3,
+    bg: #d2dee1,
     // bg: rgba($color: $negro, $alpha: 0.13),
-    nav: $modal,
+    nav: rgb(3, 38, 49),
     panel: $white,
+    bg-delete: rgb(153, 96, 96),
     modal: $modal,
     panel-interno: rgba(
         $color: $azul,
         $alpha: 0.3,
       ),
     panel-content: $card_bg,
-    resalto: rgba(172, 174, 178, 0.829),
+    resalto: rgba(198, 202, 210, 0.518),
     panel-warning: $rojo_dif,
 
-    panel-modal: rgba(
-        $color: $negro,
-        $alpha: 0.8,
-      ),
+    panel-modal: rgba(0, 0, 0, 0.89),
     // bordes
     border: rgb(70, 20, 188),
     border-hover: rgba(7, 10, 78, 0.959),
@@ -65,11 +63,11 @@ $themes: (
     alert: $rojo,
 
     // buttons
-    bg-btn: rgb(212, 212, 229),
+    bg-btn: rgb(211, 211, 218),
     br-btn: $azul,
-    bg-hover-btn: rgb(38, 64, 135),
+    bg-hover-btn: rgb(65, 65, 114),
     br-hover-btn: $azul,
-    text-btn: $negro,
+    text-btn: rgba(2, 2, 2, 0.901),
     text-btn-hover: $white,
     selected: rgb(28, 54, 72),
     // texto
@@ -89,24 +87,21 @@ $themes: (
 
     // difuminados
     dif-uno: rgba(255, 255, 255, 0.518),
-    dif-dos: rgba(0, 0, 0, 0.892),
+    dif-dos: rgba(0, 0, 0, 0.89),
     dif-tres: rgba(109, 109, 185, 0.547),
     dif-cuatro: rgba(255, 0, 0, 0.422),
   ),
   dark: (
     //  fondos
     bg: #121212,
-    panel: #292830,
-    nav: #1f1f1f,
+    panel: #212022,
+    nav: #231c26,
     modal: #182433,
     panel-interno: $btn_action,
     panel-content: #57556145,
     resalto: #37363a,
 
-    panel-modal: rgba(
-        $color: $negro,
-        $alpha: 0.8,
-      ),
+    panel-modal: rgba(25, 18, 18, 0.828),
     // bordes
     border: rgb(143, 121, 194),
     border-hover: rgba(93, 122, 157, 0.703),
@@ -146,38 +141,39 @@ $themes: (
 
   blue_theme: (
     //  fondos
-    bg: #0b2941,
-    panel: #143855,
-    nav: #234c6a,
-    modal: #1f305b,
+    bg: #121212,
+    panel: #292830,
+    nav: #121b32,
+    modal: #182433,
     panel-interno: $btn_action,
     panel-content: #57556145,
-    resalto: #322d3f,
+    resalto: #37363a,
 
+    panel-modal: rgba(25, 18, 18, 0.828),
     // bordes
-    border: rgb(219, 216, 227),
+    border: rgb(143, 121, 194),
     border-hover: rgba(93, 122, 157, 0.703),
     // iconoes
-    icons: $white,
+    icons: #9f76d2,
     icons-nav: $white,
     alert: #cf6679,
 
     // buttons
-    bg-btn: rgb(55, 81, 109),
+    bg-btn: rgba(69, 80, 107, 0.567),
     br-btn: $azul,
-    bg-hover-btn: rgba(11, 8, 15, 0.692),
+    bg-hover-btn: rgba(255, 255, 255, 0.2),
     br-hover-btn: rgba(255, 255, 255, 0.2),
     text-btn: $white,
     text-btn-hover: $white,
-
+    selected: rgba(27, 60, 83, 0.843),
     // texto
     text-error: $escarlata,
-    text-primary: rgb(219, 219, 220),
+    text-primary: rgba(231, 223, 232, 0.995),
     text-secondary: $white,
-    text-tertiary: #d1d1f8,
+    text-tertiary: rgb(196, 194, 210),
 
     //colores dashboard
-    aquac: #a5acc761,
+    aquac: #6681ef61,
     primaro: #1976d2,
     segundo: #f3e8e8,
     tercero: rgb(255, 255, 255),
@@ -187,7 +183,7 @@ $themes: (
     // difuminados
     dif-uno: rgba(255, 255, 255, 0.518),
     dif-dos: rgba(0, 0, 0, 0.892),
-    dif-tres: rgba(123, 123, 163, 0.547),
+    dif-tres: rgba(161, 161, 207, 0.547),
     dif-cuatro: rgba(255, 0, 0, 0.422),
   ),
 

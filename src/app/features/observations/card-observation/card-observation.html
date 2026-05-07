@@ -9,7 +9,7 @@
           <button class="boton editar">
             <span><mat-icon>edit</mat-icon> </span>
           </button>
-          <button class="boton eliminar">
+          <button class="boton eliminar" (click)="onDeleteObservation()">
             <span>
               <mat-icon>delete</mat-icon>
             </span>
@@ -60,4 +60,19 @@
 
 @if (showModal()) {
   <app-modal-imege [photos]="photos()" (close)="closeModal()" />
+}
+
+@if (alertDelete()) {
+  <app-confirm-alert-component
+    [pregunta]="
+      `¿Seguro quiere elimiar la observacion con id <strong> ${Observation()?.idRegister} </strong> ?`
+    "
+    (respuesta)="deleteOk($event)"
+  />
+}
+
+@if (loadDelete()) {
+  <app-cargando-accion-component
+    [mensaje]="'Eliminando observación...'"
+    />
 }

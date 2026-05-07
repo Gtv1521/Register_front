@@ -30,9 +30,19 @@
                 <i>{{ register.oneRegisterState()?.statusRegister }} </i></P
               >
               <p>
-                <strong>Tecnico: </strong><i>{{ usuario()?.name }}</i>
+                <strong>Tecnico: </strong
+                ><i>{{ register.oneRegisterState()?.tecnico }}</i>
               </p>
               <p><strong>Servicio: </strong> <i>Mantenimiento</i></p>
+              <p>
+                <strong>total: </strong>
+                <i>
+                  {{
+                    register.oneRegisterState()?.totalPagar
+                      | currency: "COP" : "symbol-narrow" : "1.2-2"
+                  }}
+                </i>
+              </p>
             </div>
           </div>
 
@@ -44,7 +54,7 @@
               </p>
               <p>
                 <strong>Teléfono: </strong>
-                <i>{{ client()?.phone | Phone: false }} </i>
+                <i>{{ client()?.phone }} </i>
               </p>
               <p>
                 <strong>Email: </strong> <i>{{ client()?.email }} </i>
@@ -127,7 +137,6 @@
                 [idRegister]="register.oneRegisterState()?.id!"
                 (close)="onCloseModal($event)"
                 (ChangeEditar)="onChangeState($event)"
-                (NewObservationCreated)="onNewObservation($event)"
               />
             }
             @for (observacion of observationsList(); track observacion?.id) {

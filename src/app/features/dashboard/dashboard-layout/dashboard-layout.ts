@@ -1,5 +1,17 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormsModule,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { RegisterGetAllUsecase } from 'src/app/core/aplication/use-cases/register-usecase/registerGetAll-usecase';
 import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
@@ -8,21 +20,27 @@ import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/u
 import { SessionComponent } from '../../components/session-component/session-component';
 import { LoaderSessionComponent } from '../../components/floads/loader-session-component/loader-session-component';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { NewRegisterComponent } from '../../components/new-register-component/new-register-component';
-import { LogoutUseCase } from 'src/app/core/aplication/use-cases/session-usecase/logout.useCase';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SettingsComponent } from '../../components/floads/settings-component/settings-component';
 import { CardComponent } from '../../components/cards/card-component/card-component';
 import { CompanyGetUseCase } from 'src/app/core/aplication/use-cases/company-usecase/company-get.useCase';
 import { CompanyEntity } from 'src/app/core/domain/entitys/company.entity';
+import { RegisterFilterUseCase } from 'src/app/core/aplication/use-cases/register-usecase/registerFilter-useCase';
+import { LoaderComponent } from '../../components/floads/loader-component/loader-component';
+import { SignalRService } from 'src/app/core/infrastructure/services/signalr/signal-r.service';
+import { ConfirmAlertComponent } from '../../components/floads/confirm-alert-component/confirm-alert-component';
+import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
+import { RegisterDeleteUseCase } from 'src/app/core/aplication/use-cases/register-usecase/register-delete.useCase';
 
 type FilterMode =
   | 'todo'
   | 'Pendiente'
   | 'En progreso'
   | 'Completado'
+  | 'Entregado'
   | 'cancelado';
 
 @Component({
@@ -36,6 +54,10 @@ type FilterMode =
     LoaderSessionComponent,
     NewRegisterComponent,
     SettingsComponent,
+    ReactiveFormsModule,
+    LoaderComponent,
+    ConfirmAlertComponent,
+    CargandoAccionComponent,
   ],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.scss',
@@ -49,34 +71,90 @@ export class DashboardLayout implements OnInit {
   // casos de uso utilizados
   private auth = inject(AuthService);
   private user = inject(UserGetUseCase);
-  private registers = inject(RegisterGetAllUsecase);
+  private route = inject(ActivatedRoute);
+  private readonly registers = inject(RegisterGetAllUsecase);
+  private filter = inject(RegisterFilterUseCase);
   private router = inject(Router);
   private getcompany = inject(CompanyGetUseCase);
+  private fb = inject(FormBuilder);
+  private signalR = inject(SignalRService);
+  private deleteRegister = inject(RegisterDeleteUseCase);
 
   // data signals
   filterType = signal<FilterMode>('todo');
+  idUser = signal<string>(this.auth.getUserId()!);
   registerList = signal<RegisterEntity[]>([]);
   usuario = signal<UserEntity | null>(null);
   loader = signal<boolean>(false);
+  loadeRegister = signal<boolean>(false);
   size = signal<number>(30);
   page = signal<number>(1);
   isLastPage = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   settings = signal<boolean>(false);
   company = signal<CompanyEntity | null>(null);
+  onSearch = signal<boolean>(false);
+  eliminando = signal<boolean>(false);
+  filterError = signal<string | null>(null);
+
+  onDelete = signal<boolean>(false);
+  listDelete = signal<string[]>([]);
+  onModal = signal<boolean>(false);
+
+  search = this.fb.group({
+    filtro: ['', [Validators.required]],
+  });
 
   // funcion inicial para hacer las consultas
   async ngOnInit(): Promise<void> {
     this.loader.set(true);
+
+    const params = this.route.snapshot.queryParams;
+    const estado = params['estado'] || '';
+
+    // Asignamos a tu objeto de búsqueda
+    this.search.patchValue({
+      filtro: estado || '',
+    });
+
     try {
-      await this.GetUser();
-      await this.loadMore();
+      if (!estado) {
+        await this.loadMore();
+      } else this.onBuscar();
+
       await this.loadCompany();
+      await this.GetUser();
     } catch (error: any) {
       this.errores = error;
     } finally {
       this.loader.set(false);
     }
+  }
+
+  constructor() {
+    effect(async () => {
+      const valor = this.onSearch();
+      try {
+        if (!valor) {
+          this.loadeRegister.set(true);
+          await this.loadMore();
+        }
+      } finally {
+        this.loadeRegister.set(false);
+      }
+
+    });
+
+    this.signalR.deleteRegistro$.subscribe((id) => {
+      this.registerList.update((lista) =>
+        lista.filter((item) => item.id !== id),
+      );
+    });
+
+    // Suscribirse a nuevos registros en tiempo real
+    this.signalR.newRegistro$.subscribe((data: RegisterEntity) => {
+      this.registerList.update((lista) => [data, ...lista]);
+    });
   }
 
   public filteredObservations = computed(() => {
@@ -90,6 +168,8 @@ export class DashboardLayout implements OnInit {
         return list.filter((item) => item.statusRegister === 'EnProgreso');
       case 'Completado':
         return list.filter((item) => item.statusRegister === 'Completado');
+      case 'Entregado':
+        return list.filter((item) => item.statusRegister === 'Entregado');
       case 'cancelado':
         return list.filter((item) => item.statusRegister === 'Cancelado');
       default:
@@ -114,11 +194,50 @@ export class DashboardLayout implements OnInit {
   }
 
   // funcion de busqueda segun la descripcion
-  onBuscar(): void {
-    // this.aplicarFiltroYBusqueda();
+  async onBuscar(): Promise<void> {
+    if (this.search.invalid) return;
+    this.onSearch.set(true);
+    this.loadeRegister.set(true);
+
+    try {
+      this.registerList.set([]);
+      const data = this.search.value.filtro?.toString();
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { estado: data || null }, // null lo borra de la URL si está vacío
+        queryParamsHandling: 'merge',
+      });
+
+      const response = await lastValueFrom(
+        this.filter.execute(data!, this.auth.companyId()!),
+      );
+
+      console.log(response);
+      this.registerList.set(response);
+    } catch (error) {
+      this.filterError.set('No se encontraron resultados para la búsqueda');
+    } finally {
+      setTimeout(() => {
+        this.loadeRegister.set(false);
+      }, 1000);
+    }
   }
 
-  async onLogout() {
+  desactivarFiltro(): void {
+    this.onSearch.set(false);
+    this.page.set(1);
+    this.filterError.set(null);
+    this.isLastPage.set(false);
+    this.registerList.set([]);
+    this.search.patchValue({ filtro: '' });
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { estado: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  async onLogout(): Promise<void> {
     this.router.navigate(['logout']);
   }
 
@@ -132,9 +251,8 @@ export class DashboardLayout implements OnInit {
   }
 
   //  refresh de registros con paginado
-  onScroll(event: any) {
+  onScroll(event: any): void {
     const element = event.target;
-    // Si la distancia del scroll + el alto visible es >= al alto total del contenido
     if (
       element.scrollHeight - element.scrollTop <=
       element.clientHeight + 100
@@ -143,17 +261,60 @@ export class DashboardLayout implements OnInit {
     }
   }
 
-  async loadCompany() {
+  async loadCompany(): Promise<void> {
     this.company.set(
       await lastValueFrom(this.getcompany.execute(this.auth.companyId()!)),
     );
   }
 
-  onSettings() {
+  onSettings(): void {
     this.settings.set(!this.settings());
   }
 
-  async loadMore() {
+  async OnDelete(): Promise<void> {
+    this.onDelete.set(!this.onDelete());
+    this.listDelete.set([]);
+  }
+
+  respuestaModal($event: boolean) {
+    if ($event) {
+      this.Borrrando();
+    } else {
+      this.onModal.set(false);
+      this.OnDelete();
+    }
+  }
+
+  onBorrar(): void {
+    this.onModal.set(true);
+  }
+
+  async Borrrando(): Promise<void> {
+    try {
+      this.onModal.set(false);
+      this.eliminando.set(true);
+
+      for (const id of this.listDelete()) {
+        await lastValueFrom(this.deleteRegister.execute(id));
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.OnDelete();
+      this.eliminando.set(false);
+    }
+  }
+
+  async DeleteRegisters($event: { state: boolean; id: string }): Promise<void> {
+    if ($event.state) this.listDelete.update((lista) => [...lista, $event.id]);
+    else
+      this.listDelete.update((lista) =>
+        lista.filter((item) => item !== $event.id),
+      );
+  }
+
+  //  carga todos los registros de la empresa
+  async loadMore(): Promise<void> {
     // Si ya estamos cargando o llegamos al final, no hacemos nada
     if (this.isLoading() || this.isLastPage()) return;
 

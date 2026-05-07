@@ -9,5 +9,6 @@ export interface RegisterRequestDto extends NavDataEntity {
   registroNumber: string,
   statusRegister?: EstadoRegistro,
   urlRuta: string, // para en qr del registro
-
+  antisipo: number,
+  totalPagar: number
 }

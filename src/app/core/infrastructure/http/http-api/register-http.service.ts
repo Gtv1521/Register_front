@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { IRegistro } from 'src/app/core/domain/interfaces/ICrud';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -17,10 +17,13 @@ export class RegisterHttpService implements IRegistro<
 > {
   Url = `${environment.apiUrl}/Register`;
 
-  constructor(
-    private http: HttpClient,
-    private mapper: RegisterMapper,
-  ) {}
+  Delete(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.Url}/${id}`);
+  }
+
+  private http = inject(HttpClient);
+  private mapper = inject(RegisterMapper);
+
   downloadPdf(id: string): Observable<{ blob: Blob; filename: string }> {
     return this.http
       .get(`${this.Url}/pdf/${id}`, {
@@ -58,9 +61,18 @@ export class RegisterHttpService implements IRegistro<
       .get<RegisterResponseDto[]>(`${this.Url}`, { params })
       .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));
   }
-  Filter(): Observable<RegisterEntity[]> {
+  // Filter(): Observable<RegisterEntity[]> {
+  // }
+
+  Filter(data: string, idCompany: string): Observable<RegisterEntity[]> {
     return this.http
-      .get<RegisterResponseDto[]>(`${this.Url}/Filter`)
+      .get<RegisterResponseDto[]>(`${this.Url}/Filter/${data}`, {
+        params: {
+          idCompany,
+          page: 1,
+          size: 40,
+        },
+      })
       .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));
   }
   Get(id: string): Observable<RegisterEntity> {

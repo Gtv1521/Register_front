@@ -2,7 +2,7 @@
   <div class="panel-content" #panelContent>
     <div class="config_title"><h2>Configuraciones</h2></div>
     <div class="opciones">
-      <button (click)="onEditUser()" class="item">Editar perfil</button>
+      <button (click)="onEditUser()" class="item">Perfil</button>
       <button (click)="onTheme()" class="item">Temas</button>
       @if (role() === "Administrador" || role() === "Super") {
         <button (click)="onUsers()" class="item">Usuarios</button>

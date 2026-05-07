@@ -6,6 +6,7 @@
   $theme: map.get(t.$themes, $theme-name);
 
   --color-bg: #{map.get($theme, bg)};
+  --color-bg-delete: #{map.get($theme, bg-delete)};
   --color-nav: #{map.get($theme, nav)};
   --color-panel: #{map.get($theme, panel)};
   --color-panel-interno: #{map.get($theme, panel-interno)};

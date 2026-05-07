@@ -29,16 +29,21 @@
     </section>
   </div>
   <section class="actions">
-    @if (session()?.status === "Active") {
-      <button type="button" (click)="onLogout(session()?.id)">
-        @if (loaderLogout()) {
-          <app-loader-component class="icono" />
-        } @else {
-          Cerrar sesión
-        }
-      </button>
-    } @else {
-      <strong> Sesión inactiva </strong>
+    @if (!sessionOn()) {
+      @if (session()?.status === "Active") {
+        <button type="button" (click)="onLogout(session()?.id)">
+          @if (loaderLogout()) {
+            <app-loader-component class="icono" />
+          } @else {
+            Cerrar sesión
+          }
+        </button>
+      } @else {
+        <strong> Sesión inactiva </strong>
+      }
+    }@else {
+      <strong class="you">Tu session abierta</strong>
     }
+
   </section>
 </div>

@@ -5,61 +5,90 @@
 } @else {
   <!-- componentes de dashboard -->
   <div class="container">
-    <div class="container-fluid">
-      <!-- componente de busqueda -->
-      <div class="options">
-        <mat-icon class="icons" (click)="busqueda = ''; onBuscar()"
-          >delete</mat-icon
-        >
+    @if (onDelete()) {
+      <div class="panel_delete">
+        <div class="delete_title">
+          <h2>Eliminar registros</h2>
+        </div>
 
-        <mat-icon class="icons" (click)="openNewRegister()"
-          >add_to_queue</mat-icon
-        >
-      </div>
+        <div class="cantidad">
+          <strong> Cantidad: {{ listDelete().length }} </strong>
+        </div>
 
-      <div class="card-search">
-        <div class="search-box">
-          <input
-            type="text"
-            [(ngModel)]="busqueda"
-            [placeholder]="
-              filterType() === 'todo'
-                ? 'Buscar en todo'
-                : filterType() === 'En progreso'
-                  ? 'Buscar en progreso'
-                  : filterType() === 'Completado'
-                    ? 'Buscar en alertas'
-                    : filterType() === 'cancelado'
-                      ? 'Buscar por código o registro'
-                      : 'Buscar por cliente'
-            "
-            (keyup.enter)="onBuscar()"
-          />
-          <mat-icon class="search-icon" (click)="onBuscar()">search</mat-icon>
+        <div class="options_delete">
+          <button class="btn" (click)="OnDelete()">Cancelar</button>
+          <button class="btn" (click)="onBorrar()">Eliminar</button>
         </div>
       </div>
+    } @else {
+      <div class="container-fluid">
+        <!-- componente de busqueda -->
+        <div class="options">
+          <mat-icon class="icons" (click)="OnDelete()">delete</mat-icon>
 
-      <mat-icon class="icons" (click)="onLogout()">exit_to_app</mat-icon>
-    </div>
+          <mat-icon class="icons" (click)="openNewRegister()"
+            >add_to_queue</mat-icon
+          >
+        </div>
 
+        <div class="card-search">
+          <div class="search-box">
+            @if (onSearch()) {
+              <div class="icono limpiar">
+                <mat-icon class="clean" (click)="desactivarFiltro()"
+                  >close</mat-icon
+                >
+              </div>
+            }
+            <form [formGroup]="search">
+              <!-- [(ngModel)]="busqueda" -->
+              <input
+                type="text"
+                formControlName="filtro"
+                [placeholder]="
+                  filterType() === 'todo'
+                    ? 'Buscar en todo'
+                    : filterType() === 'En progreso'
+                      ? 'Buscar en progreso'
+                      : filterType() === 'Completado'
+                        ? 'Buscar en alertas'
+                        : filterType() === 'cancelado'
+                          ? 'Buscar por código o registro'
+                          : 'Buscar por cliente'
+                "
+                (keyup.enter)="onBuscar()"
+              />
+              <div class="icono buscar">
+                <mat-icon class="search" (click)="onBuscar()">search</mat-icon>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <mat-icon class="icons" (click)="onLogout()">exit_to_app</mat-icon>
+      </div>
+    }
     <!-- mapeo de registros -->
     <div class="content" (scroll)="onScroll($event)">
-      <div class="registers">
-        @for (registro of filteredObservations(); track registro.id) {
-          <!-- <div class="registers"> -->
-          <app-card-component
-            [registro]="registro"
-            (verDetalleEvent)="verDetalle($event)"
-          />
-          <!-- </div> -->
-        } @empty {
-          <div class="no_data">
-            <p>No hay registros</p>
-          </div>
-        }
-      </div>
-      @if (isLoading()) {
-        <div class="loader">Cargando más...</div>
+      @if (loadeRegister()) {
+        <div class="floads">
+          <app-loader-component class="loader" />
+        </div>
+      } 
+      @if (filterError() && !loadeRegister()) {
+        <div class="notFound">No hay datos</div>
+      }
+       @if(filteredObservations().length !== 0)  {
+        <div class="registers">
+          @for (registro of filteredObservations(); track registro.id) {
+            <app-card-component
+              [registro]="registro"
+              [delete]="onDelete()"
+              (select)="DeleteRegisters($event)"
+              (verDetalleEvent)="verDetalle($event)"
+            />
+          }
+        </div>
       }
     </div>
 
@@ -67,7 +96,7 @@
       <!-- usuario logeado -->
 
       <div class="footer">
-        <div class="footer-left">
+        <div class="footer-left" [class.activa]="settings()">
           <mat-icon class="user-icon">account_circle</mat-icon>
           <div class="user-info" (click)="onSettings()">
             <span class="user-name">{{ usuario()?.name }}</span>
@@ -136,7 +165,18 @@
   <app-settings-component
     [company]="usuario()?.idCompany"
     [role]="usuario()?.rol"
-    [id]="usuario()?.id"
+    [id]="idUser()"
     (Closed)="onSettings()"
   />
+}
+
+@if (onModal()) {
+  <app-confirm-alert-component
+    (respuesta)="respuestaModal($event)"
+    [pregunta]="`¿ Seguro quiere eliminar ${listDelete().length} registros ?`"
+  />
+}
+
+@if (eliminando()) {
+  <app-cargando-accion-component [mensaje]="`Eliminando registros`" />
 }

@@ -10,9 +10,12 @@ export interface RegisterResponseDto {
   idClient: string,
   idCompany: string,
   idUser: string,
+  tecnico: string,
   registroNumber: string,
   statusRegister: EstadoRegistro,
   urlQr: string,
   idQr: string,
+  antisipo: number,
+  totalPagar: number,
   createdAt: string
 }

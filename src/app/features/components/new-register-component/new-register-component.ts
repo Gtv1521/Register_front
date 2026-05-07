@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Output,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
@@ -26,13 +19,23 @@ import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { NewObservation } from '../../observations/new-observation/new-observation';
 import { ObservationCreateUseCase } from 'src/app/core/aplication/use-cases/observation-usecase/observation-create.useCase';
-import { LISTA_ESTADOS } from 'src/app/core/domain/reusables/estados.constant';
 import { ObservationRequestDto } from 'src/app/core/infrastructure/dto/request/observation/observation-request.dto';
+import { SignalRService } from 'src/app/core/infrastructure/services/signalr/signal-r.service';
+import { CargandoAccionComponent } from '../floads/cargando-accion-component/cargando-accion-component';
+import { OnlyNumbers } from 'src/app/core/directives/only-numbers';
+import { validateHorizontalPosition } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-new-register-component',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LoaderComponent, NewObservation],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    LoaderComponent,
+    NewObservation,
+    CargandoAccionComponent,
+    OnlyNumbers,
+  ],
   templateUrl: './new-register-component.html',
   styleUrl: './new-register-component.scss',
 })
@@ -44,6 +47,7 @@ export class NewRegisterComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
   private add_observation = inject(ObservationCreateUseCase);
+  private signalR = inject(SignalRService);
 
   // datos de componente hijo
   @ViewChild('observation') newObservation!: NewObservation;
@@ -66,10 +70,11 @@ export class NewRegisterComponent {
     email: ['', [Validators.email, Validators.required]],
     name: ['', [Validators.minLength(3), Validators.required]],
     phone: ['', [Validators.minLength(10), Validators.required]],
-    type: ['', [Validators.required]],
+    antisipo: [0],
+    total: [0],
   });
 
-  readonly estados = LISTA_ESTADOS;
+  // readonly estados = LISTA_ESTADOS;
 
   goEmail() {
     if (this.saveCliente === true) return;
@@ -113,7 +118,8 @@ export class NewRegisterComponent {
         email: clientes.email,
         name: clientes.name,
         phone: clientes.phone.toString(),
-        type: '',
+        antisipo: 0.0,
+        total: 0.0,
       });
     }
   }
@@ -123,7 +129,8 @@ export class NewRegisterComponent {
       email: email,
       name: '',
       phone: '',
-      type: '',
+      antisipo: 0.0,
+      total: 0.0,
     });
     this.register.get('name')?.enable();
     this.register.get('phone')?.enable();
@@ -184,12 +191,12 @@ export class NewRegisterComponent {
   // crea un nuevo cliente / Si no exite
   async newClient(): Promise<string> {
     try {
-      const cliente = this.register.value;
+      const cliente = this.register.getRawValue();
 
       const data = {
-        Name: cliente.name,
-        Email: cliente.email,
-        Phone: cliente.phone?.toString(),
+        name: cliente.name,
+        email: cliente.email,
+        phone: cliente.phone?.toString(),
       };
 
       // inserta cliente y retorna el id de cliente
@@ -206,20 +213,37 @@ export class NewRegisterComponent {
   async newRegister(): Promise<string> {
     try {
       const baseUrl = window.location.origin;
+      const registro = this.register?.value;
+
+      console.log(registro);
+
       let data = {
         idClient: this.idClient,
         idUser: this.auth.getUserId()!,
         idCompany: this.auth.getCompany()!,
-        statusRegister: this.register.value.type,
         urlRuta: `${baseUrl}/registro`,
+        antisipo: this.monto(registro.antisipo),
+        totalPagar: this.monto(registro.total),
       };
 
+      console.log(data);
       const insert = data as RegisterRequestDto;
       const res: any = await lastValueFrom(this.registerNew.execute(insert));
       return res.id;
     } catch (error) {
       throw error;
     }
+  }
+
+  monto(valor: any): number {
+    if (!valor) return 0;
+
+    const valorLimpio = valor
+      .split('.')
+      .join('') // Quita todos los puntos de miles
+      .replace(',', '.');
+
+    return Number(valorLimpio);
   }
 
   // guarda la primera observasion
@@ -252,6 +276,7 @@ export class NewRegisterComponent {
       console.error('Error en la secuencia de guardado:', error);
       // Aquí podrías mostrar una alerta al usuario
     } finally {
+      this.signalR.RegistroCompleto(this.idRegister);
       this.loadIcono = false;
     }
   }

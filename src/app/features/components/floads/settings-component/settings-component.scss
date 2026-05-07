@@ -23,22 +23,23 @@
     position: fixed;
     width: 25%;
     height: auto;
-    bottom: 2.8rem;
+    bottom: 3rem;
     padding: 30px 0;
-    left: calc(15vw - 100px);
+    left: calc(15vw - 90px);
     background-color: var(--color-modal);
     border-radius: 0.6rem;
     box-shadow: 0 0 5px 2px var(--color-border);
     color: var(--color-secondary);
     opacity: 0;
     transform: translateY(20px) scale(0.95);
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transition:
+      opacity 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
     pointer-events: none;
 
     .config_title {
       margin-bottom: 30px;
       text-align: center;
-      // border-bottom: 1px solid var(--color-border);
     }
 
     .opciones {
@@ -61,7 +62,7 @@
 
         // Efecto de overlay superpuesto
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: 0;
@@ -94,5 +95,12 @@
   &.active .panel-content {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@media (400px <= width <= 1360px) {
+  .panel-content {
+    bottom: 7% !important;
+    left: 50px !important;
   }
 }

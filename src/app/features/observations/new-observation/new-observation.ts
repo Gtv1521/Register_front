@@ -4,6 +4,7 @@ import {
   inject,
   Input,
   Output,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -16,6 +17,8 @@ import { ObservationRequestDto } from 'src/app/core/infrastructure/dto/request/o
 import { LIST_TYPE } from 'src/app/core/domain/reusables/estados.constant';
 import { types } from 'src/app/core/domain/entitys/observation.entity';
 import { UpperCaseConstant } from 'src/app/core/domain/reusables/upper-case.constant';
+import { CargandoAccionComponent } from "../../components/floads/cargando-accion-component/cargando-accion-component";
+import { BooleanLiteral } from 'typescript';
 // const statusMap: Record<string, number> = {
 //   PENDIENTE: 0,
 //   EN_PROCESO: 1,
@@ -26,7 +29,7 @@ import { UpperCaseConstant } from 'src/app/core/domain/reusables/upper-case.cons
 @Component({
   selector: 'app-observation-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule, CargandoAccionComponent],
   templateUrl: './new-observation.html',
   styleUrl: './new-observation.scss',
 })
@@ -50,7 +53,9 @@ export class NewObservation {
   photoPreviews: string[] = [];
   userId = this.auth.getUserId();
   responseData!: string; // respuesta de la peticion
-  loader: boolean = false;
+  loader= signal<boolean>(false);
+
+
 
   //datos del formulario
   form = this.fb.group({
@@ -137,7 +142,7 @@ export class NewObservation {
     }
 
     try {
-      this.loader = true;
+      this.loader.set(true);
       const formData = await this.obtenerDatos(this.IdRegister!);
 
       const response: any = await firstValueFrom(
@@ -164,7 +169,7 @@ export class NewObservation {
     } catch (error) {
       throw error;
     } finally {
-      this.loader = false;
+      this.loader.set(false);
       this.ChangeEditar.emit(false);
       this.CloseModal.emit(false);
     }

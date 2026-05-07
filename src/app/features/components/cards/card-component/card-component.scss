@@ -3,10 +3,10 @@
   width: 100%;
   height: auto;
   background-color: var(--color-panel);
-  border: 2px solid var(--color-panel-interno);
+  // border: 2px solid var(--color-panel-interno);
   border-radius: 18px;
   color: var(--color-text);
-  box-shadow: 0 0 3px 2px var(--color-panel-interno);
+  // box-shadow: 0 1px 5px var(--color-panel-interno);
   text-align: center;
   padding: 15px;
   box-sizing: border-box;
@@ -16,6 +16,12 @@
     border-color: var(--color-border-hover);
     box-shadow: 0 0 10px var(--color-border);
     scale: 1.01;
+  }
+
+  .panel_delete {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
   }
 
   .container {
@@ -107,7 +113,7 @@
           line-height: 1.2; // disminuye el espacio entre líneas para que el texto ocupe menos espacio vertica
           text-align: start;
           justify-content: justify;
-          background-color: var(--color-panel-content);
+          background-color: var(--color-resalto);
           padding: 5px;
           box-sizing: border-box;
 
@@ -136,7 +142,7 @@
 
       /* ===== Botones ===== */
       .btn {
-        // box-sizing: border-box;
+        box-sizing: border-box;
         font-size: 0.8rem;
         border-radius: 6px;
         cursor: pointer;
@@ -204,9 +210,17 @@
   }
 }
 
+.delete {
+  background-color: var(--color-bg-delete);
+
+  .card-body {
+    background-color: transparent !important;
+  }
+}
+
 @media (400px <= width <= 1300px) {
   .card {
-    padding: 6px;
+    padding: 1rem;
 
     .container {
       .card-header {
@@ -220,7 +234,7 @@
       }
 
       .card-body {
-        padding: 7px;
+        padding: 10px 2px !important;
 
         .panel_imagen {
           height: 130px;
@@ -230,8 +244,6 @@
           padding: 0 !important;
           font-size: 0.8em !important;
           margin-top: 0;
-
-          // background-color: red;
 
           .title_description {
             font-size: 11px !important;
@@ -257,11 +269,21 @@
         }
       }
 
-      .card-footer {
-        button {
-          padding: 4px 8px;
-          font-size: 10px;
+      .btn-download {
+        width: 20px !important;
+        height: 20px !important;
+
+        .icon {
+          width: 70%;
+          height: 70%;
+          font-size: 16px;
         }
+
+      }
+
+      .btn-primary, .btn-secondary {
+        padding: 0.2rem 1rem !important;
+        font-weight: 600 !important;
       }
     }
   }

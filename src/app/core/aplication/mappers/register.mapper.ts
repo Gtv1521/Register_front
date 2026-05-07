@@ -1,12 +1,14 @@
-import { inject, Injectable } from "@angular/core";
-import { RegisterEntity } from "../../domain/entitys/register.entity";
-import { IMapper } from "../../domain/interfaces/IMapper";
-import { RegisterResponseDto } from "../../infrastructure/dto/response/register/register-response.dto";
-import { ObservationMapper } from "./observable.mapper";
-import { ClientMapper } from "./client.mapper";
-@Injectable({ providedIn: "root" })
-export class RegisterMapper implements IMapper<RegisterResponseDto, RegisterEntity> {
-
+import { inject, Injectable } from '@angular/core';
+import { RegisterEntity } from '../../domain/entitys/register.entity';
+import { IMapper } from '../../domain/interfaces/IMapper';
+import { RegisterResponseDto } from '../../infrastructure/dto/response/register/register-response.dto';
+import { ObservationMapper } from './observable.mapper';
+import { ClientMapper } from './client.mapper';
+@Injectable({ providedIn: 'root' })
+export class RegisterMapper implements IMapper<
+  RegisterResponseDto,
+  RegisterEntity
+> {
   private mapObservation = inject(ObservationMapper);
   private mapClient = inject(ClientMapper);
 
@@ -18,15 +20,18 @@ export class RegisterMapper implements IMapper<RegisterResponseDto, RegisterEnti
       id: dto.id,
       idClient: dto.idClient,
       idCompany: dto.idCompany,
+      tecnico: dto.tecnico,
       idUser: dto.idUser,
       registroNumber: dto.registroNumber,
       idQr: dto.idQr,
       urlQr: dto.urlQr,
+      antisipo: dto.antisipo,
+      totalPagar: dto.totalPagar,
       createdAt: dto.createdAt,
-      statusRegister: dto.statusRegister
-    }
+      statusRegister: dto.statusRegister,
+    };
   }
   toDto(entity: RegisterEntity): RegisterResponseDto {
-    return entity as RegisterResponseDto
+    return entity as RegisterResponseDto;
   }
 }

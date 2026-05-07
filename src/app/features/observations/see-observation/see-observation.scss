@@ -1,16 +1,19 @@
 .padre {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
   position: relative;
   scrollbar-width: thin;
   scrollbar-color: #888 #eee;
   box-sizing: border-box;
+  background-color: var(--color-bg);
 
   .nav_header {
     position: sticky;
     top: 0;
-    height: 6%;
+    width: 100%;
+    height: 2.5rem;
+    gap: 10px;
+    // background-color: blue;
     background-color: var(--color-nav);
     display: flex;
     justify-content: start;
@@ -18,14 +21,14 @@
 
     // boton para cerrar la ventana
     .back-button {
-      padding: 5px 15px;
-      margin-left: 10px;
       background-color: var(--color-bg-btn);
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      color: var(--color-text);
-      font-weight: 570;
+      color: var(--color-text-btn);
+      font-weight: 600;
+      margin-left: 20px;
+      padding: 0.2rem 1rem;
 
       &:hover {
         background-color: var(--color-bg-hover-btn);
@@ -35,16 +38,20 @@
   }
 
   .see-observation-container {
-    padding: 0 20px;
+    // padding: 0 20px;
     margin: auto;
     width: 100%;
+    min-height: 95dvh;
     box-sizing: border-box;
     // box-shadow: 0 0 10px white;
+    // background-color: red;
     background-color: var(--color-bg);
 
     .container {
       width: 70%;
-      margin: 0.1rem auto 1rem auto;
+      // padding: 1rem 0.5rem;
+      // box-sizing: border-box;
+      margin: 0 auto 1rem auto;
       background-color: var(--color-panel);
       // box-shadow: 0 0 10px var(--color-border);
 
@@ -57,6 +64,7 @@
         font-weight: 800;
         height: 40px;
         width: 100%;
+        // padding: auto 1rem;
         display: flex;
         text-align: center;
         align-items: center;
@@ -198,23 +206,13 @@
                   font-weight: 800;
                 }
               }
-
-              // .btn-download {
-              //   background-color: transparent;
-              //   // color: var(--color-secondary);
-
-              //   &:hover {
-              //     color: var(--color-text);
-              //     background-color: var(--color-primary);
-              //   }
-              // }
             }
           }
         }
 
         .observations {
           width: 95%;
-          min-height: 400px;
+          min-height: 50vh;
           margin: 10px auto;
           display: flex;
           flex-direction: column;
@@ -365,13 +363,13 @@
           }
           .header_observations {
             top: 4% !important;
-            
+
             .search-box {
               width: 99%;
               margin: auto;
             }
           }
-          
+
           .panel-opciones {
             height: 20px !important;
             .modos {
@@ -381,7 +379,7 @@
                 font-size: 10px !important;
               }
             }
-            
+
             .options {
               .btn {
                 width: 20px !important;
@@ -391,8 +389,7 @@
                   width: 15px !important;
                   height: 15px !important;
                   font-weight: 700;
-                  font-size: 15px
-                  ;
+                  font-size: 15px;
                 }
               }
             }
@@ -401,12 +398,10 @@
 
         .observations {
           min-height: 250px;
-
         }
 
-       .footer {
+        .footer {
           padding: 5px 20px 20px 20px !important;
-
 
           .center {
             font-size: 0.5rem;

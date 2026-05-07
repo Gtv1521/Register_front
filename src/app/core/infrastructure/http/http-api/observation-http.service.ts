@@ -20,6 +20,7 @@ export class ObservationHttpService implements IGeneral<
     private http: HttpClient,
     private mapper: ObservationMapper,
   ) {}
+
   Get(id: string): Observable<ObservationEntity> {
     return this.http
       .get<ObservationResponseDto>(`${this.Url}/${id}`)
@@ -42,19 +43,19 @@ export class ObservationHttpService implements IGeneral<
     formData.append('Type', dto.Type.toString()); // 🔑
     formData.append('Description', dto.Description);
     formData.append('NotificaEmail', dto.NotificaEmail.toString());
-    formData.append(
-      'NotificaWhatsapp',
-      dto.NotificaWhatsapp.toString(),
-    );
+    formData.append('NotificaWhatsapp', dto.NotificaWhatsapp.toString());
 
     dto.Photos.forEach((photo, index) => {
       formData.append('Photos', photo);
     });
 
-
     return this.http.post<string>(`${this.Url}`, formData);
   }
   Update(dto: ObservationRequestDto): Observable<boolean> {
     return this.http.post<boolean>(`${this.Url}/${dto.id}`, dto);
+  }
+
+  Delete(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.Url}/${id}`);
   }
 }

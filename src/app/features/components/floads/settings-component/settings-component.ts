@@ -50,7 +50,7 @@ export class SettingsComponent {
   }
 
   onEditUser() {
-    this.router.navigate([`user/${this.id()}`]);
+    this.router.navigate([`user/data/${this.id()}`]);
   }
 
   onDataCompany() {

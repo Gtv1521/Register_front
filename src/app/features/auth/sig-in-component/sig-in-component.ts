@@ -12,6 +12,7 @@ import { lastValueFrom } from 'rxjs';
 import { CompanyCreateUseCase } from 'src/app/core/aplication/use-cases/company-usecase/company-create.useCase';
 import { LoaderComponent } from '../../components/floads/loader-component/loader-component';
 import { Rol } from 'src/app/core/infrastructure/dto/request/sig-in-request.dto';
+import { DataNavService } from 'src/app/core/infrastructure/services/data_navegador/data-nav.service';
 
 @Component({
   selector: 'app-sig-in-component',
@@ -31,6 +32,7 @@ export class SigInComponent {
   private singIn = inject(SigInUseCase);
   private addcompany = inject(CompanyCreateUseCase);
   private auth = inject(AuthService);
+  private navData = inject(DataNavService);
 
   @ViewChild('company') company!: NewCompanyComponent;
   @ViewChild('user') user!: SigInFormComponent;
@@ -72,6 +74,7 @@ export class SigInComponent {
     try {
       const dataUser = await this.user.onData(this.idCompany);
       dataUser.rol = Rol.Administrador;
+      dataUser.data = await this.navData.GoData() 
       const res: SessionEntity = await lastValueFrom(
         this.singIn.execute(dataUser),
       );
@@ -92,9 +95,8 @@ export class SigInComponent {
       this.loader = true;
       const company = await this.saveCompany();
       this.idCompany = company;
-      console.log('Company ID:', company);
       const user = await this.saveUser();
-      console.log('User ID:', user);
+
       this.auth.setAuth(user.idUser, user.idSession, user.idCompany);
       this.router.navigate(['/dashboard']);
     } catch (error) {

@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
-import { UserUpdateThemeUseCase } from 'src/app/core/aplication/use-cases/user-usecase/use-update-theme.useCase';
+import { UserUpdateThemeUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-update-theme.useCase';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { ThemesService } from 'src/app/core/infrastructure/services/themes/themes.service';
 

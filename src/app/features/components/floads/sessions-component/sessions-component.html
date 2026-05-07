@@ -8,20 +8,27 @@
         <app-loader-component />
       </div>
     } @else {
-      <div class="intro">
-        Se han alcanzado las sesiones maximas permitidas
-        <strong>(3)</strong> para un usuario.
-      </div>
+      @if (!sessionOn()) {
+        <div class="intro">
+          Se han alcanzado las sesiones maximas permitidas
+          <strong>(3)</strong> para un usuario.
+        </div>
+      }
       <section class="title">Sesiones</section>
       <div class="panel_sesiones">
         @for (session of sessiomsList(); track session.id) {
-          <app-data-session-component [session]="session" (close)="onLogout($event)" />
+          <app-data-session-component
+            [session]="session"
+            (close)="onLogout($event)"
+          />
         }
       </div>
-      <div class="options">
-        <button class="back" type="button">Regresar</button>
-        <button class="ok" type="button" (click)="onExit()">Listo</button>
-      </div>
+      @if (!sessionOn()) {
+        <div class="options">
+          <button class="back" type="button">Regresar</button>
+          <button class="ok" type="button" (click)="onExit()">Listo</button>
+        </div>
+      }
     }
   </div>
 </div>

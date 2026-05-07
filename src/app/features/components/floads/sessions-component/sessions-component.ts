@@ -5,7 +5,10 @@ import { LogoutUseCase } from 'src/app/core/aplication/use-cases/session-usecase
 import { SessionesUseCase } from 'src/app/core/aplication/use-cases/session-usecase/sessiones.useCase';
 import { SessionInfo } from 'src/app/core/domain/entitys/session.entity';
 import { LoaderComponent } from '../loader-component/loader-component';
-import { DataSessionComponent } from "../../data-session-component/data-session-component";
+import { DataSessionComponent } from '../../data-session-component/data-session-component';
+import { lastValueFrom } from 'rxjs';
+import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
+import { RemoveSessionUseCase } from 'src/app/core/aplication/use-cases/session-usecase/remove-session.useCase';
 
 @Component({
   selector: 'app-sessions-component',
@@ -17,35 +20,34 @@ export class SessionsComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private session = inject(SessionesUseCase);
-  private logout = inject(LogoutUseCase);
+  private logout = inject(RemoveSessionUseCase);
+  private auth = inject(AuthService);
 
   sessiomsList = signal<SessionInfo[]>([]);
-  user: string | null = this.route.snapshot.paramMap.get('id');
+  user = signal<string | null>(this.route.snapshot.paramMap.get('id'));
   loader = signal<boolean>(false);
   loaderLogout = signal<boolean>(false);
   successLogout = signal<boolean>(false);
   errores = signal<HttpErrorResponse | null>(null);
+  sessionOn = signal<boolean>(this.auth.sessionId() === null ? false : true);
 
-  ngOnInit() {
-    if (typeof this.user === 'string') {
+  async ngOnInit(): Promise<void> {
+    try {
       this.loader.set(true);
-      this.session.execute(this.user).subscribe({
-        next: (res) => {
-          this.sessiomsList.set(res);
-          this.loader.set(false);
-        },
-        error: (err) => {
-          this.errores.set(err);
-          this.loader.set(false);
-        },
-      });
+      this.sessiomsList.set(
+        await lastValueFrom(this.session.execute(this.user()!)),
+      );
+    } catch (error) {
+      console.error('Error loading sessions:', error);
+    } finally {
+      this.loader.set(false);
     }
   }
 
   // elimina una session activa
   onLogout(id: string) {
     this.loaderLogout.set(true);
-    this.logout.execute(id).subscribe({
+    this.logout.execute(this.user()!, id).subscribe({
       next: (res) => {
         this.successLogout.set(res);
         this.sessiomsList.update((sessions) =>

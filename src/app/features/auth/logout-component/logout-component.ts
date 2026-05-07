@@ -1,7 +1,7 @@
 import { IfStmt } from '@angular/compiler';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, sample } from 'rxjs';
 import { LogoutUseCase } from 'src/app/core/aplication/use-cases/session-usecase/logout.useCase';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { LogOutService } from 'src/app/core/infrastructure/services/_/log-out.service';
@@ -19,18 +19,20 @@ export class LogoutComponent {
   private auth = inject(AuthService);
 
   async ngOnInit() {
-    if (!this.auth.getSession()) this.salir();
-    else {
+    try {
+      if (!this.auth.getSession()) this.salir();
       const response = await lastValueFrom(
         this.logout.execute(this.auth.getSession()!),
       );
+
       if (response) {
         this.states.close();
-
-        setTimeout(() => {
-          this.salir();
-        }, 1000);
+        this.salir();
       }
+    } catch (error) {
+      console.error('Error al cerrar sesion', error);
+    } finally {
+      this.salir();
     }
   }
 

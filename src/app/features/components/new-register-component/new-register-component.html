@@ -7,7 +7,7 @@
       <div class="title">
         {{ saveCliente ? "Editar Cliente" : "Nuevo registro" }}
       </div>
-      <form [formGroup]="register" class="registro">
+      <form [formGroup]="register" class="registro" autocomplete="off">
         <div class="form_group">
           <label for="email">Email: </label>
           <div class="box_mail">
@@ -88,7 +88,9 @@
         <div class="form_group">
           <label for="telefono">Telefono: </label
           ><input
-            type="number"
+            type="text"
+            appOnlyNumbers
+            [isPhone]="true"
             name="telefono"
             id="telefono"
             placeholder="Telefono"
@@ -116,26 +118,25 @@
         </div>
 
         <div class="form_group">
-          <label for="status">Estado</label>
-          <select name="status" formControlName="type" id="status">
-            <option value="" disabled selected hidden>
-              Seleccione un estado
-            </option>
-            @for (item of estados; track item.value) {
-              <option [ngValue]="item.value">
-                {{ item.label }}
-              </option>
-            }
-          </select>
-          @if (register.get("type")?.touched && register.get("type")?.invalid) {
-            <div class="error-message">
-              @if (register.get("type")?.errors?.["required"]) {
-                <span>El estado es obligatorio</span>
-              } @else {
-                <span>El estado tiene un error desconocido</span>
-              }
-            </div>
-          }
+          <label for="antisipo">Antisipo</label>
+          <input
+            type="text"
+            appOnlyNumbers
+            [isCurrency]="true"
+            formControlName="antisipo"
+            placeholder="0,0"
+          />
+        </div>
+
+        <div class="form_group">
+          <label for="total">Total</label>
+          <input
+            type="text"
+            appOnlyNumbers
+            [isCurrency]="true"
+            formControlName="total"
+            placeholder="0,0"
+          />
         </div>
       </form>
       @if (loadObservation) {
@@ -175,8 +176,7 @@
               <span class="icon">
                 <app-loader-component />
               </span>
-            }
-            @else {
+            } @else {
               <p>Crear Registro</p>
             }
           </button>
@@ -185,14 +185,12 @@
 
         @if (saveCliente) {
           <button class="btn cancel" (click)="onCancelar()">Cancelar</button>
-          <button class="btn save" (click)="onEditar()">
-            @if (loadIcono) {
-              <span class="icono"> <app-loader-component /> </span>
-            }
-            Guardar
-          </button>
+          <button class="btn save" (click)="onEditar()">Guardar</button>
         }
       </div>
     </div>
   </div>
 </div>
+@if (loadIcono) {
+  <app-cargando-accion-component [mensaje]="`Creando registro`" />
+}

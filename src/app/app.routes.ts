@@ -6,11 +6,10 @@ import { ResetComponent } from './features/auth/reset-component/reset-component'
 import { DashboardLayout } from './features/dashboard/dashboard-layout/dashboard-layout';
 import { NotFound } from './features/not-found/not-found';
 import { SeeObservation } from './features/observations/see-observation/see-observation';
-import { NewObservation } from './features/observations/new-observation/new-observation';
 import { SessionsComponent } from './features/components/floads/sessions-component/sessions-component';
 import { LogoutComponent } from './features/auth/logout-component/logout-component';
-import { UsersComponent } from './features/dashboard/users-component/users-component';
-import { DataUserComponent } from './features/dashboard/data-user-component/data-user-component';
+import { UsersComponent } from './features/dashboard/users/users-component/users-component';
+import { DataUserComponent } from './features/dashboard/users/data-user-component/data-user-component';
 import { CompaniesComponent } from './features/dashboard/companies-component/companies-component';
 import { DataCompanyComponent } from './features/dashboard/data-company-component/data-company-component';
 import { Rol } from './core/infrastructure/dto/request/sig-in-request.dto';
@@ -21,6 +20,7 @@ import { EditRolComponet } from './features/components/edit-rol-componet/edit-ro
 import { ThemeComponent } from './features/components/theme-component/theme-component';
 import { NewRegisterComponent } from './features/components/new-register-component/new-register-component';
 import { qrAccessGuard } from './core/infrastructure/services/permisos/qr-access.guard';
+import { DatosUsuarioLoged } from './features/dashboard/users/datos-usuario-loged/datos-usuario-loged';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -43,7 +43,15 @@ export const routes: Routes = [
   },
   { path: 'new-registro', component: NewRegisterComponent },
   { path: 'logout', component: LogoutComponent },
-  { path: 'user/:id', component: DataUserComponent },
+  {
+    path: 'user',
+    component: DataUserComponent,
+    children: [
+      { path: '', redirectTo: 'data/:id', pathMatch: 'full' },
+      { path: 'data/:id', component: DatosUsuarioLoged },
+      { path: 'sessions/:id', component: SessionsComponent },
+    ],
+  },
   {
     path: 'users',
     component: UsersComponent,

@@ -1,0 +1,20 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-panel-modal);
+
+  .container_fluid {
+    display: block;
+    .mensaje {
+      color: var(--color-text-title);
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+}

@@ -27,6 +27,9 @@ export class SessionHttpService
 
   private http = inject(HttpClient);
   private mapper = inject(SessionMapper);
+  DeleteSession(id: string, session: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.apiUrl}/revoke/${session}/${id}`);
+  }
 
   Login(user: LoginRequestDto): Observable<SessionEntity> {
     return this.http
@@ -40,9 +43,7 @@ export class SessionHttpService
   }
 
   Logout(id: string): Observable<boolean> {
-    const response = this.http.post<boolean>(`${this.apiUrl}/logout/${id}`, {});
-    console.log(response);
-    return response;
+    return this.http.post<boolean>(`${this.apiUrl}/logout/${id}`, {});
   }
 
   SigIn(data: SigInRequestDto): Observable<SessionEntity> {

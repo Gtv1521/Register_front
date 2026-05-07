@@ -8,10 +8,13 @@ export interface RegisterEntity {
   idClient: string;
   idCompany: string;
   idUser: string;
+  tecnico: string;
   urlQr: string;
   registroNumber: string;
   statusRegister: EstadoRegistro;
   idQr: string;
+  antisipo: number,
+  totalPagar: number,
   createdAt: string;
 }
 

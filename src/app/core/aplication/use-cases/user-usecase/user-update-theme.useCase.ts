@@ -12,7 +12,6 @@ export class UserUpdateThemeUseCase {
   ) {}
 
   execute(id: string, theme: string): Observable<boolean> {
-    console.log(id, theme);
     return this.repo.SaveSession(id, theme);
   }
 }

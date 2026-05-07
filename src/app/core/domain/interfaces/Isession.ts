@@ -6,6 +6,7 @@ export interface ISession<dto, dto1, entity> {
   ResetPassword(mail: string): Observable<boolean>;
   VerifyMail(mail: string): Observable<boolean>;
   Logout(id: string): Observable<boolean>;
+  DeleteSession(id: string, session: string): Observable<boolean>;
 }
 
 export interface ISessionInfo<entity> {

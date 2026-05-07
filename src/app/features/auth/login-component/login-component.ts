@@ -65,7 +65,6 @@ export class LoginComponent {
           this.loading.set(false);
           this.error.set(null);
           this.success.set(true);
-          console.log(res.theme);
           this.theme.setTheme(res.theme);
           
           setTimeout(() => {

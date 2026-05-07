@@ -1,5 +1,8 @@
 import { Injectable, signal } from '@angular/core';
-import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
+import {
+  EstadoRegistro,
+  RegisterEntity,
+} from 'src/app/core/domain/entitys/register.entity';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +20,20 @@ export class RegisterStateService {
 
   setOneRegister(data: RegisterEntity) {
     this._oneRegister.set(data);
+  }
+
+  /**
+   * Actualiza cualquier propiedad del registro seleccionado
+   * @param partialUpdate Un objeto con las propiedades a cambiar
+   */
+  updateSelectedRegister(partialUpdate: Partial<RegisterEntity>) {
+    this._oneRegister.update((current) =>
+      current ? { ...current, ...partialUpdate } : undefined,
+    );
+  }
+
+  updateStatus(newState: EstadoRegistro) {
+    this.updateSelectedRegister({ statusRegister: newState });
   }
 
   clear() {

@@ -1,5 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { MatIcon } from '@angular/material/icon';
@@ -17,24 +24,36 @@ export class CardComponent {
 
   imageUrl!: string | null | undefined;
 
-  @Input() registro!: RegisterEntity;
-  @Output() verDetalleEvent = new EventEmitter<string>();
-  @Output() crearObservacionEvent = new EventEmitter<string>();
+  registro = input<RegisterEntity>();
+  verDetalleEvent = output<string>();
+  crearObservacionEvent = output<string>();
+  delete = input<boolean>();
+  select = output<{ state: boolean; id: string }>();
 
+  stateDelete = signal<boolean>(false);
   descripcion!: string;
+
+  constructor() {
+    effect(() => {
+      if (!this.delete()) {
+        this.stateDelete.set(false);
+        this.select.emit({ state: false, id: '' });
+      }
+    });
+  }
 
   ngOnInit() {
     this.imageUrl =
-      this.registro.observation === null ||
-      this.registro.observation === undefined
+      this.registro()?.observation === null ||
+      this.registro()?.observation === undefined
         ? '/generic.webp'
-        : this.registro.observation?.photos?.[0]?.photo;
+        : this.registro()?.observation?.photos?.[0]?.photo;
 
     this.formateTexto();
   }
 
   imprimirDocumento() {
-    this.download.execute(this.registro.id).subscribe({
+    this.download.execute(this.registro()?.id!).subscribe({
       next: ({ url, filename }) => {
         const link = document.createElement('a');
         link.href = url;
@@ -50,14 +69,21 @@ export class CardComponent {
 
   formateTexto() {
     this.descripcion =
-      this.registro.observation?.description?.replace(/\n/g, '<br>') || '';
+      this.registro()?.observation?.description?.replace(/\n/g, '<br>') || '';
+  }
+
+  onDelete(): void {
+    if (this.delete()) {
+      this.stateDelete.set(!this.stateDelete());
+      this.select.emit({ state: this.stateDelete(), id: this.registro()?.id! });
+    }
   }
 
   public verDetalle(idObservacion?: string) {
-    this.verDetalleEvent.emit(idObservacion);
+    this.verDetalleEvent.emit(idObservacion!);
   }
   public crearObservacion() {
-    this.router.navigate([`registro/${this.registro.id}`], {
+    this.router.navigate([`registro/${this.registro()?.id}`], {
       state: { editar: true },
     });
   }
