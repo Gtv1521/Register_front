@@ -40,9 +40,9 @@ export class TokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    const excludedRoutes = ['api/Session/login', 'api/Session/signin'];
-    if (excludedRoutes.some((url) => req.url.includes(url)))
-      return next.handle(req);
+    // const excludedRoutes = ['api/Session/login', 'api/Session/signin'];
+    // if (excludedRoutes.some((url) => req.url.includes(url)))
+    //   return next.handle(req);
 
     const authReq = req.clone({ withCredentials: true });
 

@@ -1,11 +1,11 @@
 
 .container {
     width: 100%;
-    height: 100dvb;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--color-panel);
+    background-color: var(--color-bg);
 
     .container-fluid {
         width: 10%;

@@ -31,10 +31,9 @@ export class ClientHttpService implements IClient<
       .pipe(map((res) => this.mapper.fromDto(res)));
   }
   Create(dto: ClientRequestDto): Observable<string> {
-    console.log(dto);
     return this.http.post<string>(`${this.Url}`, dto);
   }
-  Update(dto: ClientRequestDto): Observable<boolean> {
-    return this.http.post<boolean>(`${this.Url}`, dto);
+  Update(id: string, dto: ClientRequestDto): Observable<boolean> {
+    return this.http.put<boolean>(`${this.Url}/${id}`, dto);
   }
 }

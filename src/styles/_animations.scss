@@ -1,0 +1,63 @@
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(var(--anim-offset, 10px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseHighlight {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(var(--anim-scale, 1.05));
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes expandCenterToEdges {
+  0% {
+    // El color de expansión (var(--color-expansion)) ocupa 0% en el centro
+    background-image: radial-gradient(circle, red 0%, transparent 0%);
+  }
+  100% {
+    // El color de expansión se expande hasta ocupar el 100% de la caja
+    background-image: radial-gradient(circle, blue 100%, transparent 100%);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: perspective(1000px) rotatex(0deg);
+  }
+  to {
+    transform: perspective(1000px) rotatex(360deg);
+  }
+}
+
+@mixin animation-variables {
+  --anim-duration-slow: 0.5s;
+  --anim-duration-fast: 0.2s;
+  --anim-curve: cubic-bezier(0.4, 0, 0.2, 1);
+  --anim-duration-expand: 0.8s;
+  --anim-curve-expand: cubic-bezier(
+    0.25,
+    0.46,
+    0.45,
+    0.94
+  ); // Curva suave de expansión
+
+  --animation-fade-in: fadeInSlide var(--anim-duration-slow) var(--anim-curve)
+    forwards;
+  --animation-pulse: pulseHighlight var(--anim-duration-fast) linear infinite;
+  --animation-center-expand: expandCenterToEdges var(--anim-duration-expand)
+    var(--anim-curve-expand) forwards;
+
+  --animation-list: slideInUp var(--anim-duration-slow) ease-in-out 1 forwards;
+}

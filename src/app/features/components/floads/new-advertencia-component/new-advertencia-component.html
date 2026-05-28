@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="container-fluid">
+    <h1 class="title">
+      {{ editar() ? "Editar Advertencia" : "Nueva Advertencia" }}
+    </h1>
+    <div class="form_group">
+      <label for="warn">Advertencia: </label>
+      <textarea
+        name="warn"
+        [formControl]="warn"
+        placeholder="Agrega una advertencia"
+        id="warn"
+        rows="3"
+      ></textarea>
+      @if (warn.hasError("required") && warn.touched) {
+        <span class="error-message">
+          Este campo es obligatorio para el registro.
+        </span>
+      }
+    </div>
+    <div class="actions">
+      <button class="btn cancel" (click)="OnClose()">
+        <span><mat-icon>reply_all</mat-icon> </span>Volver</button
+      ><button class="btn ok" (click)="OnSubir()">
+        <span><mat-icon>save</mat-icon> </span>Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (loaderCreated()) {
+  <app-cargando-accion-component [mensaje]="`Creando Advertencia`" />
+}
+@if (loaderUpdate()) {
+  <app-cargando-accion-component [mensaje]="`Actualizando Advertencia`" />
+}

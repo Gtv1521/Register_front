@@ -4,10 +4,10 @@ import { MatIcon } from '@angular/material/icon';
 import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entity';
 import { ModalImege } from '../../components/floads/modal-imege/modal-imege';
 import { ConfirmAlertComponent } from '../../components/floads/confirm-alert-component/confirm-alert-component';
-import { LoaderComponent } from '../../components/floads/loader-component/loader-component';
 import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
 import { ObservationDeleteUseCase } from 'src/app/core/aplication/use-cases/observation-usecase/observation-delete.useCase';
 import { lastValueFrom } from 'rxjs';
+import { NewObservationComponent } from "../../components/floads/new-observation-component/new-observation-component";
 
 @Component({
   selector: 'app-card-observation',
@@ -17,7 +17,8 @@ import { lastValueFrom } from 'rxjs';
     ModalImege,
     ConfirmAlertComponent,
     CargandoAccionComponent,
-  ],
+    NewObservationComponent
+],
   templateUrl: './card-observation.html',
   styleUrl: './card-observation.scss',
 })
@@ -33,12 +34,16 @@ export class CardObservation {
   showModal = signal<boolean>(false);
   alertDelete = signal<boolean>(false);
   loadDelete = signal<boolean>(false);
+  onEdit = signal<boolean>(false);
 
-  ngOnInit() {
-    // En tu componente
+  ngOnInit(): void {
     this.textoFormateado.set(
       this.Observation()?.description?.replace(/\n/g, '<br>') || '',
     );
+  }
+
+  OpenEdit(): void {
+    this.onEdit.set(!this.onEdit());
   }
 
   onDeleteObservation() {

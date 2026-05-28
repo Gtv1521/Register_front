@@ -1,0 +1,8 @@
+<div class="container" (click)="toggleDelete()" [class.delete]="onDelete()">
+  <div class="container-fluid">
+    <div class="data">
+      <strong>Advertencia: </strong>{{ datos()?.advertencia }}
+    </div>
+    <div class="data"><strong>Autor: </strong> {{ datos()?.autor }}</div>
+  </div>
+</div>

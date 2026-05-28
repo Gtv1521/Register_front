@@ -28,7 +28,7 @@
       </span>
     </section>
   </div>
-  <section class="actions">
+  <div class="actions">
     @if (!sessionOn()) {
       @if (session()?.status === "Active") {
         <button type="button" (click)="onLogout(session()?.id)">
@@ -39,11 +39,12 @@
           }
         </button>
       } @else {
-        <strong> Sesión inactiva </strong>
+        <div class="estate">
+          <strong> Sesión inactiva </strong>
+        </div>
       }
-    }@else {
-      <strong class="you">Tu session abierta</strong>
+    } @else {
+      <strong class="you estate">Tu session abierta</strong>
     }
-
-  </section>
+  </div>
 </div>

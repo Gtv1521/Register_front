@@ -11,10 +11,11 @@ import { Router } from '@angular/router';
 import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { MatIcon } from '@angular/material/icon';
 import { RegisterPdfUseCase } from 'src/app/core/aplication/use-cases/register-usecase/register-pdf.useCase';
+import { PhonePipe } from "../../../../core/infrastructure/http/pipes/phone-pipe";
 
 @Component({
   selector: 'app-card-component',
-  imports: [DatePipe, MatIcon],
+  imports: [DatePipe, MatIcon, PhonePipe],
   templateUrl: './card-component.html',
   styleUrl: './card-component.scss',
 })

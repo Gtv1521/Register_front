@@ -16,7 +16,7 @@
 
     <div class="card-header">
       <h3>{{ registro()?.clients?.name }}</h3>
-      <h3>{{ registro()?.clients?.phone }}</h3>
+      <h3>{{ registro()?.clients?.phone + "" | Phone }}</h3>
     </div>
 
     <div class="card-body">
@@ -34,7 +34,12 @@
         </div>
 
         <section class="status">
-          <strong>Estado:</strong> {{ registro()?.statusRegister }}
+          <strong>Estado:</strong>
+          {{
+            registro()?.statusRegister === "EnProgreso"
+              ? "En progreso"
+              : registro()?.statusRegister
+          }}
         </section>
         <div class="title_description">
           <strong>Descripción:</strong>

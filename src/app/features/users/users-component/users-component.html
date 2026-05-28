@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="nav">
+    <button (click)="onBack()" class="btn">Volver</button>
+    <h1 class="title">Gestion de usuarios</h1>
+  </div>
+  <div class="container-fluid">
+    <div class="panel-left">
+      <div class="panel_opciones">
+        <h2 class="title">Opciones</h2>
+        <div class="acciones">
+          <a class="item" routerLink="edit" routerLinkActive="activebutton">
+            <mat-icon>how_to_reg</mat-icon><span>Cambiar roles</span></a
+          >
+          <a class="item" routerLink="add" routerLinkActive="activebutton">
+            <mat-icon>person_add</mat-icon><span>Crear Users</span></a
+          >
+          <a class="item" routerLink="fijados" routerLinkActive="activebutton"
+            ><mat-icon>style</mat-icon> <span>Observaciones fijas</span></a
+          >
+          <a
+            class="item"
+            [routerLink]="['company', company()]"
+            routerLinkActive="activebutton"
+          >
+            <mat-icon>store_mall_directory</mat-icon
+            ><span>Data Empresa</span></a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="panel-rigth">
+      <div class="contanido">
+        <div class="panel_muestra">
+          <router-outlet />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

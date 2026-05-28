@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.
 import { LoaderComponent } from '../../components/floads/loader-component/loader-component';
 import { DataNavService } from 'src/app/core/infrastructure/services/data_navegador/data-nav.service';
 import { ThemesService } from 'src/app/core/infrastructure/services/themes/themes.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login-component',
@@ -20,13 +21,14 @@ export class LoginComponent {
   loading = signal<boolean>(false);
   error = signal<HttpErrorResponse | null>(null);
   success = signal<boolean>(false);
+  themeActivo = signal<string>('ligth');
 
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private loginSession = inject(LoginUseCase);
   private auth = inject(AuthService);
   private dataNav = inject(DataNavService);
-  private theme = inject(ThemesService)
+  private theme = inject(ThemesService);
 
   login = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
@@ -59,37 +61,37 @@ export class LoginComponent {
       data.versionNavegador = datos.versionNavegador;
       data.sistemaOperativo = datos.sistemaOperativo;
 
-      this.loginSession.execate(data).subscribe({
-        next: (res) => {
-          this.auth.setAuth(res.idUser, res.idSession, res.idCompany);
-          this.loading.set(false);
-          this.error.set(null);
-          this.success.set(true);
-          this.theme.setTheme(res.theme);
-          
-          setTimeout(() => {
-            this.router.navigate(['/dashboard']);
-          }, 1500);
-        },
-        error: (err: HttpErrorResponse) => {
-          if (err.status === 401) {
-            this.error.set(err);
-          } else if (err.status === 400) {
-            this.error.set(err);
-            this.goSessions();
-          } else {
-            this.error.set(
-              new HttpErrorResponse({
-                status: err.status,
-                statusText: 'Error en el servidor',
-              }),
-            );
-          }
-
+      try {
+        const res = await lastValueFrom(this.loginSession.execate(data));
+        this.auth.setAuth(res.idUser, res.idSession, res.idCompany);
+        this.loading.set(false);
+        this.error.set(null);
+        this.success.set(true);
+        this.themeActivo.set(res.theme);
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1000);
+      } catch (err: any) {
+        if (err.status === 401) {
           this.error.set(err);
-          this.loading.set(false);
-        },
-      });
+        } else if (err.status === 400) {
+          this.error.set(err);
+          this.goSessions();
+        } else {
+          this.error.set(
+            new HttpErrorResponse({
+              status: err.status,
+              statusText: 'Error en el servidor',
+            }),
+          );
+        }
+        this.error.set(err);
+      } finally {
+        this.loading.set(false);
+        setTimeout(() => {
+          this.theme.setTheme(this.themeActivo());
+        }, 1010);
+      }
     }
   }
 }

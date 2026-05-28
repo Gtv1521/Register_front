@@ -1,17 +1,23 @@
 .container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--color-panel-modal);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 4;
-    overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-panel-modal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+  overflow: hidden;
 
-    .container-fluid {
-        width: 70%;
-    }
+  .container-fluid {
+    width: 70%;
+  }
+}
+
+@media (30px<= width <= 500px) {
+  .container-fluid {
+    width: 95% !important;
+  }
 }

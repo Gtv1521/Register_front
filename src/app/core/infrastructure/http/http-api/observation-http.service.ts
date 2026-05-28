@@ -21,11 +21,22 @@ export class ObservationHttpService implements IGeneral<
     private mapper: ObservationMapper,
   ) {}
 
+  FilterData(id: string, filter: string): Observable<ObservationEntity[]> {
+    return this.http
+      .get<ObservationResponseDto[]>(`${this.Url}/filter/${id}`, {
+        params: {
+          filter,
+        },
+      })
+      .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));
+  }
+
   Get(id: string): Observable<ObservationEntity> {
     return this.http
       .get<ObservationResponseDto>(`${this.Url}/${id}`)
       .pipe(map((res) => this.mapper.fromDto(res)));
   }
+
   GetAll(
     id: string,
     page: number,
@@ -35,6 +46,7 @@ export class ObservationHttpService implements IGeneral<
       .get<ObservationResponseDto[]>(`${this.Url}/${id}/${page}/${size}`)
       .pipe(map((res) => res.map((c) => this.mapper.fromDto(c))));
   }
+
   Create(dto: ObservationRequestDto): Observable<string> {
     const formData = new FormData();
 
@@ -51,6 +63,7 @@ export class ObservationHttpService implements IGeneral<
 
     return this.http.post<string>(`${this.Url}`, formData);
   }
+
   Update(dto: ObservationRequestDto): Observable<boolean> {
     return this.http.post<boolean>(`${this.Url}/${dto.id}`, dto);
   }

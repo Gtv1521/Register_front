@@ -1,5 +1,5 @@
 <div class="carrusel">
-  <button class="close" (click)="cerrar()">&times;</button>
+  <button class="close" (window:keydown.esc)="cerrar()" (click)="cerrar()">&times;</button>
   <div class="carousel-container">
     <!-- El riel que se mueve -->
     <div
@@ -18,7 +18,7 @@
             [style.transform]="getImageTransform()"
             [class.grabbing]="isDragging"
             class="zoomable-img"
-            (click)="ampliar()"
+            (dblclick)="ampliar()"
             (contextmenu)="restaurar($event)"
             (mousedown)="onMouseDown($event)"
             (mousemove)="onMouseMove($event)"
@@ -29,8 +29,20 @@
     </div>
 
     <!-- Controles -->
-    <button class="btn prev" (click)="anterior()">&#10094;</button>
-    <button class="btn next" (click)="siguiente()">&#10095;</button>
+    <button
+      class="btn prev"
+      (window:keydown.arrowleft)="anterior()"
+      (click)="anterior()"
+    >
+      &#10094;
+    </button>
+    <button
+      class="btn next"
+      (window:keydown.arrowright)="siguiente()"
+      (click)="siguiente()"
+    >
+      &#10095;
+    </button>
 
     <!-- Indicadores (Puntos) -->
     <div class="dots">

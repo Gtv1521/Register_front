@@ -1,61 +1,56 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  signal,
-} from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ObservationCreateUseCase } from 'src/app/core/aplication/use-cases/observation-usecase/observation-create.useCase';
 import { firstValueFrom } from 'rxjs';
-import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entity';
+import {
+  Imagen,
+  ObservationEntity,
+} from 'src/app/core/domain/entitys/observation.entity';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { ObservationRequestDto } from 'src/app/core/infrastructure/dto/request/observation/observation-request.dto';
 import { LIST_TYPE } from 'src/app/core/domain/reusables/estados.constant';
 import { types } from 'src/app/core/domain/entitys/observation.entity';
 import { UpperCaseConstant } from 'src/app/core/domain/reusables/upper-case.constant';
-import { CargandoAccionComponent } from "../../components/floads/cargando-accion-component/cargando-accion-component";
-import { BooleanLiteral } from 'typescript';
-// const statusMap: Record<string, number> = {
-//   PENDIENTE: 0,
-//   EN_PROCESO: 1,
-//   COMPLETADO: 2,
-//   CANCELADO: 3,
-// };
+import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
 
 @Component({
   selector: 'app-observation-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatIconModule, CargandoAccionComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    CargandoAccionComponent,
+  ],
   templateUrl: './new-observation.html',
   styleUrl: './new-observation.scss',
 })
 export class NewObservation {
   readonly estados = LIST_TYPE;
-  
+
   // servicios
   private fb = inject(FormBuilder);
   private observationService = inject(ObservationCreateUseCase);
   private auth = inject(AuthService);
   private upperCase = inject(UpperCaseConstant);
 
-  @Input() IdRegister: string | null = null;
-  @Input() onRegister: boolean = false;
-  @Output() CloseModal = new EventEmitter<boolean>();
-  @Output() ChangeEditar = new EventEmitter<boolean>();
-  @Output() NewObservationCreated = new EventEmitter<ObservationEntity>();
+  IdRegister = input<string | null>();
+  onRegister = input<boolean>();
+  ChangeData = input<ObservationEntity>();
+  OnEditar = input<boolean>();
+  CloseModal = output<boolean>();
+  ChangeEditar = output<boolean>();
+  NewObservationCreated = output<ObservationEntity>();
 
   // datos
   photos: File[] = [];
-  photoPreviews: string[] = [];
+  photoPreviews = signal<string[]>([]);
+  PhotoSave = signal<Imagen[]>([]);
   userId = this.auth.getUserId();
   responseData!: string; // respuesta de la peticion
-  loader= signal<boolean>(false);
-
-
+  loader = signal<boolean>(false);
 
   //datos del formulario
   form = this.fb.group({
@@ -64,6 +59,28 @@ export class NewObservation {
     notificaEmail: [false],
     notificaWhatsapp: [false],
   });
+
+  ngOnInit(): void {
+    if (this.OnEditar()) {
+      this.llenaData();
+    }
+  }
+
+  llenaData(): void {
+    this.form.patchValue({
+      description: this.ChangeData()?.description,
+      type: this.ChangeData()?.type,
+    });
+
+    if (this.ChangeData()?.photos?.length! > 0) {
+      this.ChangeData()?.photos?.forEach((data) => {
+        this.PhotoSave.update((lista) => [
+          ...lista,
+          { id: data.id, photo: data.photo },
+        ]);
+      });
+    }
+  }
 
   onPhotosSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -74,13 +91,15 @@ export class NewObservation {
       this.photos.push(file);
 
       const previewUrl = URL.createObjectURL(file);
-      this.photoPreviews.push(previewUrl);
+      this.photoPreviews.update((previews) => [...previews, previewUrl]);
     });
   }
 
   removePhoto(index: number) {
     this.photos.splice(index, 1);
-    this.photoPreviews.splice(index, 1);
+    this.photoPreviews.update((previews) =>
+      previews.filter((_, i) => i !== index),
+    );
   }
 
   cancelar(): void {
@@ -143,27 +162,27 @@ export class NewObservation {
 
     try {
       this.loader.set(true);
-      const formData = await this.obtenerDatos(this.IdRegister!);
+      const formData = await this.obtenerDatos(this.IdRegister()!);
 
       const response: any = await firstValueFrom(
         this.observationService.execute(formData),
       );
       this.responseData = response;
-      
+
       // Construir el objeto ObservationEntity completo con el ID retornado
       const newObservation: ObservationEntity = {
         id: response.id!, // El ID retornado por el backend
-        idRegister: this.IdRegister!,
+        idRegister: this.IdRegister()!,
         type: this.form.value.type!,
         description: this.form.value.description!,
         idUser: this.userId!,
         createdAt: new Date(),
-        photos: this.photoPreviews.map((preview, index) => ({
+        photos: this.photoPreviews().map((preview, index) => ({
           photo: preview,
           id: `${index}`,
         })),
       };
-      
+
       // Emitir la nueva observación con todos los datos
       this.NewObservationCreated.emit(newObservation);
     } catch (error) {

@@ -16,7 +16,7 @@
         <!-- sección de encabezado -->
         <div class="header">
           <div class="header-left">
-            <h3>Detalles</h3>
+            <h3>Detalles registro</h3>
             <div class="details">
               <p>
                 <strong>Fecha registro: </strong>
@@ -27,21 +27,95 @@
               </p>
               <P
                 ><strong>Estado: </strong>
-                <i>{{ register.oneRegisterState()?.statusRegister }} </i></P
+                <i class="state">{{
+                  register.oneRegisterState()?.statusRegister === "EnProgreso"
+                    ? "En Progreso"
+                    : register.oneRegisterState()?.statusRegister
+                }}</i></P
               >
               <p>
                 <strong>Tecnico: </strong
                 ><i>{{ register.oneRegisterState()?.tecnico }}</i>
               </p>
-              <p><strong>Servicio: </strong> <i>Mantenimiento</i></p>
+              <p><strong>Servicio: </strong> <i> Mantenimiento</i></p>
               <p>
-                <strong>total: </strong>
-                <i>
-                  {{
-                    register.oneRegisterState()?.totalPagar
+                <strong>Antisipo: </strong>
+                @if (editarAntisipo() && !invitado()) {
+                  <input
+                    [formControl]="antisipo"
+                    class="item"
+                    type="text"
+                    appOnlyNumbers
+                    (keydown.enter)="onModalAntisipo()"
+                    [isCurrency]="true"
+                  />
+
+                  <span title="enviar">
+                    <mat-icon class="icono ok" (click)="onModalAntisipo()"
+                      >done</mat-icon
+                    >
+                  </span>
+                  <span title="cancelar">
+                    <mat-icon (click)="onEditarAntisipo()" class="icono not"
+                      >clear</mat-icon
+                    >
+                  </span>
+                } @else {
+                  <i class="value">{{
+                    register.oneRegisterState()?.antisipo
                       | currency: "COP" : "symbol-narrow" : "1.2-2"
-                  }}
-                </i>
+                  }}</i>
+                  <span>
+                    @if (!invitado()) {
+                      <mat-icon (click)="onEditarAntisipo()" class="icono"
+                        >create</mat-icon
+                      >
+                    }
+                  </span>
+                }
+              </p>
+
+              <p>
+                <strong>Total: </strong>
+
+                @if (editarTotal() && !invitado()) {
+                  <input
+                    class="item"
+                    [formControl]="total"
+                    type="text"
+                    appOnlyNumbers
+                    (keydown.enter)="onModalTotal()"
+                    [isCurrency]="true"
+                    [value]="
+                      register.oneRegisterState()?.totalPagar
+                        | currency: 'COP' : 'symbol-narrow' : '1.2-2'
+                    "
+                  />
+                  <span title="enviar">
+                    <mat-icon (click)="onModalTotal()" class="icono ok"
+                      >done</mat-icon
+                    >
+                  </span>
+                  <span title="cancelar">
+                    <mat-icon (click)="onEditarTotal()" class="icono not"
+                      >clear</mat-icon
+                    >
+                  </span>
+                } @else {
+                  <i class="value">
+                    {{
+                      register.oneRegisterState()?.totalPagar
+                        | currency: "COP" : "symbol-narrow" : "1.2-2"
+                    }}
+                  </i>
+                  <span>
+                    @if (!invitado()) {
+                      <mat-icon (click)="onEditarTotal()" class="icono"
+                        >create</mat-icon
+                      >
+                    }
+                  </span>
+                }
               </p>
             </div>
           </div>
@@ -54,7 +128,7 @@
               </p>
               <p>
                 <strong>Teléfono: </strong>
-                <i>{{ client()?.phone }} </i>
+                <i>{{ client()?.phone | Phone: true : false }} </i>
               </p>
               <p>
                 <strong>Email: </strong> <i>{{ client()?.email }} </i>
@@ -69,8 +143,14 @@
           <div class="header_observations">
             <div class="search-box">
               <div class="input_search">
+                @if (buscarOn()) {
+                  <mat-icon class="close-icon" (click)="closeBuscar()"
+                    >close</mat-icon
+                  >
+                }
                 <input
                   type="text"
+                  [formControl]="search"
                   [(ngModel)]="busqueda"
                   [placeholder]="
                     filterActual() === 'todo'
@@ -89,24 +169,27 @@
               <div class="panel-opciones">
                 <section class="modos">
                   <button
-                    [class.active]="filterActual() === 'todo'"
+                    class="btn"
+                    [class.activo]="seleccionado() === 'todo'"
                     (click)="onVerTodos()"
                   >
                     Todo
                   </button>
 
                   <button
-                    [class.active]="filterActual() === 'Ultimos'"
+                    class="btn"
+                    [class.activo]="seleccionado() === 'ultimo'"
                     (click)="onVerUltimos()"
                   >
-                    Ultimos
+                    Ultimo
                   </button>
 
                   <button
-                    [class.active]="filterActual() === 'Primeros'"
+                    class="btn"
+                    [class.activo]="seleccionado() === 'primero'"
                     (click)="onVerPrimeros()"
                   >
-                    Primeros
+                    Primero
                   </button>
                 </section>
 
@@ -139,22 +222,34 @@
                 (ChangeEditar)="onChangeState($event)"
               />
             }
-            @for (observacion of observationsList(); track observacion?.id) {
-              <app-card-observation
-                [Observation]="observacion"
-                [invitado]="invitado()"
-                [registerStatus]="register.oneRegisterState()?.statusRegister"
-              />
-            } @empty {
-              @if (!nueva()) {
-                <section class="no_data">
-                  <strong>No hay obsevasiones</strong>
-                </section>
+            @if (loadObs()) {
+              <app-loader-component class="loader" />
+            } @else {
+              @for (observacion of observationsList(); track observacion?.id) {
+                <app-card-observation
+                  [Observation]="observacion"
+                  [invitado]="invitado()"
+                  [registerStatus]="register.oneRegisterState()?.statusRegister"
+                />
+              } @empty {
+                @if (!nueva()) {
+                  <section class="no_data">
+                    <strong>No hay obsevasiones</strong>
+                  </section>
+                }
               }
             }
           </section>
         </div>
 
+        <div class="warning">
+          <h3>Advertencias:</h3>
+          <ul class="lista">
+            @for (item of listAdvertencias(); track $index) {
+              <li class="warn">{{ item.advertencia }}</li>
+            }
+          </ul>
+        </div>
         <!-- pie de pagina -->
         <div class="footer">
           <div class="left">
@@ -181,4 +276,22 @@
       </div>
     </div>
   </div>
+}
+
+@if (modalAntisipo()) {
+  <app-confirm-alert-component
+    [pregunta]="`¿ Seguro quiere cambiar el valor de antisipo ?`"
+    (respuesta)="changeAntisipo($event)"
+  />
+}
+
+@if (modalTotal()) {
+  <app-confirm-alert-component
+    [pregunta]="`¿ Seguro quiere cambiar el valor a total ?`"
+    (respuesta)="changeTotal($event)"
+  />
+}
+
+@if (updateOn()) {
+  <app-cargando-accion-component [mensaje]="`Actualizando valores`" />
 }

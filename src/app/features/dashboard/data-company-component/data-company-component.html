@@ -1,1 +1,44 @@
-<p>data-company-component works!</p>
+<div class="container">
+  <div class="container-fluid">
+    <div class="title">Datos Empresa</div>
+
+    @if (isLoader()) {
+      <div class="load">
+        <app-loader-component class="icono" />
+      </div>
+    } @else if (!isEditar()) {
+      <div class="contain-data">
+        <div class="item">
+          <strong>Nombre: </strong> <span>{{ company()?.name }}</span>
+        </div>
+        <div class="item">
+          <strong>Nit: </strong> <span>{{ company()?.nit }}</span>
+        </div>
+        <div class="item">
+          <strong>Telefono: </strong> <span>{{ company()?.phone }}</span>
+        </div>
+        <div class="item">
+          <strong>Dirección: </strong> <span> {{ company()?.address }}</span>
+        </div>
+        <div class="container-logo">
+          <div class="item-logo">
+            <strong>Logo:</strong>
+            <img [src]="company()?.logoUrl" alt="100" class="logo" />
+          </div>
+        </div>
+      </div>
+      <span class="editar" (click)="onEditar()"
+        ><mat-icon class="icono">create</mat-icon></span
+      >
+    }
+    @if (isEditar()) {
+      <div class="formulario">
+        <app-new-company-component [onEditar]="true" #formCompany />
+        <div class="actions">
+          <button class="btn" (click)="onEditar()">Cancelar</button>
+          <button class="btn">Guardar</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

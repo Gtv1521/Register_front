@@ -1,0 +1,98 @@
+<div class="container">
+  <div class="container-fluid">
+    <div class="title">Observaciones fijas</div>
+    <div class="actions">
+      @if (!onBorrar()) {
+        <div class="cantidad">
+          {{ listDelete().length }}
+        </div>
+      }
+      @if (onBorrar()) {
+        <button
+          class="btn"
+          [class.activo]="onEditar()"
+          (click)="OnEditar()"
+          [disabled]="isLimitReachedDelete()"
+        >
+          Editar
+          <span class="icono"><mat-icon>edit</mat-icon></span>
+        </button>
+        <button
+          class="btn"
+          [disabled]="isLimitReachedCreated() || onEditar()"
+          (click)="OnCrear()"
+          [attr.title]="
+            isLimitReachedCreated()
+              ? 'Has alcanzado el límite de 3 advertencias'
+              : ''
+          "
+        >
+          Crear
+          <span class="icono"><mat-icon>add_to_photos</mat-icon></span>
+        </button>
+      }
+      @if (!onBorrar()) {
+        <button class="btn" (click)="iniciarBorrado()">Eliminar</button>
+      }
+      <button
+        class="btn"
+        (click)="OnBorrar()"
+        [disabled]="isLimitReachedDelete() || onEditar()"
+      >
+        @if (!onBorrar()) {
+          Cancelar
+        } @else {
+          Borrar
+          <span class="icono">
+            <mat-icon>delete</mat-icon>
+          </span>
+        }
+      </button>
+    </div>
+
+    @if (loader()) {
+      <app-loader-component class="loader" />
+    } @else {
+      <div class="observation_list">
+        @for (item of items(); track $index) {
+          <app-card-advertencia-component
+            (delete)="createListDelete($event)"
+            [datos]="item"
+            [onEditar]="onBorrar()"
+            (click)="PasarEdicion(item)"
+          />
+        } @empty {
+          <div class="item">No hay Advertencias</div>
+        }
+      </div>
+    }
+  </div>
+  <div class="info">
+    <strong>Solo puede agregar 3 advertencias.</strong>
+  </div>
+</div>
+
+@if (onCrear()) {
+  <app-new-advertencia-component (close)="OnCrear()" />
+}
+
+@if (confDelete()) {
+  <app-confirm-alert-component
+    [pregunta]="
+      `¿Seguro quiere eliminar <strong>${listDelete().length}</strong> advertencias ?`
+    "
+    (respuesta)="DeleteOk($event)"
+  />
+}
+
+@if (loadingDelete()) {
+  <app-cargando-accion-component [mensaje]="`Eliminando advertencias...`" />
+}
+
+@if (startEdition()) {
+  <app-new-advertencia-component
+    (close)="OnEditar()"
+    [editar]="true"
+    [data]="selectedEdition()!"
+  />
+}

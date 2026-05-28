@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
@@ -24,6 +24,7 @@ import { SignalRService } from 'src/app/core/infrastructure/services/signalr/sig
 import { CargandoAccionComponent } from '../floads/cargando-accion-component/cargando-accion-component';
 import { OnlyNumbers } from 'src/app/core/directives/only-numbers';
 import { validateHorizontalPosition } from '@angular/cdk/overlay';
+import { ClientUpdateUseCase } from 'src/app/core/aplication/use-cases/client-useCase/client-update.useCase';
 
 @Component({
   selector: 'app-new-register-component',
@@ -43,6 +44,7 @@ export class NewRegisterComponent {
   private fb = inject(FormBuilder);
   private filterClient = inject(ClientFilterUseCase);
   private newCliente = inject(ClientCreateUseCase);
+  private updateCliente = inject(ClientUpdateUseCase);
   private registerNew = inject(RegisterCreateUseCase);
   private auth = inject(AuthService);
   private router = inject(Router);
@@ -65,11 +67,12 @@ export class NewRegisterComponent {
   loadIcono: boolean = false;
   loadObservation: boolean = false;
   datosObs!: ObservationRequestDto;
+  isLoad = signal<boolean>(false);
 
   register = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
     name: ['', [Validators.minLength(3), Validators.required]],
-    phone: ['', [Validators.minLength(10), Validators.required]],
+    phone: ['', [Validators.required]],
     antisipo: [0],
     total: [0],
   });
@@ -140,8 +143,25 @@ export class NewRegisterComponent {
     this.router.navigate(['/dashboard']);
   }
 
-  onEditar() {
-    throw new Error('Method not implemented.');
+  async onEditar(): Promise<void> {
+    var cliente = this.register.getRawValue();
+
+    const clientdata: ClientRequestDto = {
+      name: cliente.name!,
+      email: cliente.email!,
+      phone: String(cliente.phone).replace(/\D/g, ''),
+    };
+
+    try {
+      this.isLoad.set(true);
+      await lastValueFrom(
+        this.updateCliente.execute(this.idClient, clientdata),
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isLoad.set(false);
+    }
   }
 
   onChangeEdit() {
@@ -196,7 +216,7 @@ export class NewRegisterComponent {
       const data = {
         name: cliente.name,
         email: cliente.email,
-        phone: cliente.phone?.toString(),
+        phone: String(cliente.phone).replace(/\D/g, ''),
       };
 
       // inserta cliente y retorna el id de cliente
@@ -215,8 +235,6 @@ export class NewRegisterComponent {
       const baseUrl = window.location.origin;
       const registro = this.register?.value;
 
-      console.log(registro);
-
       let data = {
         idClient: this.idClient,
         idUser: this.auth.getUserId()!,
@@ -226,7 +244,6 @@ export class NewRegisterComponent {
         totalPagar: this.monto(registro.total),
       };
 
-      console.log(data);
       const insert = data as RegisterRequestDto;
       const res: any = await lastValueFrom(this.registerNew.execute(insert));
       return res.id;
@@ -237,13 +254,9 @@ export class NewRegisterComponent {
 
   monto(valor: any): number {
     if (!valor) return 0;
-
-    const valorLimpio = valor
-      .split('.')
-      .join('') // Quita todos los puntos de miles
-      .replace(',', '.');
-
-    return Number(valorLimpio);
+    const soloNumeros = valor.replace(/\D/g, '');
+    const valorFinal = (Number(soloNumeros) / 100).toFixed(2);
+    return Number(valorFinal);
   }
 
   // guarda la primera observasion

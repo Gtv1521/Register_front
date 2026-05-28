@@ -45,6 +45,7 @@
 
   .actions {
     margin: auto;
+    
 
     button {
       padding: 1rem;
@@ -84,7 +85,11 @@
   }
 }
 
-@media (500px<= width <=1300px) {
+.you {
+  color: rgb(43, 132, 43);
+}
+
+@media (500px <= width <=1300px) {
   .session-item {
     margin: 1px auto;
     width: 80%;
@@ -128,6 +133,60 @@
   }
 }
 
-.you {
-  color: rgb(43, 132, 43);
+@media (30px <= width <= 500px) {
+  .session-item {
+    padding: 3px  !important;
+    height: auto !important;
+
+    & > * {
+      font-size: 10px !important;
+    }
+
+    .content_data {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .item {
+        line-height: normal;
+        display: grid;
+        font-weight: 400 !important;
+        padding: 0 !important;
+
+        .active {
+          color: var(--color-primary);
+          font-weight: 400 !important;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.474);
+        }
+
+        .inactive {
+          color: var(--color-error);
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.454);
+          font-weight: 600;
+        }
+      }
+    }
+    .actions {
+      width: 20% !important;
+      height: 100% !important;
+
+      .estate {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-wrap: wrap;
+      }
+
+      button {
+        padding: 1px !important;
+        width: 100%;
+        height: 20px;
+        font-weight: 500;
+        border-radius: 5px !important;
+        font-size: 10px !important;
+      }
+    }
+  }
 }
