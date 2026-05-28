@@ -1,0 +1,114 @@
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+
+  & > * {
+    color: var(--color-text);
+  }
+
+  .container-fluid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .title {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: end;
+      gap: 10px;
+
+      .btn {
+        padding: 0.3rem 1.3rem;
+        border-radius: 10px;
+        color: var(--color-text);
+        background: var(--color-bg-btn);
+        border-color: transparent;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+
+        &:hover {
+          background: var(--color-bg-hover-btn);
+          color: var(--color-text-hover-btn);
+          box-shadow: 0 0 10px var(--color-br-btn);
+        }
+
+        &:disabled {
+          background-color: var(--color-dif-uno);
+          border-color: var(--color-border);
+          color: var(--color-text-subtitle);
+          cursor: not-allowed;
+          filter: grayscale(0.8);
+          opacity: 0.6;
+
+          // Evitamos que tenga sombras o efectos de elevación
+          box-shadow: none;
+          transform: none;
+        }
+
+        .icono {
+          width: 15px;
+          height: 15px;
+          position: relative;
+
+          mat-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -25%);
+
+            font-size: 14px;
+          }
+        }
+      }
+
+      .activo {
+        background-color: var(--color-selected);
+        // background: var(--color-success) !important;
+        color: var(--color-text-title);
+        box-shadow: 0 0 10px var(--color-br-btn);
+
+        &:hover {
+          // background: var(--color-danger) !important;
+          // color: var(--color-text);
+          box-shadow: 0 0 10px var(--color-br-btn);
+        }
+      }
+    }
+
+    .loader {
+      width: 40px;
+      height: 40px;
+      margin: auto;
+    }
+
+    .observation_list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .item {
+        margin: auto;
+        font-style: italic;
+        font-weight: bold;
+        color: var(--color-text-subtitle);
+      }
+    }
+  }
+
+  .info {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

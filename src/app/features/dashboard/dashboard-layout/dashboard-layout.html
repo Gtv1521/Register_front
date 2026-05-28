@@ -22,50 +22,59 @@
       </div>
     } @else {
       <div class="container-fluid">
-        <!-- componente de busqueda -->
-        <div class="options">
-          <mat-icon class="icons" (click)="OnDelete()">delete</mat-icon>
+        <div class="nav">
+          <div class="options">
+            <button class="btn" (click)="OnDelete()" [disabled]="isBlocked()">
+              <mat-icon class="icons">delete</mat-icon>
+            </button>
 
-          <mat-icon class="icons" (click)="openNewRegister()"
-            >add_to_queue</mat-icon
-          >
-        </div>
-
-        <div class="card-search">
-          <div class="search-box">
-            @if (onSearch()) {
-              <div class="icono limpiar">
-                <mat-icon class="clean" (click)="desactivarFiltro()"
-                  >close</mat-icon
-                >
-              </div>
-            }
-            <form [formGroup]="search">
-              <!-- [(ngModel)]="busqueda" -->
-              <input
-                type="text"
-                formControlName="filtro"
-                [placeholder]="
-                  filterType() === 'todo'
-                    ? 'Buscar en todo'
-                    : filterType() === 'En progreso'
-                      ? 'Buscar en progreso'
-                      : filterType() === 'Completado'
-                        ? 'Buscar en alertas'
-                        : filterType() === 'cancelado'
-                          ? 'Buscar por código o registro'
-                          : 'Buscar por cliente'
-                "
-                (keyup.enter)="onBuscar()"
-              />
-              <div class="icono buscar">
-                <mat-icon class="search" (click)="onBuscar()">search</mat-icon>
-              </div>
-            </form>
+            <button class="btn">
+              <mat-icon class="icons" (click)="openNewRegister()"
+                >add_to_queue</mat-icon
+              >
+            </button>
           </div>
-        </div>
 
-        <mat-icon class="icons" (click)="onLogout()">exit_to_app</mat-icon>
+          <div class="card-search">
+            <div class="search-box">
+              @if (onSearch()) {
+                <div class="icono limpiar">
+                  <mat-icon class="clean" (click)="desactivarFiltro()"
+                    >close</mat-icon
+                  >
+                </div>
+              }
+              <form [formGroup]="search">
+                <!-- [(ngModel)]="busqueda" -->
+                <input
+                  type="text"
+                  formControlName="filtro"
+                  [placeholder]="
+                    filterType() === 'todo'
+                      ? 'Buscar en todo'
+                      : filterType() === 'En progreso'
+                        ? 'Buscar en progreso'
+                        : filterType() === 'Completado'
+                          ? 'Buscar en alertas'
+                          : filterType() === 'cancelado'
+                            ? 'Buscar por código o registro'
+                            : 'Buscar por cliente'
+                  "
+                  (keyup.enter)="onBuscar()"
+                />
+                <div class="icono buscar">
+                  <mat-icon class="search" (click)="onBuscar()"
+                    >search</mat-icon
+                  >
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <button class="btn" (click)="onLogout()">
+            <mat-icon class="icons">exit_to_app</mat-icon>
+          </button>
+        </div>
       </div>
     }
     <!-- mapeo de registros -->
@@ -74,22 +83,25 @@
         <div class="floads">
           <app-loader-component class="loader" />
         </div>
-      } 
-      @if (filterError() && !loadeRegister()) {
-        <div class="notFound">No hay datos</div>
       }
-       @if(filteredObservations().length !== 0)  {
-        <div class="registers">
-          @for (registro of filteredObservations(); track registro.id) {
-            <app-card-component
-              [registro]="registro"
-              [delete]="onDelete()"
-              (select)="DeleteRegisters($event)"
-              (verDetalleEvent)="verDetalle($event)"
-            />
+      <div class="registers">
+        @for (registro of filteredObservations(); track registro.id) {
+          <app-card-component
+            [registro]="registro"
+            [delete]="onDelete()"
+            (select)="DeleteRegisters($event)"
+            (verDetalleEvent)="verDetalle($event)"
+          />
+        } @empty {
+          @if (!loadeRegister()) {
+            <div class="notFound">
+              <span>
+                No hay registros en <strong>{{ filterType() }}</strong>
+              </span>
+            </div>
           }
-        </div>
-      }
+        }
+      </div>
     </div>
 
     <footer class="dashboard-footer">
@@ -108,7 +120,6 @@
           <span class="system-name">
             <strong> {{ company()?.name }}</strong>
           </span>
-          <!-- <span class="system-version">v1.0.0</span> -->
         </div>
 
         <div class="footer-right">
@@ -141,6 +152,13 @@
                 (click)="setFilter('Completado')"
               >
                 Completado
+              </button>
+
+              <button
+                [class.active]="filterType() === 'Entregado'"
+                (click)="setFilter('Entregado')"
+              >
+                Entregado
               </button>
 
               <button

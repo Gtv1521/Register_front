@@ -77,7 +77,7 @@
   transform: translateY(-50%);
   background: transparent;
   font-size: 1.1rem;
-  border-radius: 50%; 
+  border-radius: 50%;
   color: var(--color-secondary);
   border: none;
   padding: 15px;
@@ -94,7 +94,6 @@
 
 .next {
   right: 2px;
-
 }
 .prev {
   left: 2px;
@@ -129,6 +128,10 @@
   height: 90%;
   margin: auto;
   display: block;
+  border: 2px solid var(--color-primary);
+  border-radius: 20px;
+  padding: 10px;
+  box-sizing: border-box;
   cursor: zoom-in; /* Lupa con más por defecto */
   transition: transform 0.1s ease-out; /* Transición rápida para el arrastre */
   transform-origin: center center;

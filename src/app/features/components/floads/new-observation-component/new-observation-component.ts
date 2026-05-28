@@ -1,5 +1,6 @@
 import { Component, input, output, signal } from '@angular/core';
-import { NewObservation } from "src/app/features/observations/new-observation/new-observation";
+import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entity';
+import { NewObservation } from 'src/app/features/observations/new-observation/new-observation';
 
 @Component({
   selector: 'app-new-observation-component',
@@ -8,10 +9,12 @@ import { NewObservation } from "src/app/features/observations/new-observation/ne
   styleUrl: './new-observation-component.scss',
 })
 export class NewObservationComponent {
+  idRegister = input<string>(''); // Recibe el ID del registro desde el componente padre
+  Data = input<ObservationEntity | undefined>();
+  onEditar = input<boolean>();
   close = output<boolean>();
   ChangeEditar = output<boolean>();
   NewObservationCreated = output<any>();
-  idRegister = input<string>(''); // Recibe el ID del registro desde el componente padre
 
   onCloseModal($event: boolean): void {
     this.close.emit($event); // Emite el evento para cerrar el modal

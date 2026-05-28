@@ -7,7 +7,7 @@
       <div class="buttons">
         @if (!invitado() && registerStatus() !== "Entregado") {
           <button class="boton editar">
-            <span><mat-icon>edit</mat-icon> </span>
+            <span (click)="OpenEdit()"><mat-icon >edit</mat-icon> </span>
           </button>
           <button class="boton eliminar" (click)="onDeleteObservation()">
             <span>
@@ -19,7 +19,6 @@
     </div>
 
     <div class="panel_contenido">
-      <!-- LADO IZQUIERDO -->
       <div
         class="panel_left"
         [class.size]="Observation()?.photos?.length! === 0"
@@ -75,4 +74,8 @@
   <app-cargando-accion-component
     [mensaje]="'Eliminando observación...'"
     />
+}
+
+@if (onEdit()) {
+  <app-new-observation-component [Data]="Observation()" [onEditar]="onEdit()" (close)="OpenEdit()"  />
 }

@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="container-fluid">
+    <header class="title">Usuario</header>
+    @if (loader()) {
+      <div class="loader">
+        <app-loader-component />
+      </div>
+    } @else {
+      <div class="datos">
+        <div class="item">
+          <strong>Nombre: </strong>{{ dataUser()?.name }}
+          <span class="icono"><mat-icon class="icono">create</mat-icon></span>
+        </div>
+        <div class="item">
+          <strong>Correo: </strong> {{ dataUser()?.email }}
+          <span class="icono"><mat-icon class="icono">create</mat-icon></span>
+        </div>
+        <div class="item"><strong>Empresa: </strong> {{ nameCompany() }}</div>
+        <div class="item"><strong>Rol: </strong> {{ dataUser()?.rol }}</div>
+      </div>
+    }
+  </div>
+</div>

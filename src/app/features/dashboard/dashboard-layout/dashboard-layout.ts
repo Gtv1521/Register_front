@@ -34,6 +34,7 @@ import { SignalRService } from 'src/app/core/infrastructure/services/signalr/sig
 import { ConfirmAlertComponent } from '../../components/floads/confirm-alert-component/confirm-alert-component';
 import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
 import { RegisterDeleteUseCase } from 'src/app/core/aplication/use-cases/register-usecase/register-delete.useCase';
+import { RoleService } from 'src/app/core/infrastructure/services/effect/role.service';
 
 type FilterMode =
   | 'todo'
@@ -79,11 +80,13 @@ export class DashboardLayout implements OnInit {
   private fb = inject(FormBuilder);
   private signalR = inject(SignalRService);
   private deleteRegister = inject(RegisterDeleteUseCase);
+  private Rol = inject(RoleService);
 
   // data signals
   filterType = signal<FilterMode>('todo');
   idUser = signal<string>(this.auth.getUserId()!);
   registerList = signal<RegisterEntity[]>([]);
+  registerDataList = signal<RegisterEntity[]>([]);
   usuario = signal<UserEntity | null>(null);
   loader = signal<boolean>(false);
   loadeRegister = signal<boolean>(false);
@@ -105,59 +108,11 @@ export class DashboardLayout implements OnInit {
     filtro: ['', [Validators.required]],
   });
 
-  // funcion inicial para hacer las consultas
-  async ngOnInit(): Promise<void> {
-    this.loader.set(true);
-
-    const params = this.route.snapshot.queryParams;
-    const estado = params['estado'] || '';
-
-    // Asignamos a tu objeto de búsqueda
-    this.search.patchValue({
-      filtro: estado || '',
-    });
-
-    try {
-      if (!estado) {
-        await this.loadMore();
-      } else this.onBuscar();
-
-      await this.loadCompany();
-      await this.GetUser();
-    } catch (error: any) {
-      this.errores = error;
-    } finally {
-      this.loader.set(false);
+  filteredObservations = computed(() => {
+    if (this.loadeRegister()) {
+      return [];
     }
-  }
 
-  constructor() {
-    effect(async () => {
-      const valor = this.onSearch();
-      try {
-        if (!valor) {
-          this.loadeRegister.set(true);
-          await this.loadMore();
-        }
-      } finally {
-        this.loadeRegister.set(false);
-      }
-
-    });
-
-    this.signalR.deleteRegistro$.subscribe((id) => {
-      this.registerList.update((lista) =>
-        lista.filter((item) => item.id !== id),
-      );
-    });
-
-    // Suscribirse a nuevos registros en tiempo real
-    this.signalR.newRegistro$.subscribe((data: RegisterEntity) => {
-      this.registerList.update((lista) => [data, ...lista]);
-    });
-  }
-
-  public filteredObservations = computed(() => {
     const list = this.registerList();
     const filter = this.filterType();
 
@@ -177,8 +132,81 @@ export class DashboardLayout implements OnInit {
     }
   });
 
-  setFilter(status: FilterMode) {
+  isBlocked = computed(() => {
+    return this.registerList().length === 0;
+  });
+
+  Efecto = effect(async () => {
+    const valor = this.onSearch();
+    try {
+      if (!valor) {
+        this.loadeRegister.set(true);
+        await this.loadMore();
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+    } finally {
+      this.loadeRegister.set(false);
+    }
+  });
+
+  constructor() {
+    this.signalR.updateRol$.subscribe((data) => {
+      if (data.id === this.usuario()?.id) {
+        const current = this.usuario();
+        if (current) {
+          this.usuario.set({ ...current, rol: data.rol });
+        }
+      }
+    });
+
+    this.signalR.deleteRegistro$.subscribe((id) => {
+      this.registerList.update((lista) =>
+        lista.filter((item) => item.id !== id),
+      );
+    });
+
+    // Suscribirse a nuevos registros en tiempo real
+    this.signalR.newRegistro$.subscribe((data: RegisterEntity) => {
+      this.registerList.update((lista) => [data, ...lista]);
+    });
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.loader.set(true);
+
+    try {
+      const params = this.route.snapshot.queryParams;
+      const estado = params['estado'] || '';
+
+      this.search.patchValue({ filtro: estado });
+
+      if (!estado) {
+        await this.loadMore();
+      } else {
+        await this.onBuscar();
+      }
+
+      await Promise.all([this.loadCompany(), this.GetUser()]);
+
+      const user = this.usuario();
+      if (user?.rol) {
+        this.Rol.setRol(user.rol);
+      }
+    } catch (error: any) {
+      this.errores = error;
+      console.error('Error inicializando el componente:', error);
+    } finally {
+      this.loader.set(false);
+    }
+  }
+
+  async setFilter(status: FilterMode) {
+    this.loadeRegister.set(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     this.filterType.set(status);
+    this.loadeRegister.set(false);
   }
 
   onCloseNewRegister() {
@@ -197,10 +225,9 @@ export class DashboardLayout implements OnInit {
   async onBuscar(): Promise<void> {
     if (this.search.invalid) return;
     this.onSearch.set(true);
-    this.loadeRegister.set(true);
 
     try {
-      this.registerList.set([]);
+      this.loadeRegister.set(true);
       const data = this.search.value.filtro?.toString();
       this.router.navigate([], {
         relativeTo: this.route,
@@ -208,28 +235,31 @@ export class DashboardLayout implements OnInit {
         queryParamsHandling: 'merge',
       });
 
-      const response = await lastValueFrom(
+      await lastValueFrom(
         this.filter.execute(data!, this.auth.companyId()!),
-      );
-
-      console.log(response);
-      this.registerList.set(response);
+      ).then((response) => {
+        this.registerList.set(response);
+      });
     } catch (error) {
-      this.filterError.set('No se encontraron resultados para la búsqueda');
+      this.registerList.set([]);
     } finally {
       setTimeout(() => {
         this.loadeRegister.set(false);
-      }, 1000);
+      }, 1500);
     }
   }
 
-  desactivarFiltro(): void {
+  async desactivarFiltro(): Promise<void> {
+    // 1. Primero activamos el loader
+    this.registerList.set([]);
+    this.loadeRegister.set(true);
+
     this.onSearch.set(false);
     this.page.set(1);
-    this.filterError.set(null);
     this.isLastPage.set(false);
-    this.registerList.set([]);
+
     this.search.patchValue({ filtro: '' });
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { estado: null },
@@ -331,16 +361,15 @@ export class DashboardLayout implements OnInit {
       );
 
       if (newData.length < 10) {
-        this.isLastPage.set(true); // Si trajo menos de 10, es la última página
+        this.isLastPage.set(true);
       }
 
-      // LA CLAVE: Concatenamos los datos nuevos con los anteriores
       this.registerList.update((current) => [...current, ...newData]);
 
       // Incrementamos la página para la siguiente vez
       this.page.update((p) => p + 1);
     } catch (error) {
-      console.error('Error cargando más datos', error);
+      throw new Error('Error al cargar los registros: ' + error);
     } finally {
       this.isLoading.set(false);
     }

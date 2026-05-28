@@ -2,43 +2,64 @@
   <div class="card">
     <div class="card-header">
       <div class="user-avatar">
-        {{ user()?.name?.charAt(0)?.toUpperCase() }}
+        {{ userData()?.name?.charAt(0)?.toUpperCase() }}
       </div>
       <div class="card-title-section">
-        <h3 class="card-title">{{ user()?.name?.toUpperCase() }}</h3>
-        <span class="card-rol" [class]="'rol-' + user()?.rol?.toLowerCase()">{{
-          user()?.rol
-        }}</span>
+        <h3 class="card-title">{{ userData()?.name?.toUpperCase() }}</h3>
+        <span
+          class="card-rol"
+          [class]="'rol-' + userData()?.rol?.toLowerCase()"
+          >{{ userData()?.rol }}</span
+        >
       </div>
     </div>
 
     <div class="card-content">
       <div class="info-item">
         <span class="label">Email:</span>
-        <span class="value">{{ user()?.email }}</span>
+        <span class="value">{{ userData()?.email }}</span>
       </div>
     </div>
 
     <div class="card-actions">
-      <button type="button" class="btn btn-edit" title="Editar usuario">
-        <span>✎</span> Editar
-      </button>
+      @if (!ValidaUser()) {
+        <button
+          type="button"
+          (click)="onEditar()"
+          class="btn btn-edit"
+          title="Editar usuario"
+        >
+          <span>✎</span> Editar
+        </button>
+      }
       <button
+        [disabled]="ValidaUser()"
         type="button"
+        [class.disabled]="ValidaUser()"
         (click)="modalDelete()"
         class="btn btn-delete"
         title="Eliminar usuario"
       >
-        <span>🗑</span> Eliminar
+        <span>🗑</span>
+        <p>Eliminar</p>
       </button>
     </div>
   </div>
 </div>
 
-@if (Delete()) {
+@if (deleted()) {
   <app-confirm-alert-component
     [pregunta]="
-      `¿Seguro quiere borrar el usuario de <strong> ${user()?.name} </strong>  ?`"
+      `¿Seguro quiere borrar el usuario de <strong> ${userData()?.name} </strong>  ?`
+    "
     (respuesta)="respuesta($event)"
+  />
+}
+
+@if (editarRol()) {
+  <app-edita-rol-component
+    [idUser]="userData()?.id"
+    (close)="onEditar()"
+    [rolActual]="userData()?.rol"
   />
 }

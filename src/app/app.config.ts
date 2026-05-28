@@ -7,10 +7,14 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { SESSION_TOKEN, SESSIONES_TOKEN } from './core/aplication/tokens/session.token';
+import {
+  SESSION_TOKEN,
+  SESSIONES_TOKEN,
+} from './core/aplication/tokens/session.token';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
+  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { REGISTER_TOKEN } from './core/aplication/tokens/register.token';
@@ -27,6 +31,9 @@ import { COMPANY_TOKEN } from './core/aplication/tokens/company.token';
 import { CompanyHttpService } from './core/infrastructure/http/http-api/company-http.service';
 import { registerLocaleData } from '@angular/common';
 import localeEsCo from '@angular/common/locales/es-CO';
+import { conexionInterceptor } from './core/infrastructure/http/interceptors/conexion.interceptor';
+import { ADVERTENCIA_TOKEN } from './core/aplication/tokens/advertencias.token';
+import { AdvertenciasHttpService } from './core/infrastructure/http/http-api/advertencias.http-service';
 
 registerLocaleData(localeEsCo);
 
@@ -42,13 +49,14 @@ export const appConfig: ApplicationConfig = {
     { provide: OBSERVATION_TOKEN, useClass: ObservationHttpService },
     { provide: CLIENT_TOKEN, useClass: ClientHttpService },
     { provide: SESSIONES_TOKEN, useClass: SessionHttpService },
-    { provide: COMPANY_TOKEN, useClass: CompanyHttpService},
+    { provide: COMPANY_TOKEN, useClass: CompanyHttpService },
+    { provide: ADVERTENCIA_TOKEN, useClass: AdvertenciasHttpService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
     },
+    provideHttpClient(withInterceptors([conexionInterceptor])),
     provideRouter(routes),
-    
-  ]
+  ],
 };

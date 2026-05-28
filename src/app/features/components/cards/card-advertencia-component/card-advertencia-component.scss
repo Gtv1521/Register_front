@@ -1,0 +1,15 @@
+.container {
+  width: 100%;
+  background: var(--color-resalto);
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 18px;
+
+  &:hover {
+    background: var(--color-bg-btn);
+  }
+}
+
+.delete {
+  background: var(--color-alert) !important;
+}

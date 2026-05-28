@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LogoutUseCase } from 'src/app/core/aplication/use-cases/session-usecase/logout.useCase';
 import { SessionesUseCase } from 'src/app/core/aplication/use-cases/session-usecase/sessiones.useCase';
 import { SessionInfo } from 'src/app/core/domain/entitys/session.entity';
 import { LoaderComponent } from '../loader-component/loader-component';

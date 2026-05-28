@@ -83,12 +83,18 @@
             <div class="field">
               <label>Evidencias</label>
               <div class="photo-preview">
-                @for (photo of photoPreviews; track photo) {
-                  <img
-                    [src]="photo"
-                    alt="preview"
-                    (click)="removePhoto(photoPreviews.indexOf(photo))"
-                  />
+                @if (OnEditar()) {
+                  @for (photo of PhotoSave(); track $index) {
+                    <img [src]="photo.photo" alt="preview" />
+                  }
+                } @else {
+                  @for (photo of photoPreviews(); track photo) {
+                    <img
+                      [src]="photo"
+                      alt="preview"
+                      (click)="removePhoto(photoPreviews().indexOf(photo))"
+                    />
+                  }
                 }
               </div>
               <label class="upload-btn">
@@ -107,7 +113,7 @@
         </section>
       </div>
       <!-- ACCIONES -->
-      @if (!onRegister) {
+      @if (!onRegister()) {
         <div class="actions">
           <button type="button" class="btn-cancel" (click)="cancelar()">
             Cancelar

@@ -1,5 +1,5 @@
 import { validateHorizontalPosition } from '@angular/cdk/overlay';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, input, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
@@ -17,6 +17,11 @@ import { CompanyRequestDto } from 'src/app/core/infrastructure/dto/request/compa
 })
 export class NewCompanyComponent {
   private fb = inject(FormBuilder);
+
+  onEditar = input<boolean>();
+
+  logo = signal<string>('');
+  changeLogo = signal<boolean>(false);
 
   @ViewChild('formDirective') formDirective!: FormGroupDirective;
 
@@ -37,6 +42,10 @@ export class NewCompanyComponent {
     return true;
   }
 
+  showLogo(data: string) {
+    this.logo.set(data);
+  }
+
   onFileChange(event: any) {
     const file = event.target.files[0]; // Capturamos el primer archivo
 
@@ -47,6 +56,18 @@ export class NewCompanyComponent {
       });
       this.form.get('image')?.updateValueAndValidity();
     }
+  }
+
+  onLlenaData(datos: any) {
+    return this.form.patchValue(datos);
+  }
+
+  obtenerDatos() {
+    return this.form.getRawValue();
+  }
+
+  resetear() {
+    this.form.reset();
   }
 
   onDesabled() {

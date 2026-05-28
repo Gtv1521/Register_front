@@ -75,7 +75,7 @@ $themes: (
     text-primary: $black,
     text-secondary: $white,
     text-tertiary: $azul,
-    text-succes: #10b981,
+    text-succes: #1dc051,
 
     //colores dashboard
     aquac: #6681ef61,
@@ -114,7 +114,7 @@ $themes: (
     bg-btn: rgba(69, 80, 107, 0.567),
     br-btn: $azul,
     bg-hover-btn: rgba(255, 255, 255, 0.2),
-    br-hover-btn: rgba(255, 255, 255, 0.2),
+    br-hover-btn: rgba(255, 255, 255, 0.995),
     text-btn: $white,
     text-btn-hover: $white,
     selected: rgba(27, 60, 83, 0.843),
@@ -171,7 +171,6 @@ $themes: (
     text-primary: rgba(231, 223, 232, 0.995),
     text-secondary: $white,
     text-tertiary: rgb(196, 194, 210),
-
     //colores dashboard
     aquac: #6681ef61,
     primaro: #1976d2,
@@ -187,25 +186,53 @@ $themes: (
     dif-cuatro: rgba(255, 0, 0, 0.422),
   ),
 
-  dark_blue: (
-    bg: $white,
-    panel: $forms,
+  neon: (
+    bg: #f3eeee,
+    nav: #9d8046,
+    panel: #d1c6d1,
+    bg-delete: rgb(153, 96, 96),
+    modal: #cbbbbb,
+    panel-interno: rgb(147, 147, 207),
+    panel-content: $card_bg,
+    resalto: rgba(182, 192, 211, 0.518),
+    panel-warning: $rojo_dif,
 
-    modal: $modal,
-    icons: $black,
-    alert: $verde,
+    panel-modal: rgba(0, 0, 0, 0.89),
+    // bordes
+    border: rgb(70, 20, 188),
+    border-hover: rgba(7, 10, 78, 0.959),
+    // iconoes
+    icons: $azul,
+    icons-nav: #732424,
+    alert: $rojo,
 
     // buttons
-    bg-btn: $azul,
-    br-btn: $blue_dark,
-    text-btn: $white,
-
-    error: $escarlata,
-    text: $black,
+    bg-btn: rgb(211, 211, 218),
+    br-btn: $azul,
+    bg-hover-btn: rgba(137, 137, 148, 0.398),
+    br-hover-btn: $azul,
+    text-btn: rgba(2, 2, 2, 0.901),
+    text-btn-hover: $white,
+    selected: rgb(28, 54, 72),
+    // texto
+    text-error: #ff6b6b,
+    text-primary: $negro,
+    text-secondary: $negro,
+    text-tertiary: $azul,
+    text-succes: #10b981,
 
     //colores dashboard
+    aquac: #030c3283,
     primaro: #1976d2,
-    segundo: #9e9e9e,
+    segundo: #732424,
+    tercero: rgb(255, 255, 255),
+    cuarto: rgb(0, 0, 0),
     quinto: #f44336,
+
+    // difuminados
+    dif-uno: rgba(255, 255, 255, 0.518),
+    dif-dos: rgba(0, 0, 0, 0.89),
+    dif-tres: rgba(109, 109, 185, 0.547),
+    dif-cuatro: rgba(255, 0, 0, 0.422),
   ),
 );

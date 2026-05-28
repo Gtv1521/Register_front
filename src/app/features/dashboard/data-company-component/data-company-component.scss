@@ -1,0 +1,105 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .container-fluid {
+    width: 60%;
+    background-color: var(--color-resalto);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid var(--color-border);
+    position: relative;
+
+    & > * {
+      color: var(--color-text);
+    }
+
+    .title {
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .load {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      .icono {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    .contain-data {
+      padding: 10px !important;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .item {
+        display: flex;
+        gap: 15px;
+      }
+
+      .container-logo {
+        .item-logo {
+          display: flex;
+          flex-direction: column;
+          .logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border: 2px solid var(--color-border);
+            border-radius: 15px;
+          }
+        }
+      }
+    }
+
+    .editar {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+
+      .icono {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        border: 2px solid var(--color-border);
+        border-radius: 10px;
+        background: var(--color-bg-btn);
+        cursor: pointer;
+
+        &:hover {
+          transition: ease-in-out 1s;
+          border-radius: 50%;
+          background: var(--color-bg-hover-btn);
+          border-color: var(--color-border);
+          color: var(--color-text-title);
+        }
+      }
+    }
+  }
+
+  .actions {
+    width: 90%;
+    margin: auto;
+    justify-content: end;
+    text-align: end;
+    gap: 10px;
+    display: flex;
+
+    .btn {
+      padding: 0.5rem 1.9rem;
+      text-transform: uppercase;
+      border: none;
+      background: var(--color-bg-btn);
+      color: var(--color-text);
+      font-weight: 500;
+      border-radius: 10px;
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { Subscription, timer } from 'rxjs';
 import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
 import { SignalRService } from '../../services/signalr/signal-r.service';
 import { Router } from '@angular/router';
+import { RoleService } from '../../services/effect/role.service';
 
 @Injectable({
   providedIn: 'root',
@@ -46,7 +47,7 @@ export class AuthService {
 
     // Como tu token dura 2 min (120s), disparamos cada 90s (1.5 min)
     // para que el Interceptor tenga 30s de margen para renovar.
-    this._heartbeatSub = timer(120000, 120000).subscribe(() => {
+    this._heartbeatSub = timer(0, 120000).subscribe(() => {
       this.ejecutarRefrescoSilencioso();
     });
   }
@@ -57,7 +58,9 @@ export class AuthService {
     // Ejecutamos tu caso de uso. No nos importa mucho el resultado,
     // lo que queremos es que la petición pase por el INTERCEPTOR.
     this._getMeUseCase.execute().subscribe({
-      next: () => console.log('✅ Sesión validada/refrescada con éxito'),
+      next: (res) => {
+        console.log('✅ Sesión validada/refrescada con éxito');
+      },
       error: (err) => {
         console.error('💔 Error crítico en el latido:', err);
         if (err.status === 401) this.clean(); // Si el refresh falla, limpiamos

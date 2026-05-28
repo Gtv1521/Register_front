@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="container-fluid">
+    <h1 class="title">Editar Rol</h1>
+    <div class="options">
+      <strong>Aqui se cambia el rol del usuario</strong>
+      <form class="opcion">
+        <strong>Rol</strong>
+        <div class="form_group">
+          <div class="item">
+            <input
+              type="radio"
+              id="administrador"
+              [formControl]="rol"
+              value="Administrador"
+            />
+            <label for="administrador"> Administrador </label>
+          </div>
+
+          <div class="item">
+            <input
+              type="radio"
+              id="usuario"
+              value="Usuario"
+              [formControl]="rol"
+            />
+            <label for="usuario"> Usuario</label>
+          </div>
+
+          @if (userRole === "Super") {
+            <div class="item">
+              <input
+                type="radio"
+                id="super"
+                value="Super"
+                [formControl]="rol"
+              />
+              <label for="super"> Super</label>
+            </div>
+          }
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <button class="btn cancel" (click)="closed()">
+        <span><mat-icon>reply_all</mat-icon> </span>
+        Cancelar
+      </button>
+      <button class="btn save" (click)="updateRol()">
+        <span><mat-icon>save</mat-icon></span>
+        Cambiar
+      </button>
+    </div>
+  </div>
+</div>
+
+@if (loader()) {
+  <app-cargando-accion-component [mensaje]="`Cambiando rol!`" />
+}

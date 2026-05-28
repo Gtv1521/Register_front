@@ -1,6 +1,8 @@
 <div class="container">
   <div class="container-fluid">
-    <h2 class="title">Registrar Empresa</h2>
+    <h2 class="title">
+      {{ onEditar() ? "Editar Datos" : "Registrar" }} Empresa
+    </h2>
     <form class="container-form" #formDirective="ngForm" [formGroup]="form">
       <!-- name -->
       <div class="form_group">
@@ -119,7 +121,7 @@
                 {{ form.get("email")?.errors?.["minlength"].requiredLength }}
                 caracteres
               </span>
-            }@else if (form.get("email")?.errors?.["email"]) {
+            } @else if (form.get("email")?.errors?.["email"]) {
               <span>El correo no es válido</span>
             } @else {
               <span>El email tiene un error desconocido</span>
@@ -129,26 +131,54 @@
       </div>
       <!-- image -->
       <div class="form_group">
-        <label for="image">Logo</label>
-        <input
-          type="file"
-          (change)="onFileChange($event)"
-          name="image"
-          id="image"
-        />
-        @if (form.get("image")?.touched && form.get("image")?.invalid) {
-          <div class="error-message">
-            @if (form.get("image")?.errors?.["required"]) {
-              <span>La imagen es obligatoria</span>
-            } @else if (form.get("image")?.errors?.["minlength"]) {
-              <span>
-                La imagen debe tener al menos
-                {{ form.get("image")?.errors?.["minlength"].requiredLength }}
-                caracteres
-              </span>
-            } @else {
-              <span>La imagen tiene un error desconocido</span>
-            }
+        @if (!onEditar()) {
+          <label for="image">Logo</label>
+          <input
+            type="file"
+            (change)="onFileChange($event)"
+            name="image"
+            id="image"
+            appSingleFile
+          />
+          @if (form.get("image")?.touched && form.get("image")?.invalid) {
+            <div class="error-message">
+              @if (form.get("image")?.errors?.["required"]) {
+                <span>La imagen es obligatoria</span>
+              } @else if (form.get("image")?.errors?.["minlength"]) {
+                <span>
+                  La imagen debe tener al menos
+                  {{ form.get("image")?.errors?.["minlength"].requiredLength }}
+                  caracteres
+                </span>
+              } @else {
+                <span>La imagen tiene un error desconocido</span>
+              }
+            </div>
+          }
+        } @else {
+          <div class="action_logo">
+            <img [src]="logo()" alt="" class="logo" />
+            <div class="title_logo">
+              <div class="btn_option">
+                <label for="ChangeLogo">Cambiar Logo</label>
+                <input
+                  class="box"
+                  type="checkbox"
+                  name=""
+                  [checked]="changeLogo()"
+                  (change)="changeLogo.set($any($event.target).checked)"
+                  id="ChangeLogo"
+                />
+              </div>
+              <input
+                class="entrada"
+                type="file"
+                accept="image/*"
+                placeholder="Cambiar logo"
+                [disabled]="!changeLogo()"
+                appSingleFile
+              />
+            </div>
           </div>
         }
       </div>

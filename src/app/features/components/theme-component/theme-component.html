@@ -21,7 +21,7 @@
             id="light"
             class="theme"
           />
-          <span class="material-symbols-outlined">Modo claro</span>
+          <span class="material-symbols-outlined">Claro</span>
           <div class="colors">
             <div class="color uno"></div>
             <div class="color dos"></div>
@@ -42,7 +42,7 @@
             id="dark"
             class="theme"
           />
-          <span class="material-symbols-outlined">Modo oscuro</span>
+          <span class="material-symbols-outlined">Oscuro</span>
           <div class="colors">
             <div class="color cuatro"></div>
             <div class="color cinco"></div>
@@ -63,7 +63,7 @@
             [checked]="selectedTheme() === 'blue_theme'"
             class="theme"
           />
-          <span class="material-symbols-outlined">Modo azul</span>
+          <span class="material-symbols-outlined">Azul</span>
           <div class="colors">
             <div class="color ocho"></div>
             <div class="color nueve"></div>
@@ -73,12 +73,12 @@
         </label>
         <label
           class="btn"
-          [class.active]="selectedTheme() === 'blue_theme'"
-          (click)="setTheme('blue_theme')"
-          (change)="selectedTheme.set('blue_theme')"
+          [class.active]="selectedTheme() === 'neon'"
+          (click)="setTheme('neon')"
+          (change)="selectedTheme.set('neon')"
         >
-          <input type="radio" name="theme" id="blue_theme" class="theme" />
-          <span class="material-symbols-outlined">Modo azul</span>
+          <input type="radio" name="theme" id="neon" class="theme" />
+          <span class="material-symbols-outlined">Neon</span>
           <div class="colors">
             <div class="color doce"></div>
             <div class="color trece"></div>

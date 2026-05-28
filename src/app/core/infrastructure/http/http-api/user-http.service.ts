@@ -16,11 +16,13 @@ export class UserHttpService implements IUser<UserRequestDto, UserEntity> {
     private http: HttpClient,
     private map: UserMapper,
   ) {}
+
   GetId(id: string): Observable<UserEntity> {
     return this.http
       .get<UserResponseDto>(`${this.Url}/${id}`)
       .pipe(map((res) => this.map.fromDto(res)));
   }
+
   Delete(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${this.Url}/${id}`);
   }
@@ -48,6 +50,7 @@ export class UserHttpService implements IUser<UserRequestDto, UserEntity> {
       .get<UserResponseDto>(`${this.Url}/me`)
       .pipe(map((res) => this.map.fromDto(res)));
   }
+
   GetAll(id: string): Observable<UserEntity[]> {
     return this.http
       .get<
@@ -55,7 +58,16 @@ export class UserHttpService implements IUser<UserRequestDto, UserEntity> {
       >(`${this.Url}`, { params: { idCompany: id, pageNumber: 1, pageSize: 20 } })
       .pipe(map((res) => res.map((c) => this.map.fromDto(c))));
   }
+
   Update(dto: UserRequestDto): Observable<boolean> {
     return this.http.put<boolean>(`${this.Url}/${dto.id}`, dto);
+  }
+
+  UpdateRol(id: string, rol: string): Observable<boolean> {
+    return this.http
+      .put<{
+        update: boolean;
+      }>(`${this.Url}/Rol/${id}`, {}, { params: { rol } })
+      .pipe(map((res) => res.update));
   }
 }

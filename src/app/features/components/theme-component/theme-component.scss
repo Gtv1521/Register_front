@@ -54,13 +54,14 @@
 
       .themes {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         gap: 10px;
         width: 100dvw;
 
         .btn {
           position: relative;
-          width: 15%;
+          width: 250px;
           color: var(--color-text);
           border: 2px solid var(--color-br-btn);
           padding: 20px;
@@ -162,14 +163,13 @@
   }
 }
 
-@media (400px <= width <= 1300px) {
-
+@media (500px <= width <= 1300px) {
   .nav {
     h1 {
       font-size: 1.3rem;
     }
   }
-  
+
   .title {
     font-size: 1.1rem;
   }
@@ -181,4 +181,7 @@
       font-size: 1.2rem !important;
     }
   }
+}
+
+@media (30px <= width <= 500px) {
 }

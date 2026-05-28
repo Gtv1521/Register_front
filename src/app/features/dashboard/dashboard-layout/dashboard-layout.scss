@@ -18,6 +18,35 @@
     background-color: var(--color-nav);
     align-items: center;
 
+    .nav {
+      width: 98%;
+      margin: auto;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .btn {
+      border-radius: 50%;
+      background-color: transparent;
+      border-color: var(--color-secondary);
+
+      &:disabled {
+        background-color: transparent;
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
+        cursor: not-allowed;
+      }
+
+      &:hover {
+        color: var(--color-text-hover-btn);
+        border-color: var(--color-br-hover-btn);
+        & > .icons {
+          scale: 1.2;
+        }
+      }
+    }
+
     .icons {
       color: var(--color-icons-nav);
       width: 30px;
@@ -97,12 +126,6 @@
               color: var(--color-text-hover-btn);
             }
           }
-
-          // &:hover {
-          //   background-color: var(--color-bg-hover-btn);
-          //   color: var(--color-text-hover-btn);
-          //   // scale: 1.1;
-          // }
         }
 
         .limpiar {
@@ -190,15 +213,17 @@
 
     .registers {
       transition: ease-in-out 1s;
-      padding: 10px;
+      padding: 1.1rem;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(409px, 1fr));
       gap: 20px;
+      position: relative;
     }
 
     .floads {
+      margin-top: 20px;
       width: 100%;
-      height: 100%;
+      // height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -210,11 +235,14 @@
     }
 
     .notFound {
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      color: var(--color-text);
+      position: absolute;
+      top: 20px;
+      font-weight: bold;
+      font-style: italic;
+      left: 50%;
+      transform: translateX(-50%);
       font-weight: 600;
+      color: var(--color-text);
     }
 
     .no_data {
@@ -357,7 +385,11 @@
   }
 }
 
-@media (400px <= width <= 1300px) {
+.alert {
+  background: red;
+}
+
+@media (500px <= width <= 1500px) {
   .container {
     grid-template-rows: 1fr // header
       19fr // content
@@ -382,7 +414,7 @@
         transition: ease-in-out 1s;
         padding: 10px;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         gap: 20px;
       }
     }
@@ -412,7 +444,87 @@
 
         .footer-right {
           .filters {
+            width: 100% !important;
             .modos {
+              button {
+                padding: 4px 8px;
+                font-size: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (40px <= width <= 500px) {
+  .container {
+    grid-template-rows: 1fr // header
+      18fr // content
+      4fr !important; // footer
+
+    .container-fluid {
+      .card-search {
+        .search-box {
+          input {
+            font-size: 0.9rem;
+          }
+
+          .search-icon {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
+    .content {
+      .registers {
+        transition: ease-in-out 1s;
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+      }
+    }
+
+    .dashboard-footer {
+      padding: 2px;
+      box-sizing: border-box;
+      bottom: 1px;
+      height: 7% !important;
+      .footer {
+        width: 100% !important;
+        flex-wrap: wrap;
+
+        .footer-left {
+          width: 50% !important;
+          .user-info {
+            .user-name {
+              font-size: 10px;
+            }
+            .user-role {
+              font-size: 9px;
+            }
+          }
+        }
+
+        .footer-center {
+          width: 50% !important;
+          .system-name {
+            font-size: 11px;
+            line-height: 0.6;
+          }
+        }
+
+        .footer-right {
+          width: 100% !important;
+          padding: 5px !important;
+          border-top: 1px solid var(--color-border);
+          .filters {
+            margin: auto !important;
+            .modos {
+              margin: auto !important;
               button {
                 padding: 4px 8px;
                 font-size: 10px;

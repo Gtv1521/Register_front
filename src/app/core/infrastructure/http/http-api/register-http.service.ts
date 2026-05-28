@@ -17,12 +17,39 @@ export class RegisterHttpService implements IRegistro<
 > {
   Url = `${environment.apiUrl}/Register`;
 
+  private http = inject(HttpClient);
+  private mapper = inject(RegisterMapper);
+
+  UpdateAntisipo(id: string, antisipo: number): Observable<boolean> {
+    console.log(id, antisipo);
+    return this.http.put<boolean>(
+      `${this.Url}/antisipo`,
+      {},
+      {
+        params: {
+          antisipo: antisipo,
+          idRegister: id,
+        },
+      },
+    );
+  }
+
+  UpdateTotal(id: string, total: number): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${this.Url}/total`,
+      {},
+      {
+        params: {
+          total: total,
+          idRegister: id,
+        },
+      },
+    );
+  }
+
   Delete(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${this.Url}/${id}`);
   }
-
-  private http = inject(HttpClient);
-  private mapper = inject(RegisterMapper);
 
   downloadPdf(id: string): Observable<{ blob: Blob; filename: string }> {
     return this.http

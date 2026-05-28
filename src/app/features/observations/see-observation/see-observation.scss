@@ -38,22 +38,16 @@
   }
 
   .see-observation-container {
-    // padding: 0 20px;
     margin: auto;
     width: 100%;
     min-height: 95dvh;
     box-sizing: border-box;
-    // box-shadow: 0 0 10px white;
-    // background-color: red;
     background-color: var(--color-bg);
 
     .container {
       width: 70%;
-      // padding: 1rem 0.5rem;
-      // box-sizing: border-box;
       margin: 0 auto 1rem auto;
       background-color: var(--color-panel);
-      // box-shadow: 0 0 10px var(--color-border);
 
       .name_company {
         position: sticky;
@@ -64,7 +58,6 @@
         font-weight: 800;
         height: 40px;
         width: 100%;
-        // padding: auto 1rem;
         display: flex;
         text-align: center;
         align-items: center;
@@ -80,9 +73,89 @@
         display: flex;
         justify-content: space-evenly;
         color: var(--color-text);
+        background-color: var(--color-resalto);
 
         h2 {
           margin: 3%;
+        }
+
+        p {
+          display: flex;
+          gap: 10px;
+        }
+
+        .state {
+          font-weight: 700;
+          color: var(--color-alert) !important;
+        }
+
+        .value {
+          text-decoration: underline;
+        }
+
+        .icono {
+          width: 25px;
+          height: 25px;
+          margin-left: 10px;
+          font-size: 1.2rem;
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 4px;
+          box-sizing: border-box;
+          color: var(--color-icons);
+          cursor: pointer;
+
+          &:hover {
+            background-color: var(--color-bg-btn);
+            border-radius: 5px;
+            border: 1px solid var(--color-br-btn);
+          }
+        }
+
+        .item {
+          width: auto;
+          height: 20px;
+          text-align: center;
+          font-size: 14px;
+          box-sizing: border-box;
+          margin: 0 5px;
+          background-color: var(--color-panel);
+          color: var(--color-text);
+          border-radius: 7px;
+          border: 1px solid var(--color-border);
+          outline: none;
+
+          &:focus {
+            border: 2px solid var(--color-selected);
+          }
+        }
+
+        .btn {
+          min-width: 1px !important;
+          min-height: 1px !important;
+          border: transparent;
+          margin: 0 2px;
+          background-color: rgba(0, 0, 255, 0.334);
+        }
+
+        .ok {
+          font-weight: 700 !important;
+          &:hover {
+            background-color: var(--color-bg-hover-btn);
+            color: var(--color-text-hover-btn);
+          }
+        }
+
+        .not {
+          font-weight: 700 !important;
+          border-color: red !important;
+
+          &:hover {
+            background-color: var(--color-alert) !important;
+            color: var(--color-text-hover-btn);
+          }
         }
       }
 
@@ -112,6 +185,22 @@
             .input_search {
               width: 100%;
               position: relative;
+
+              .close-icon {
+                position: absolute;
+                top: 50%;
+                left: 5px;
+                transform: translateY(-50%);
+                color: var(--color-text);
+                background-color: var(--color-modal);
+                padding: 2px;
+                box-sizing: border-box;
+                border: 1px solid var(--color-br-btn);
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
 
               input {
                 width: 100%;
@@ -152,22 +241,23 @@
             padding: 5px 0;
 
             .modos {
-              button {
+              .btn {
                 margin: 3px;
-                background-color: transparent;
-                border: 1px solid rgba(var(--color-bg), 0.2);
+                background-color: var(--color-bg-btn);
+                border: 1px solid var(--color-br-btn);
                 color: var(--color-text);
                 padding: 0 10px;
                 height: 35px;
+                font-weight: 600;
                 font-size: 12px;
                 border-radius: 6px;
                 cursor: pointer;
                 transition: all 0.2s ease;
 
                 &:hover {
-                  background-color: var(--color-panel);
+                  background-color: var(--color-bg-hover-btn);
                   color: var(--color-text-hover-btn);
-                  border: 1px solid var(--color-primary);
+                  border-color: var(--color-br-hover-btn);
                 }
               }
             }
@@ -184,10 +274,10 @@
                 align-items: center;
                 margin-left: 10px;
                 cursor: pointer;
-                border-radius: 6px;
+                border-radius: 10px;
                 background-color: var(--color-bg-btn);
+                border: 2px solid var(--color-br-btn);
                 color: var(--color-text-btn);
-                border: none;
                 transition: all 0.3s ease;
                 position: relative;
                 transition: ease-in 45ms;
@@ -223,6 +313,32 @@
             text-align: center;
             padding-top: 20px;
             font-size: 18px;
+          }
+
+          .loader {
+            width: 10%;
+            height: 10%;
+            margin: auto;
+          }
+        }
+      }
+
+      .warning {
+        width: 100%;
+        padding: 1rem;
+        box-sizing: border-box;
+        background: var(--color-resalto);
+
+        h3 {
+          color: var(--color-alert);
+        }
+
+        .lista {
+          padding: 0 2rem;
+          box-sizing: border-box;
+
+          .warn {
+            color: var(--color-text);
           }
         }
       }
@@ -262,6 +378,12 @@
       }
     }
   }
+}
+
+.activo {
+  background-color: var(--color-bg-hover-btn) !important;
+  color: var(--color-text-hover-btn) !important;
+  border-color: var(--color-br-hover-btn) !important;
 }
 
 @media (400px <= width <= 1300px) {

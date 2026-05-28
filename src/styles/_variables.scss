@@ -1,5 +1,6 @@
 @use "sass:map"; // 1. Primero el módulo de Sass
-@use "themes" as t; // 2. Tu archivo de temas con un alias (recomendado)
+@use "themes" as t; // 2. Tu archivo de temas con un alias (recomendado)k
+@use "animations" as a;
 
 @mixin apply-theme($theme-name) {
   // Usamos el alias 't' para acceder a tu variable $themes
@@ -24,11 +25,11 @@
 
   --color-border: #{map.get($theme, border)};
   --color-border-hover: #{map.get($theme, border-hover)};
-  
+
   --color-icons: #{map.get($theme, icons)};
   --color-icons-nav: #{map.get($theme, icons-nav)};
   --color-alert: #{map.get($theme, alert)};
-  
+
   --color-bg-btn: #{map.get($theme, bg-btn)};
   --color-br-btn: #{map.get($theme, br-btn)};
   --color-bg-hover-btn: #{map.get($theme, bg-hover-btn)};
@@ -36,19 +37,21 @@
   --color-text-btn: #{map.get($theme, text-btn)};
   --color-text-hover-btn: #{map.get($theme, text-btn-hover)};
   --color-selected: #{map.get($theme, selected)};
-  
+
   --color-blanco: #{map.get($theme, tercero)};
   --color-negro: #{map.get($theme, cuarto)};
-  
+
   --color-dif-blanco: #{map.get($theme, dif-uno)};
   --color-dif-negro: #{map.get($theme, dif-dos)};
   --color-dif-azul: #{map.get($theme, dif-tres)};
   --color-dif-rojo: #{map.get($theme, dif-cuatro)};
-  
+
   --color-aqua: #{map.get($theme, aquac)};
   --color-primary: #{map.get($theme, primaro)};
   --color-secondary: #{map.get($theme, segundo)};
   --color-tertiary: #{map.get($theme, quinto)};
+
+  @include a.animation-variables();
 }
 
 // Configuración de los temas en el :root
@@ -64,6 +67,6 @@
   @include apply-theme(blue_theme);
 }
 
-[data-theme="dark-blue"] {
-  @include apply-theme(dark_blue);
+[data-theme="neon"] {
+  @include apply-theme(neon);
 }

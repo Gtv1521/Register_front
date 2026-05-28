@@ -9,7 +9,7 @@ export class ClientUpdateUseCase {
   constructor(
     @Inject(CLIENT_TOKEN) private repo: IClient<ClientRequestDto, ClientEntity>
   ) { }
-  execute(dto: ClientRequestDto) {
-    return this.repo.Update(dto);
+  execute(id: string, dto: ClientRequestDto) {
+    return this.repo.Update(id, dto);
   }
 }

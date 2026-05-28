@@ -1,0 +1,104 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-panel-modal);
+
+  .container-fluid {
+    width: 40%;
+    // padding: 2rem;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    background-color: var(--color-panel);
+    color: var(--color-text);
+
+    .title {
+      padding: 1.5rem;
+      border-radius: 1rem 1rem 0 0;
+      text-align: start;
+      color: var(--color-text);
+      background-color: var(--color-resalto);
+    }
+
+    .options {
+      width: 100%;
+      padding: 1rem;
+      box-sizing: border-box;
+
+      .opcion {
+        text-align: center;
+        justify-content: start;
+        width: 80%;
+        gap: 10px;
+        padding: 20px;
+        margin: auto;
+        padding: 10px;
+        display: block;
+
+        .form_group {
+          width: 100%;
+          display: flex;
+          text-align: center;
+          justify-content: space-evenly;
+
+          .item {
+            gap: 10px;
+          }
+        }
+      }
+    }
+
+    .actions {
+      width: 100%;
+      padding: 1rem;
+      box-sizing: border-box;
+      background-color: var(--color-resalto);
+      display: flex;
+      border-radius: 0 0 1rem 1rem;
+      align-items: end;
+      justify-content: space-evenly;
+
+      .btn {
+        width: 30% !important;
+        padding: 0.8rem 1rem;
+        border: none;
+        color: var(--color-text-hover-btn);
+        font-weight: 600;
+        border-radius: 8px;
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        text-transform: uppercase;
+      }
+      .cancel {
+        border: 1px solid var(--color-alert) !important;
+        color: var(--color-alert);
+        background: transparent;
+
+        &:hover {
+          background: var(--color-alert);
+          color: var(--color-text-title);
+          transition: ease 1s;
+        }
+      }
+
+      .save {
+        background: var(--color-modal);
+        color: var(--color-text-hover-btn);
+
+        &:hover {
+          background: var(--color-selected);
+          color: var(--color-text-hover-btn);
+          transition: ease 0.3s;
+        }
+      }
+    }
+  }
+}

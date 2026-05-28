@@ -36,6 +36,14 @@ export class RegisterStateService {
     this.updateSelectedRegister({ statusRegister: newState });
   }
 
+  updateTotal(total: number) {
+    this.updateSelectedRegister({ totalPagar: total });
+  }
+
+  updateAntisipo(antisipo: number) {
+    this.updateSelectedRegister({ antisipo: antisipo });
+  }
+
   clear() {
     this._register.set([]);
     this._oneRegister.set(undefined);

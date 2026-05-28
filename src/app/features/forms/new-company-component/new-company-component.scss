@@ -30,14 +30,13 @@
         }
 
         input {
-          background-color: var(--color-secondary);
           width: 100%;
           box-sizing: border-box;
           margin: 10px auto 0 auto;
           padding: 4px 13px;
           font-weight: 600;
           border-radius: 8px;
-          color: var(--color-text);
+          color: black;
         }
 
         input.ng-invalid.ng-touched {
@@ -58,7 +57,7 @@
             display: block;
 
             &:before {
-              content: '⚠ ';
+              content: "⚠ ";
             }
           }
         }
@@ -83,6 +82,77 @@
             border: 2px solid var(--color-primary);
             box-shadow: 0 0 10px var(--color-primary);
           }
+        }
+      }
+    }
+  }
+}
+
+.action_logo {
+  width: 100% !important;
+  display: flex;
+  justify-content: space-between;
+
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .title_logo {
+    width: 80%;
+    display: block;
+    flex-direction: row;
+    padding: 1rem;
+    box-sizing: border-box;
+    background: var(--color-panel);
+    border-radius: 15px;
+    border: 1px solid var(--color-border);
+
+    .btn_option {
+      width: 140px;
+      height: 30px;
+      display: flex;
+      align-items: center !important;
+      justify-content: center !important;
+      position: relative;
+
+      input {
+        width: 20px !important;
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+      }
+      label {
+        width: 15ch !important;
+        position: absolute;
+        top: 50%;
+        left: 5px;
+      }
+    }
+
+    .entrada {
+      border: 2px solid var(--color-border);
+      background-color: var(--color-panel);
+      color: var(--color-text-title) !important;
+      padding: 10px;
+      border-radius: 8px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color var(--anim-duration-fast);
+
+      &:disabled {
+        border-color: var(--color-dif-negro);
+        background-color: var(--color-bg-delete);
+        cursor: not-allowed;
+        opacity: 0.7;
+        // color: var(--color-text);
+
+        &::file-selector-button {
+          background-color: var(--color-dif-uno);
+          border-color: var(--color-border);
+          color: var(--color-text-subtitle);
+          cursor: not-allowed;
         }
       }
     }

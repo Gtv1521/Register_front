@@ -14,12 +14,10 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-
-    "baseUrl": ".",
     "paths": {
-      "@environment": ["environment/environment.ts"]
+      "@environment": ["./environment/environment.ts"],
+      "*": ["./*"]
     }
-
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -93,6 +93,7 @@
             [isPhone]="true"
             name="telefono"
             id="telefono"
+            [maxLength]="10"
             placeholder="Telefono"
             formControlName="phone"
           />
@@ -117,27 +118,29 @@
           }
         </div>
 
-        <div class="form_group">
-          <label for="antisipo">Antisipo</label>
-          <input
-            type="text"
-            appOnlyNumbers
-            [isCurrency]="true"
-            formControlName="antisipo"
-            placeholder="0,0"
-          />
-        </div>
+        @if (!saveCliente) {
+          <div class="form_group">
+            <label for="antisipo">Antisipo</label>
+            <input
+              type="text"
+              appOnlyNumbers
+              [isCurrency]="true"
+              formControlName="antisipo"
+              placeholder="0,0"
+            />
+          </div>
 
-        <div class="form_group">
-          <label for="total">Total</label>
-          <input
-            type="text"
-            appOnlyNumbers
-            [isCurrency]="true"
-            formControlName="total"
-            placeholder="0,0"
-          />
-        </div>
+          <div class="form_group">
+            <label for="total">Total</label>
+            <input
+              type="text"
+              appOnlyNumbers
+              [isCurrency]="true"
+              formControlName="total"
+              placeholder="0,0"
+            />
+          </div>
+        }
       </form>
       @if (loadObservation) {
         <div class="observation">
@@ -157,11 +160,6 @@
             [disabled]="saveCliente"
             class="btn save"
           >
-            @if (loadIcono) {
-              <span class="icon">
-                <app-loader-component />
-              </span>
-            }
             <p>Guardar</p>
           </button>
         }
@@ -193,4 +191,8 @@
 </div>
 @if (loadIcono) {
   <app-cargando-accion-component [mensaje]="`Creando registro`" />
+}
+
+@if (isLoad()) {
+  <app-cargando-accion-component [mensaje]="`Actualizando cliente`" />
 }
