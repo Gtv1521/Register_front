@@ -6,6 +6,6 @@ export const environment = {
   // signalR: 'http://localhost:5272', // local
   // apiUrl: 'http://localhost:5272/api', // local
 
-  signalR: 'http://registerdatapqr.runasp.net', // production
-  apiUrl: 'http://registerdatapqr.runasp.net/api', // production
+  signalR: 'https://registerdatapqr.runasp.net', // production
+  apiUrl: 'https://registerdatapqr.runasp.net/api', // production
 };
