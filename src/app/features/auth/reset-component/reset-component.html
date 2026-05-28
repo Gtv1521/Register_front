@@ -1,1 +1,41 @@
-<p>reset-component works!</p>
+<div class="container">
+  <div class="container-fluid">
+    <section class="volver">
+      <a (click)="goLogin()">Volver</a>
+    </section>
+    <h3 class="title">Restablecer contraseña</h3>
+    <form class="container-form" [formGroup]="reset" (ngSubmit)="onSubmit()">
+      <section class="form_group">
+        <label for="">Email</label>
+        <input type="email" formControlName="email" placeholder="Email" />
+        @if (reset.get("email")?.touched && reset.get("email")?.invalid) {
+          <div class="error-message">
+            @if (reset.get("email")?.errors?.["required"]) {
+              <span>El correo es obligatorio</span>
+            } @else if (reset.get("email")?.errors?.["email"]) {
+              <span>El formato del correo no es válido</span>
+            } @else if (reset.get("email")?.errors?.["minlength"]) {
+              <span
+                >El correo debe tener al menos
+                {{ reset.get("email")?.errors?.["minlength"].requiredLength }}
+                caracteres</span
+              >
+            } @else {
+              <span>El correo tiene un error desconocido</span>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="enviar">
+        <button class="btn" type="submit" [disabled]="reset.invalid">
+          @if (loading) {
+           <app-loader-component />
+          }
+
+          Enviar
+        </button>
+      </section>
+    </form>
+  </div>
+</div>

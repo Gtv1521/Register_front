@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="container-fluid">
+    <div class="title">
+      <h2>Gestión de Sesiones</h2>
+    </div>
+    @if (loader()) {
+      <div class="loader">
+        <app-loader-component />
+      </div>
+    } @else {
+      @if (!sessionOn()) {
+        <div class="intro">
+          Se han alcanzado las sesiones maximas permitidas
+          <strong>(3)</strong> para un usuario.
+        </div>
+      }
+      <section class="title">Sesiones</section>
+      <div class="panel_sesiones">
+        @for (session of sessiomsList(); track session.id) {
+          <app-data-session-component
+            [session]="session"
+            (close)="onLogout($event)"
+          />
+        }
+      </div>
+      @if (!sessionOn()) {
+        <div class="options">
+          <button class="back" type="button">Regresar</button>
+          <button class="ok" type="button" (click)="onExit()">Listo</button>
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="container-fluid">
+    <div class="nav">
+      <button class="back" (click)="goBack()">Volver</button>
+      <h1>Temas</h1>
+    </div>
+    <div class="items">
+      <h2 class="title">Cambiar tema</h2>
+
+      <div class="themes">
+        <label
+          class="btn"
+          (click)="setTheme('light')"
+          (change)="selectedTheme.set('light')"
+          [class.active]="selectedTheme() === 'light'"
+        >
+          <input
+            type="radio"
+            name="theme"
+            [checked]="selectedTheme() === 'light'"
+            id="light"
+            class="theme"
+          />
+          <span class="material-symbols-outlined">Modo claro</span>
+          <div class="colors">
+            <div class="color uno"></div>
+            <div class="color dos"></div>
+            <div class="color tres"></div>
+            <div class="color cuatro"></div>
+          </div>
+        </label>
+        <label
+          class="btn"
+          (click)="setTheme('dark')"
+          (change)="selectedTheme.set('dark')"
+          [class.active]="selectedTheme() === 'dark'"
+        >
+          <input
+            type="radio"
+            [checked]="selectedTheme() === 'dark'"
+            name="theme"
+            id="dark"
+            class="theme"
+          />
+          <span class="material-symbols-outlined">Modo oscuro</span>
+          <div class="colors">
+            <div class="color cuatro"></div>
+            <div class="color cinco"></div>
+            <div class="color seis"></div>
+            <div class="color siete"></div>
+          </div>
+        </label>
+        <label
+          class="btn"
+          [class.active]="selectedTheme() === 'blue_theme'"
+          (click)="setTheme('blue_theme')"
+          (change)="selectedTheme.set('blue_theme')"
+        >
+          <input
+            type="radio"
+            name="theme"
+            id="blue_theme"
+            [checked]="selectedTheme() === 'blue_theme'"
+            class="theme"
+          />
+          <span class="material-symbols-outlined">Modo azul</span>
+          <div class="colors">
+            <div class="color ocho"></div>
+            <div class="color nueve"></div>
+            <div class="color diez"></div>
+            <div class="color once"></div>
+          </div>
+        </label>
+        <label
+          class="btn"
+          [class.active]="selectedTheme() === 'blue_theme'"
+          (click)="setTheme('blue_theme')"
+          (change)="selectedTheme.set('blue_theme')"
+        >
+          <input type="radio" name="theme" id="blue_theme" class="theme" />
+          <span class="material-symbols-outlined">Modo azul</span>
+          <div class="colors">
+            <div class="color doce"></div>
+            <div class="color trece"></div>
+            <div class="color catorce"></div>
+            <div class="color quince"></div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

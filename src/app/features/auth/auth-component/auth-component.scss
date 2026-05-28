@@ -1,14 +1,14 @@
-@use '../../../_styles/variables' as var;
+@use 'variables' as *;
 
-.contain {
-    width: 100%;
-    height: 100dvh;
-    background-color: var.$fondo_primario;
-    margin: auto;
-    display: flex;
-    justify-content: center;
+// .contain {
+//     width: 100%;
+//     height: 100dvh;
+//     background-color: var.$fondo_primario;
+//     margin: auto;
+//     display: flex;
+//     justify-content: center;
 
-    .body {
-        width: 60%;
-    } 
-}
+//     .body {
+//         // width: 60%;
+//     } 
+// }

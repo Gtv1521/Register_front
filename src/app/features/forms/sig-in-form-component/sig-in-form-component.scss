@@ -1,0 +1,153 @@
+@use "variables" as vars;
+
+.container {
+  width: 90%;
+  margin: auto;
+
+  .container-fluid {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .title {
+      width: 100%;
+      text-align: start;
+      font-size: 1.3rem;
+      margin: 15px 0;
+      color: var(--color-text-title);
+    }
+
+    .container-form {
+      width: 100%;
+      .group_item {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+
+        label {
+          width: 100%;
+          font-weight: 800;
+
+          &.item_name {
+            color: var(--color-text-title);
+          }
+        }
+
+        input {
+          width: 100%;
+          height: 30px;
+          box-sizing: border-box;
+          padding: 4px 13px;
+          font-weight: 600;
+          border-radius: 8px;
+          background-color: var(--color-bg);
+          color: var(--color-text);
+          border: 1px solid var(--color-border);
+
+          &.item_type {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+          }
+        }
+
+        input.ng-invalid.ng-touched {
+          border-color: var(--color-error);
+        }
+
+        /* Cuando el campo es válido */
+        input.ng-valid.ng-touched {
+          border-color: var(--color-success);
+        }
+
+        .error-message {
+          font-size: 0.85rem;
+          color: var(--color-error);
+          font-weight: 500;
+
+          span {
+            display: block;
+            color: var(--color-error);
+
+            &:before {
+              content: '⚠ ';
+            }
+          }
+        }
+
+        .validate_email_message {
+          margin-top: 0.5rem;
+          padding: 0.75rem;
+          font-size: 0.85rem;
+          font-weight: 500;
+          border-radius: 0.4rem;
+          color: var(--color-error);
+
+          span {
+            display: block;
+          }
+        }
+
+        .form_validate {
+          width: 100%;
+          height: auto;
+          position: relative;
+          margin-top: 0 !important;
+
+          .validate_email {
+            height: 100%;
+          }
+
+          .loader {
+            width: 20px;
+            height: 20px;
+            color: var(--color-error);
+            position: absolute;
+            right: 1%;
+            top: 50%;
+            transform: translateY(-40%);
+          }
+
+          .error {
+            border-color: var(--color-error);
+          }
+          .loader_email {
+            position: absolute;
+            right: 1%;
+            top: 50%;
+            transform: translateY(-40%);
+
+            .icono {
+              color: var(--color-error);
+            }
+          }
+        }
+      }
+
+      .options {
+        height: 40px;
+      }
+
+      .enviar {
+        .submit {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          border-radius: 10px;
+          padding: 5px;
+          font-weight: 700;
+
+          &:hover {
+            border: 2px solid var(--color-selected);
+            box-shadow: 0 0 10px var(--color-selected);
+          }
+        }
+      }
+    }
+  }
+}

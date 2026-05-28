@@ -1,29 +1,112 @@
 <div class="contain">
-  <form class="formulario" action="">
-    <h3 class="title">Inicia session</h3>
+  <form class="formulario" [formGroup]="login" (ngSubmit)="onSubmit()">
+    <h3 class="title">Iniciar sesión</h3>
+
+    @if (success()) {
+      <div class="success-message">
+        <span>✓ Sesión iniciada correctamente</span>
+      </div>
+    }
+
+    @if (error()) {
+      @if (error()?.error?.status === 400) {
+        <div class="error-alert">
+          <span>{{ error()?.error?.message }}</span>
+        </div>
+      } @else {
+        <div class="error-alert">
+          <span>{{ error()?.error?.message }}</span>
+        </div>
+      }
+    }
 
     <div class="container-fluid">
       <section class="group-items">
-        <label class="item_name" for="email">Email: </label>
-        <input class="item_type" type="text" id="Email" placeholder="Email" />
+        <label class="item_name" for="email">Correo: </label>
+        <input
+          class="item_type"
+          formControlName="email"
+          type="text"
+          id="email"
+          placeholder="Email"
+        />
+
+        @if (login.get("email")?.touched && login.get("email")?.invalid) {
+          <div class="error-message">
+            @if (login.get("email")?.errors?.["required"]) {
+              <span>El correo es obligatorio</span>
+            } @else if (login.get("email")?.errors?.["minlength"]) {
+              <span>
+                El correo debe tener al menos
+                {{ login.get("email")?.errors?.["minlength"].requiredLength }}
+              </span>
+            } @else {
+              <span>El correo tiene un error desconocido</span>
+            }
+          </div>
+        }
       </section>
 
       <section class="group-items">
         <label class="item_name" for="password">Contraseña: </label>
-        <input class="item_type" [type]="estado ? 'text' : 'password'" placeholder="*********"/>
+        <input
+          id="password"
+          class="item_type"
+          [type]="estado() ? 'text' : 'password'"
+          placeholder="Contraseña"
+          formControlName="password"
+        />
+        @if (login.get("password")?.touched && login.get("password")?.invalid) {
+          <div class="error-message">
+            @if (login.get("password")?.errors?.["required"]) {
+              <span>La contraseña es obligatoria</span>
+            } @else if (login.get("password")?.errors?.["minlength"]) {
+              <span>
+                La contraseña debe tener al menos
+                {{ login.get("email")?.errors?.["minlength"].requiredLength }}
+              </span>
+            } @else {
+              <span>La contraseña tiene un error desconocido</span>
+            }
+          </div>
+        }
       </section>
 
       <section class="options">
         <div class="view">
-          <input (click)="togglePassword()" type="checkbox" name="show" id="show" />
-          <label for="show">   Mostrar contraseña</label>
+          <input
+            (click)="togglePassword()"
+            type="checkbox"
+            name="show"
+            id="show"
+          />
+          <label for="show">
+            {{ estado() ? " Ocultar" : " Mostrar" }} contraseña</label
+          >
         </div>
-        <div class="restore">¿Olvido su constraseña?</div>
+        <div class="restore" (click)="goReset()">
+          <p class="link">¿Olvido su constraseña?</p>
+        </div>
       </section>
 
       <section class="exit">
-        <input type="button" value="Entrar" />
+        <button type="submit" class="submit">
+          @if (loading()) {
+            <span class="load">
+              <app-loader-component />
+            </span>
+          }
+          <p>Entrar</p>
+        </button>
       </section>
     </div>
+    <div (click)="goSigIn()" class="add_user">
+      <p class="link">Crear usuario</p>
+    </div>
+    @if (error()?.error?.status === 400) {
+      <div class="sessions">
+        <p (click)="goSessions()">Ver sesiones</p>
+      </div>
+    }
   </form>
 </div>

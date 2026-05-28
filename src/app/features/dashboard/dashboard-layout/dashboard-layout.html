@@ -1,65 +1,182 @@
-<div class="container">
-  <div class="container-fluid">
-    <!-- componente de busqueda -->
-    <mat-icon class="icons">delete</mat-icon>
-    <div class="card-search">
-      <div class="search-box">
-        <input type="text" [(ngModel)]="busqueda" [placeholder]="
-          filtroActual === 'todo' ? 'Buscar en todo' :
-          filtroActual === 'Completo' ? 'Buscar en completos' :
-          filtroActual === 'pendiente' ? 'Buscar en pendientes' :
-          filtroActual === 'registro' ? 'Buscar por código o registro' :
-          'Buscar por cliente'
-        " (keyup.enter)="onBuscar()" />
-        <mat-icon class="search-icon" (click)="onBuscar()">search</mat-icon>
-      </div>
-    </div>
-    <mat-icon class="icons">exit_to_app</mat-icon>
-  </div>
-  <!--mapeo de registros-->
-  <div class="content">
-    <div class="registers">
-      @for (registro of registrosFiltrados; track registro?.registro?.id) {
-      <app-card-component [registro]="registro" (verDetalleEvent)="verDetalle($event)"></app-card-component>
-      }
-    </div>
-  </div>
+<!-- session de usuario  -->
+<app-session-component />
+@if (loader()) {
+  <app-loader-session-component />
+} @else {
+  <!-- componentes de dashboard -->
+  <div class="container">
+    @if (onDelete()) {
+      <div class="panel_delete">
+        <div class="delete_title">
+          <h2>Eliminar registros</h2>
+        </div>
 
-  <footer class="dashboard-footer">
-    <!-- usuario logeado -->
-    <div class="footer-left">
-      <mat-icon class="user-icon">account_circle</mat-icon>
-      <div class="user-info">
-        <span class="user-name">Juan Pérez</span>
-        <span class="user-role">Técnico</span>
-      </div>
-    </div>
-    <div class="footer-center">
-      <span class="system-name">Centro de Reparación Electrónica</span>
-      <span class="system-version">v1.0.0</span>
-    </div>
-    <div class="footer-right">
-      <!-- filtros del buscador -->
-      <div class="filters">
-        <div class="modos">
+        <div class="cantidad">
+          <strong> Cantidad: {{ listDelete().length }} </strong>
+        </div>
 
-          <button [class.active]="filtroActual === 'todo'" (click)="setCambiarFiltro('todo')">
-            Todo
-          </button>
-          <button [class.active]="filtroActual === 'Completo'" (click)="setCambiarFiltro('Completo')">
-            Completo
-          </button>
-          <button [class.active]="filtroActual === 'pendiente'" (click)="setCambiarFiltro('pendiente')">
-            Pendiente
-          </button>
-          <button [class.active]="filtroActual === 'registro'" (click)="setCambiarFiltro('registro')">
-            Registro
-          </button>
-          <button [class.active]="filtroActual === 'cliente'" (click)="setCambiarFiltro('cliente')">
-            Cliente
-          </button>
+        <div class="options_delete">
+          <button class="btn" (click)="OnDelete()">Cancelar</button>
+          <button class="btn" (click)="onBorrar()">Eliminar</button>
         </div>
       </div>
+    } @else {
+      <div class="container-fluid">
+        <!-- componente de busqueda -->
+        <div class="options">
+          <mat-icon class="icons" (click)="OnDelete()">delete</mat-icon>
+
+          <mat-icon class="icons" (click)="openNewRegister()"
+            >add_to_queue</mat-icon
+          >
+        </div>
+
+        <div class="card-search">
+          <div class="search-box">
+            @if (onSearch()) {
+              <div class="icono limpiar">
+                <mat-icon class="clean" (click)="desactivarFiltro()"
+                  >close</mat-icon
+                >
+              </div>
+            }
+            <form [formGroup]="search">
+              <!-- [(ngModel)]="busqueda" -->
+              <input
+                type="text"
+                formControlName="filtro"
+                [placeholder]="
+                  filterType() === 'todo'
+                    ? 'Buscar en todo'
+                    : filterType() === 'En progreso'
+                      ? 'Buscar en progreso'
+                      : filterType() === 'Completado'
+                        ? 'Buscar en alertas'
+                        : filterType() === 'cancelado'
+                          ? 'Buscar por código o registro'
+                          : 'Buscar por cliente'
+                "
+                (keyup.enter)="onBuscar()"
+              />
+              <div class="icono buscar">
+                <mat-icon class="search" (click)="onBuscar()">search</mat-icon>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <mat-icon class="icons" (click)="onLogout()">exit_to_app</mat-icon>
+      </div>
+    }
+    <!-- mapeo de registros -->
+    <div class="content" (scroll)="onScroll($event)">
+      @if (loadeRegister()) {
+        <div class="floads">
+          <app-loader-component class="loader" />
+        </div>
+      } 
+      @if (filterError() && !loadeRegister()) {
+        <div class="notFound">No hay datos</div>
+      }
+       @if(filteredObservations().length !== 0)  {
+        <div class="registers">
+          @for (registro of filteredObservations(); track registro.id) {
+            <app-card-component
+              [registro]="registro"
+              [delete]="onDelete()"
+              (select)="DeleteRegisters($event)"
+              (verDetalleEvent)="verDetalle($event)"
+            />
+          }
+        </div>
+      }
     </div>
-  </footer>
-</div>
+
+    <footer class="dashboard-footer">
+      <!-- usuario logeado -->
+
+      <div class="footer">
+        <div class="footer-left" [class.activa]="settings()">
+          <mat-icon class="user-icon">account_circle</mat-icon>
+          <div class="user-info" (click)="onSettings()">
+            <span class="user-name">{{ usuario()?.name }}</span>
+            <span class="user-role"> {{ usuario()?.rol }} </span>
+          </div>
+        </div>
+
+        <div class="footer-center">
+          <span class="system-name">
+            <strong> {{ company()?.name }}</strong>
+          </span>
+          <!-- <span class="system-version">v1.0.0</span> -->
+        </div>
+
+        <div class="footer-right">
+          <!-- filtros del buscador -->
+          <div class="filters">
+            <div class="modos">
+              <button
+                [class.active]="filterType() === 'todo'"
+                (click)="setFilter('todo')"
+              >
+                Todo
+              </button>
+
+              <button
+                [class.active]="filterType() === 'En progreso'"
+                (click)="setFilter('En progreso')"
+              >
+                En Progreso
+              </button>
+
+              <button
+                [class.active]="filterType() === 'Pendiente'"
+                (click)="setFilter('Pendiente')"
+              >
+                Pendiente
+              </button>
+
+              <button
+                [class.active]="filterType() === 'Completado'"
+                (click)="setFilter('Completado')"
+              >
+                Completado
+              </button>
+
+              <button
+                [class.active]="filterType() === 'cancelado'"
+                (click)="setFilter('cancelado')"
+              >
+                Cancelado
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+}
+
+@if (newRegister) {
+  <app-new-register-component (Close)="onCloseNewRegister()" />
+}
+
+@if (settings()) {
+  <app-settings-component
+    [company]="usuario()?.idCompany"
+    [role]="usuario()?.rol"
+    [id]="idUser()"
+    (Closed)="onSettings()"
+  />
+}
+
+@if (onModal()) {
+  <app-confirm-alert-component
+    (respuesta)="respuestaModal($event)"
+    [pregunta]="`¿ Seguro quiere eliminar ${listDelete().length} registros ?`"
+  />
+}
+
+@if (eliminando()) {
+  <app-cargando-accion-component [mensaje]="`Eliminando registros`" />
+}

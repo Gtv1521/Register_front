@@ -1,0 +1,128 @@
+<div class="container">
+  <!-- <div class="container-fluid"> -->
+  <div class="observation-create">
+    <header class="header">
+      <h2>Nueva observación</h2>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+      <!-- DESCRIPCIÓN -->
+      <div class="form_group">
+        <div class="field">
+          <label for="description">Descripción</label>
+          <textarea
+            id="description"
+            (keydown)="handleTab($event)"
+            formControlName="description"
+            placeholder="Describe la observación realizada..."
+          >
+          </textarea>
+
+          @if (
+            form.controls.description.touched &&
+            form.controls.description.invalid
+          ) {
+            <small class="error">
+              La descripción es obligatoria (mínimo 10 caracteres)
+            </small>
+          }
+        </div>
+        <!-- ESTADO -->
+        <section class="form_group">
+          <div class="field">
+            <label>Estado</label>
+            <select formControlName="type">
+              <option value="" disabled selected hidden>
+                Seleccione un estado
+              </option>
+              @for (item of estados; track item.value) {
+                <option [ngValue]="item.value">
+                  {{ item.label }}
+                </option>
+              }
+            </select>
+            @if (form.get("type")?.touched && form.get("type")?.invalid) {
+              <div class="error">
+                @if (form.get("type")?.errors?.["required"]) {
+                  <span>El estado es obligatorio</span>
+                } @else {
+                  <span>El estado tiene un error desconocido</span>
+                }
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="form_group">
+          <!-- Checks de envio a redes -->
+          <div class="field">
+            <label class="title_notify">Notificación</label>
+            <div class="notify_panel">
+              <div class="notify_group">
+                <input
+                  id="correo"
+                  type="checkbox"
+                  formControlName="notificaEmail"
+                />
+                <label for="correo"> Correo </label>
+              </div>
+
+              <div class="notify_group">
+                <input
+                  id="chat"
+                  type="checkbox"
+                  formControlName="notificaWhatsapp"
+                />
+                <label for="chat"> WhatsApp </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Imagenes -->
+          <div class="form_group">
+            <div class="field">
+              <label>Evidencias</label>
+              <div class="photo-preview">
+                @for (photo of photoPreviews; track photo) {
+                  <img
+                    [src]="photo"
+                    alt="preview"
+                    (click)="removePhoto(photoPreviews.indexOf(photo))"
+                  />
+                }
+              </div>
+              <label class="upload-btn">
+                <mat-icon>photo_camera</mat-icon>
+                Agregar fotos
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  hidden
+                  (change)="onPhotosSelected($event)"
+                />
+              </label>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- ACCIONES -->
+      @if (!onRegister) {
+        <div class="actions">
+          <button type="button" class="btn-cancel" (click)="cancelar()">
+            Cancelar
+          </button>
+
+          <button type="submit" class="btn-save">
+            <span>Guardar</span>
+          </button>
+        </div>
+      }
+    </form>
+  </div>
+  <!-- </div> -->
+</div>
+
+@if (loader()) {
+  <app-cargando-accion-component [mensaje]="`Creando observacion!!!`" />
+}

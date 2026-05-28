@@ -1,0 +1,184 @@
+@if (loader()) {
+  <app-loader-session-component />
+} @else {
+  <div class="padre">
+    <div class="nav_header">
+      @if (!invitado()) {
+        <button (click)="goBack()" class="back-button">Volver</button>
+      }
+    </div>
+    <div class="see-observation-container">
+      <div class="container">
+        <!-- nombre de la empresa -->
+        <div class="name_company">
+          <h1>{{ company().name || "Nombre de empresa" }}</h1>
+        </div>
+        <!-- sección de encabezado -->
+        <div class="header">
+          <div class="header-left">
+            <h3>Detalles</h3>
+            <div class="details">
+              <p>
+                <strong>Fecha registro: </strong>
+                <i>{{
+                  register.oneRegisterState()?.createdAt
+                    | date: "EEEE, d MMMM yyyy HH:mm"
+                }}</i>
+              </p>
+              <P
+                ><strong>Estado: </strong>
+                <i>{{ register.oneRegisterState()?.statusRegister }} </i></P
+              >
+              <p>
+                <strong>Tecnico: </strong
+                ><i>{{ register.oneRegisterState()?.tecnico }}</i>
+              </p>
+              <p><strong>Servicio: </strong> <i>Mantenimiento</i></p>
+              <p>
+                <strong>total: </strong>
+                <i>
+                  {{
+                    register.oneRegisterState()?.totalPagar
+                      | currency: "COP" : "symbol-narrow" : "1.2-2"
+                  }}
+                </i>
+              </p>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <h3>Datos cliente</h3>
+            <div class="client-details">
+              <p>
+                <strong>Nombre: </strong> <i>{{ client()?.name }}</i>
+              </p>
+              <p>
+                <strong>Teléfono: </strong>
+                <i>{{ client()?.phone }} </i>
+              </p>
+              <p>
+                <strong>Email: </strong> <i>{{ client()?.email }} </i>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- sección de observaciones -->
+        <div class="observations-section">
+          <h2>Registro {{ register.oneRegisterState()?.registroNumber }}</h2>
+          <div class="header_observations">
+            <div class="search-box">
+              <div class="input_search">
+                <input
+                  type="text"
+                  [(ngModel)]="busqueda"
+                  [placeholder]="
+                    filterActual() === 'todo'
+                      ? 'Buscar en todo'
+                      : filterActual() === 'Ultimos'
+                        ? 'Buscar en los últimos'
+                        : 'Buscar en los primeros'
+                  "
+                  (keyup.enter)="onBuscar()"
+                />
+                <mat-icon class="search-icon" (click)="onBuscar()"
+                  >search</mat-icon
+                >
+              </div>
+
+              <div class="panel-opciones">
+                <section class="modos">
+                  <button
+                    [class.active]="filterActual() === 'todo'"
+                    (click)="onVerTodos()"
+                  >
+                    Todo
+                  </button>
+
+                  <button
+                    [class.active]="filterActual() === 'Ultimos'"
+                    (click)="onVerUltimos()"
+                  >
+                    Ultimos
+                  </button>
+
+                  <button
+                    [class.active]="filterActual() === 'Primeros'"
+                    (click)="onVerPrimeros()"
+                  >
+                    Primeros
+                  </button>
+                </section>
+
+                <section class="options">
+                  @if (invitado() === false) {
+                    <button
+                      class="btn btn-download"
+                      (click)="imprimirDocumento()"
+                      title="download"
+                    >
+                      <mat-icon class="icon">download</mat-icon>
+                    </button>
+                    <button
+                      class="btn"
+                      (click)="toogleNueva()"
+                      title="add observation"
+                    >
+                      <mat-icon class="icon">add</mat-icon>
+                    </button>
+                  }
+                </section>
+              </div>
+            </div>
+          </div>
+          <section class="observations">
+            @if (nueva()) {
+              <app-new-observation-component
+                [idRegister]="register.oneRegisterState()?.id!"
+                (close)="onCloseModal($event)"
+                (ChangeEditar)="onChangeState($event)"
+              />
+            }
+            @for (observacion of observationsList(); track observacion?.id) {
+              <app-card-observation
+                [Observation]="observacion"
+                [invitado]="invitado()"
+                [registerStatus]="register.oneRegisterState()?.statusRegister"
+              />
+            } @empty {
+              @if (!nueva()) {
+                <section class="no_data">
+                  <strong>No hay obsevasiones</strong>
+                </section>
+              }
+            }
+          </section>
+        </div>
+
+        <!-- pie de pagina -->
+        <div class="footer">
+          <div class="left">
+            <img class="image-logo" [src]="company().logoUrl" alt="" />
+          </div>
+          <div class="center">
+            <h3><strong>Nit: </strong> {{ company().nit }}</h3>
+            <h3><strong>Dirección: </strong> {{ company().address }}</h3>
+            <h3><strong>Teléfono: </strong> +57 {{ company().phone }}</h3>
+            <h3><strong>Email: </strong> {{ company().email }}</h3>
+          </div>
+          <div class="right">
+            @if (register.oneRegisterState()?.urlQr) {
+              <img
+                class="qr-code"
+                [src]="register.oneRegisterState()?.urlQr"
+                alt="QR Code"
+              />
+            } @else {
+              <p>No hay QR</p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

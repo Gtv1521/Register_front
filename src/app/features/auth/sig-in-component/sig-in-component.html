@@ -1,1 +1,40 @@
-<p>sig-in-component works!</p>
+<div class="container">
+  <div class="container-fluid">
+    <div class="panel_forms">
+      <h1 class="title">Registrar</h1>
+      <app-new-company-component [class.disabled]="siguiente" #company />
+
+      @if (!siguiente) {
+        <div class="opciones">
+          <button class="btn save" type="button" (click)="onSeguir()">Siguiente</button>
+        </div>
+      } @else {
+        <app-sig-in-form-component #user />
+        <div class="opciones">
+          <button class="btn cancel" type="button" (click)="onBack()">Volver</button>
+
+          <button class="btn save" type="button" (click)="onSubmit()">
+            <div class="icon">
+              @if (loader) {
+                <app-loader-component />
+              }
+            </div>
+            Crear
+          </button>
+        </div>
+      }
+
+      <span class="link" (click)="goLogin()">
+        Iniciar session
+      </span>
+
+      @if (error) {
+        @if (error.status === 400) {
+          <div class="error_message">
+            {{ error.error }}
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>

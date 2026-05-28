@@ -1,0 +1,21 @@
+<div class="container">
+  <h2 class="title">Usuarios</h2>
+  <div class="container-fluid">
+    <div class="panel_usuarios">
+      @if (loader()) {
+        <div class="loader-content">
+          <app-loader-component />
+        </div>
+      } @else {
+        <div class="users">
+          @for (user of users(); track user.id) {
+            <app-card-user-component 
+              [user]="user" 
+              (onDelete)="onUserDeleted($event)"
+            />
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

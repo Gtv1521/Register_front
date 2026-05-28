@@ -1,0 +1,157 @@
+<div class="container">
+  <div class="container-fluid">
+    <h2 class="title">Registrar Empresa</h2>
+    <form class="container-form" #formDirective="ngForm" [formGroup]="form">
+      <!-- name -->
+      <div class="form_group">
+        <label for="name">Nombre/Razon social: </label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          placeholder="Nombre"
+        />
+
+        @if (form.get("name")?.touched && form.get("name")?.invalid) {
+          <div class="error-message">
+            @if (form.get("name")?.errors?.["required"]) {
+              <span>El nombre es obligatorio</span>
+            } @else if (form.get("name")?.errors?.["minlength"]) {
+              <span>
+                El nombre debe tener al menos
+                {{ form.get("name")?.errors?.["minlength"].requiredLength }}
+                caracteres
+              </span>
+            } @else {
+              <span>El nombre tiene un error desconocido</span>
+            }
+          </div>
+        }
+      </div>
+      <!-- nit -->
+      <div class="form_group">
+        <label for="nit">Nit: </label>
+        <input type="text" id="nit" formControlName="nit" placeholder="Nit" />
+        @if (form.get("nit")?.touched && form.get("nit")?.invalid) {
+          <div class="error-message">
+            @if (form.get("nit")?.errors?.["required"]) {
+              <span>El nit es obligatorio</span>
+            } @else if (form.get("nit")?.errors?.["minlength"]) {
+              <span>
+                El nit debe tener al menos
+                {{ form.get("nit")?.errors?.["minlength"].requiredLength }}
+                caracteres
+              </span>
+            } @else {
+              <span>El nit tiene un error desconocido</span>
+            }
+          </div>
+        }
+      </div>
+      <!-- address -->
+      <div class="form_group">
+        <label for="address">Direccion: </label>
+        <input
+          type="text"
+          id="address"
+          formControlName="address"
+          placeholder="Direccion"
+        />
+
+        @if (form.get("address")?.touched && form.get("address")?.invalid) {
+          <div class="error-message">
+            @if (form.get("address")?.errors?.["required"]) {
+              <span>La dirección es obligatoria</span>
+            } @else if (form.get("address")?.errors?.["minlength"]) {
+              <span>
+                La dirección debe tener al menos
+                {{ form.get("address")?.errors?.["minlength"].requiredLength }}
+                caracteres
+              </span>
+            } @else {
+              <span>La dirección tiene un error desconocido</span>
+            }
+          </div>
+        }
+      </div>
+      <!-- phone -->
+      <div class="form_group">
+        <label for="phone">Telefono: </label>
+        <input
+          type="text"
+          id="phone"
+          formControlName="phone"
+          placeholder="Telefono"
+        />
+        @if (form.get("phone")?.touched && form.get("phone")?.invalid) {
+          <div class="error-message">
+            @if (form.get("phone")?.errors?.["required"]) {
+              <span>El teléfono es obligatorio</span>
+            } @else if (form.get("phone")?.errors?.["minlength"]) {
+              <span>
+                El teléfono debe tener al menos
+                {{ form.get("phone")?.errors?.["minlength"].requiredLength }}
+                caracteres
+              </span>
+            } @else {
+              <span>El teléfono tiene un error desconocido</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- email -->
+      <div class="form_group">
+        <label for="email">Correo: </label>
+        <input
+          type="text"
+          id="email"
+          formControlName="email"
+          placeholder="Correo electrónico"
+        />
+        @if (form.get("email")?.touched && form.get("email")?.invalid) {
+          <div class="error-message">
+            @if (form.get("email")?.errors?.["required"]) {
+              <span>El email es obligatorio</span>
+            } @else if (form.get("email")?.errors?.["minlength"]) {
+              <span>
+                El email debe tener al menos
+                {{ form.get("email")?.errors?.["minlength"].requiredLength }}
+                caracteres
+              </span>
+            }@else if (form.get("email")?.errors?.["email"]) {
+              <span>El correo no es válido</span>
+            } @else {
+              <span>El email tiene un error desconocido</span>
+            }
+          </div>
+        }
+      </div>
+      <!-- image -->
+      <div class="form_group">
+        <label for="image">Logo</label>
+        <input
+          type="file"
+          (change)="onFileChange($event)"
+          name="image"
+          id="image"
+        />
+        @if (form.get("image")?.touched && form.get("image")?.invalid) {
+          <div class="error-message">
+            @if (form.get("image")?.errors?.["required"]) {
+              <span>La imagen es obligatoria</span>
+            } @else if (form.get("image")?.errors?.["minlength"]) {
+              <span>
+                La imagen debe tener al menos
+                {{ form.get("image")?.errors?.["minlength"].requiredLength }}
+                caracteres
+              </span>
+            } @else {
+              <span>La imagen tiene un error desconocido</span>
+            }
+          </div>
+        }
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="card-observation">
+    <div class="panel_title">
+      <h3>Observación</h3>
+      <h3>{{ Observation()?.id }}</h3>
+      <!-- BOTONES -->
+      <div class="buttons">
+        @if (!invitado() && registerStatus() !== "Entregado") {
+          <button class="boton editar">
+            <span><mat-icon>edit</mat-icon> </span>
+          </button>
+          <button class="boton eliminar" (click)="onDeleteObservation()">
+            <span>
+              <mat-icon>delete</mat-icon>
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="panel_contenido">
+      <!-- LADO IZQUIERDO -->
+      <div
+        class="panel_left"
+        [class.size]="Observation()?.photos?.length! === 0"
+      >
+        <div class="container_description">
+          <h3 class="title">Detalles</h3>
+          <div class="description" [innerHTML]="textoFormateado()"></div>
+        </div>
+      </div>
+
+      <!-- LADO DERECHO -->
+      @if (Observation()?.photos?.length! > 0) {
+        <div class="panel_right">
+          <h3>Evidencias:</h3>
+          <!-- GALERÍA -->
+          <div class="photos">
+            <div class="photo-list">
+              @for (photo of Observation()?.photos; track photo.id) {
+                <img
+                  (click)="openModal()"
+                  [src]="photo.photo"
+                  [id]="photo.id"
+                  class="observation-photo"
+                />
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="date">
+      Fecha:
+      {{ Observation()?.createdAt | date: "EEEE, d MMMM yyyy HH:mm" }}
+    </div>
+  </div>
+</div>
+
+@if (showModal()) {
+  <app-modal-imege [photos]="photos()" (close)="closeModal()" />
+}
+
+@if (alertDelete()) {
+  <app-confirm-alert-component
+    [pregunta]="
+      `¿Seguro quiere elimiar la observacion con id <strong> ${Observation()?.idRegister} </strong> ?`
+    "
+    (respuesta)="deleteOk($event)"
+  />
+}
+
+@if (loadDelete()) {
+  <app-cargando-accion-component
+    [mensaje]="'Eliminando observación...'"
+    />
+}

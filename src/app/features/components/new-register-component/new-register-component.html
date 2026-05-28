@@ -1,0 +1,196 @@
+<div class="contenedor">
+  <div class="nav">
+    <button class="back" (click)="onBack()">Volver</button>
+  </div>
+  <div class="container-fluid">
+    <div class="panel_data">
+      <div class="title">
+        {{ saveCliente ? "Editar Cliente" : "Nuevo registro" }}
+      </div>
+      <form [formGroup]="register" class="registro" autocomplete="off">
+        <div class="form_group">
+          <label for="email">Email: </label>
+          <div class="box_mail">
+            <input
+              [class.active_search]="loader_mail"
+              type="text"
+              name="email"
+              id="email"
+              (blur)="goEmail()"
+              placeholder="Email"
+              formControlName="email"
+            />
+            @if (loader_mail) {
+              <span class="icon"><app-loader-component /></span>
+            }
+          </div>
+
+          @if (errores?.status == 404) {
+            <strong class="err">No registrado</strong>
+          }
+          @if (
+            register.get("email")?.touched && register.get("email")?.invalid
+          ) {
+            <div class="error-message">
+              @if (register.get("email")?.errors?.["required"]) {
+                <span>El correo es obligatorio</span>
+              } @else if (register.get("email")?.errors?.["minlength"]) {
+                <span>
+                  El correo debe tener al menos
+                  {{
+                    register.get("email")?.errors?.["minlength"].requiredLength
+                  }}
+                </span>
+              } @else {
+                <span>El correo tiene un error desconocido</span>
+              }
+            </div>
+          }
+        </div>
+        <!-- si el cliente existe lo puede editar -->
+        @if (client) {
+          <div class="client_carge">
+            <strong class="ok">Datos cargados </strong>
+            @if (editar) {
+              <button class="btn change" (click)="onChangeEdit()">
+                Modificar datos
+              </button>
+            }
+          </div>
+        }
+        <div class="form_group">
+          <label for="cliente">Nombre: </label
+          ><input
+            type="text"
+            name="cliente"
+            id="cliente"
+            placeholder="Nombre"
+            formControlName="name"
+          />
+
+          @if (register.get("name")?.touched && register.get("name")?.invalid) {
+            <div class="error-message">
+              @if (register.get("name")?.errors?.["required"]) {
+                <span>El cliente es obligatorio</span>
+              } @else if (register.get("name")?.errors?.["minlength"]) {
+                <span>
+                  El cliente debe tener al menos
+                  {{
+                    register.get("name")?.errors?.["minlength"].requiredLength
+                  }}
+                </span>
+              } @else {
+                <span>El cliente tiene un error desconocido</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="form_group">
+          <label for="telefono">Telefono: </label
+          ><input
+            type="text"
+            appOnlyNumbers
+            [isPhone]="true"
+            name="telefono"
+            id="telefono"
+            placeholder="Telefono"
+            formControlName="phone"
+          />
+
+          @if (
+            register.get("phone")?.touched && register.get("phone")?.invalid
+          ) {
+            <div class="error-message">
+              @if (register.get("phone")?.errors?.["required"]) {
+                <span>El telefono es obligatorio</span>
+              } @else if (register.get("email")?.errors?.["minlength"]) {
+                <span>
+                  El telefono debe tener al menos
+                  {{
+                    register.get("phone")?.errors?.["minlength"].requiredLength
+                  }}
+                </span>
+              } @else {
+                <span>El telefono tiene un error desconocido</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form_group">
+          <label for="antisipo">Antisipo</label>
+          <input
+            type="text"
+            appOnlyNumbers
+            [isCurrency]="true"
+            formControlName="antisipo"
+            placeholder="0,0"
+          />
+        </div>
+
+        <div class="form_group">
+          <label for="total">Total</label>
+          <input
+            type="text"
+            appOnlyNumbers
+            [isCurrency]="true"
+            formControlName="total"
+            placeholder="0,0"
+          />
+        </div>
+      </form>
+      @if (loadObservation) {
+        <div class="observation">
+          <app-observation-create
+            #observation
+            [onRegister]="true"
+            [IdRegister]="idRegister"
+          />
+        </div>
+      }
+
+      <div class="form_submit">
+        @if (!loadObservation) {
+          <button
+            (click)="onSeguir()"
+            [class.disabled]="saveCliente"
+            [disabled]="saveCliente"
+            class="btn save"
+          >
+            @if (loadIcono) {
+              <span class="icon">
+                <app-loader-component />
+              </span>
+            }
+            <p>Guardar</p>
+          </button>
+        }
+        @if (loadObservation) {
+          <!-- <div class="options"> -->
+          <button type="reset" class="btn">Limpiar</button>
+          <button type="button" class="btn cancel" (click)="Cancelar()">
+            Cancelar
+          </button>
+          <button (click)="onSubmit()" [disabled]="loadIcono" class="btn save">
+            @if (loadIcono) {
+              <span class="icon">
+                <app-loader-component />
+              </span>
+            } @else {
+              <p>Crear Registro</p>
+            }
+          </button>
+          <!-- </div> -->
+        }
+
+        @if (saveCliente) {
+          <button class="btn cancel" (click)="onCancelar()">Cancelar</button>
+          <button class="btn save" (click)="onEditar()">Guardar</button>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+@if (loadIcono) {
+  <app-cargando-accion-component [mensaje]="`Creando registro`" />
+}

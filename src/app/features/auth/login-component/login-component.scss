@@ -1,31 +1,57 @@
-@use "../../../_styles/variables" as var;
-
 .contain {
   width: 100%;
   height: 100lvh;
   display: flex;
   justify-content: center;
   align-items: center;
-  // color: wheat;
 
   .formulario {
-    background-color: var.$fondo_modal;
+    background-color: var(--color-modal);
     width: 50%;
-    height: 50%;
     border-radius: 20px;
     padding: 50px 30px;
-    color: var.$white;
-    // position: relative;
 
     .title {
       width: 100%;
-      margin-top: 30px;
+      margin: 30px 0 40px 0;
       text-align: center;
+      color: var(--color-text-title);
       font-size: 2rem;
     }
 
+    .success-message {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background-color: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--color-success);
+      color: var(--color-text-title);
+      border-radius: 0.4rem;
+      font-weight: 600;
+      animation: slideIn 0.3s ease-out;
+      text-align: center;
+      
+      span {
+        display: block;
+      }
+    }
+
+    .error-alert {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background-color: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--color-error);
+      border-radius: 0.4rem;
+      color: var(--color-error);
+      font-weight: 600;
+      animation: slideIn 0.3s ease-out;
+      text-align: center;
+
+      span {
+        display: block;
+      }
+    }
+
     .container-fluid {
-    //   position: absolute;
       width: 100%;
       margin-top: 10px;
       bottom: 90px;
@@ -38,6 +64,7 @@
         label {
           width: 100%;
           font-weight: 800;
+          color: var(--color-text-title);
         }
 
         input {
@@ -46,9 +73,32 @@
           padding: 4px 5%;
           font-weight: 600;
           border-radius: 8px;
+          background-color: var(--color-bg);
+          color: var(--color-text);
+          border: 1px solid var(--color-border);
         }
-        &::checkmark {
-            background-color: red;
+
+        input.ng-invalid.ng-touched {
+          border-color: var(--color-error);
+        }
+
+        input.ng-valid.ng-touched {
+          border-color: var(--color-success);
+        }
+
+        .error-message {
+          margin-top: 0.5rem;
+          font-size: 0.85rem;
+          color: var(--color-error);
+          font-weight: 500;
+
+          span {
+            display: block;
+
+            &:before {
+              content: '⚠ ';
+            }
+          }
         }
       }
 
@@ -58,26 +108,71 @@
         align-items: center;
         height: 40px;
         justify-content: space-around;
+        color: var(--color-text-title);
       }
 
       .exit {
         width: 100%;
         margin-top: 40px;
 
-        input {
+        .submit {
+          position: relative;
           width: 100%;
           border-radius: 10px;
           padding: 5px;
           font-weight: 700;
-          
-          &:hover {
-              background-color: var.$azul;
-              border: 2px solid var.$white;
-              color: var.$white;
-          } 
-        }
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
+          &:hover {
+            border: 2px solid var(--color-br-hover-btn);
+            box-shadow: 0 0 10px var(--color-br-hover-btn);
+          }
+
+          .load {
+            position: absolute;
+            top: 50%;
+            left: 40%;
+            transform: translateY(-50%);
+            width: 25px !important;
+            height: 25px !important;
+            color: var(--color-icons);
+          }
+        }
       }
     }
+
+    .add_user {
+      margin-top: 20px;
+    }
+
+    .sessions {
+      p {
+        text-align: center;
+        margin-top: 20px;
+        font-weight: 800;
+        color: var(--color-text-title);
+      }
+    }
+  }
+}
+
+.link {
+  color: var(--color-error);
+  font-weight: 800;
+  &:hover {
+    color: var(--color-text-secondary);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
