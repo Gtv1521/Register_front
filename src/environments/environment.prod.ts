@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://registerdatapqr.runasp.net/api',
-  signalR: 'http://registerdatapqr.runasp.net',
+  apiUrl: 'https://registerdatapqr.runasp.net/api',
+  signalR: 'https://registerdatapqr.runasp.net',
 };
