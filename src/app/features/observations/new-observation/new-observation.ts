@@ -14,6 +14,7 @@ import { LIST_TYPE } from 'src/app/core/domain/reusables/estados.constant';
 import { types } from 'src/app/core/domain/entitys/observation.entity';
 import { UpperCaseConstant } from 'src/app/core/domain/reusables/upper-case.constant';
 import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
+import { ObservationUpdateUseCase } from 'src/app/core/aplication/use-cases/observation-usecase/observation-update.useCase';
 
 @Component({
   selector: 'app-observation-create',
@@ -33,6 +34,7 @@ export class NewObservation {
   // servicios
   private fb = inject(FormBuilder);
   private observationService = inject(ObservationCreateUseCase);
+  private updateObservation = inject(ObservationUpdateUseCase);
   private auth = inject(AuthService);
   private upperCase = inject(UpperCaseConstant);
 
@@ -51,6 +53,7 @@ export class NewObservation {
   userId = this.auth.getUserId();
   responseData!: string; // respuesta de la peticion
   loader = signal<boolean>(false);
+  listPhotosDelete = signal<string[]>([]);
 
   //datos del formulario
   form = this.fb.group({
@@ -86,7 +89,6 @@ export class NewObservation {
     const input = event.target as HTMLInputElement;
 
     if (!input.files) return;
-
     Array.from(input.files).forEach((file) => {
       this.photos.push(file);
 
@@ -100,6 +102,13 @@ export class NewObservation {
     this.photoPreviews.update((previews) =>
       previews.filter((_, i) => i !== index),
     );
+  }
+
+  OnDeletePhoto(id: string | null, index: number): void {
+    if (id) {
+      this.listPhotosDelete.update((lista) => [...lista, id]);
+    }
+    this.PhotoSave.update((lista) => lista.filter((_, i) => i !== index));
   }
 
   cancelar(): void {
@@ -134,28 +143,25 @@ export class NewObservation {
 
   handleTab(event: KeyboardEvent) {
     if (event.key === 'Tab') {
-      event.preventDefault(); // Evita que el cursor salte al siguiente input
+      event.preventDefault();
 
       const textarea = event.target as HTMLTextAreaElement;
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
-      const spaces = '  '; // Aquí defines cuántos espacios o qué caracteres insertar
+      const spaces = '  ';
 
-      // 1. Modificamos el valor del texto insertando los espacios en la posición del cursor
       textarea.value =
         textarea.value.substring(0, start) +
         spaces +
         textarea.value.substring(end);
 
-      // 2. Reposicionamos el cursor justo después de los espacios insertados
       textarea.selectionStart = textarea.selectionEnd = start + spaces.length;
 
-      // 3. Importante: Si usas Reactive Forms, hay que avisarle al control que el valor cambió
       this.form.get('description')?.setValue(textarea.value);
     }
   }
 
-  async onSubmit(): Promise<void> {
+  async OnCreate(): Promise<void> {
     if (!this.valid()) {
       return;
     }
@@ -191,6 +197,44 @@ export class NewObservation {
       this.loader.set(false);
       this.ChangeEditar.emit(false);
       this.CloseModal.emit(false);
+    }
+  }
+
+  async OnEdit(): Promise<void> {
+    if (!this.valid()) {
+      return;
+    }
+
+    const data = this.form.getRawValue();
+    const setValues: ObservationRequestDto = {
+      id: this.                           ChangeData()?.id!,
+      IdRegister: this.ChangeData()?.idRegister!,
+      Type: data.type! as types,
+      Description: this.upperCase.formatParagraphs(data.description!),
+      IdUser: this.ChangeData()?.idUser!,
+      NotificaEmail: data?.notificaEmail!,
+      NotificaWhatsapp: data?.notificaWhatsapp!,
+      Photos: this.photoPreviews().length > 0 ? this.photos : [],
+      listPhotosDelete: this.listPhotosDelete(),
+    };
+
+    try {
+      this.loader.set(true);
+      await firstValueFrom(this.updateObservation.execute(setValues));
+    } catch (error) {
+      throw error;
+    } finally {
+      this.loader.set(false);
+      this.ChangeEditar.emit(false);
+      this.CloseModal.emit(false);
+    }
+  }
+
+  async onSubmit(): Promise<void> {
+    if (!this.OnEditar()) {
+      await this.OnCreate();
+    } else {
+      this.OnEdit();
     }
   }
 }

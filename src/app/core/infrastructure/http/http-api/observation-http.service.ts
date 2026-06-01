@@ -65,7 +65,22 @@ export class ObservationHttpService implements IGeneral<
   }
 
   Update(dto: ObservationRequestDto): Observable<boolean> {
-    return this.http.post<boolean>(`${this.Url}/${dto.id}`, dto);
+    const formData = new FormData();
+
+    formData.append('Type', dto.Type.toString());
+    formData.append('Description', dto.Description);
+    formData.append('NotificaEmail', dto.NotificaEmail.toString());
+    formData.append('NotificaWhatsapp', dto.NotificaWhatsapp.toString());
+
+    dto.Photos.forEach((photo) => {
+      formData.append('NewPhotos', photo);
+    });
+
+    dto.listPhotosDelete?.forEach((id) => {
+      formData.append('DeletedPhotos', id);
+    });
+
+    return this.http.post<boolean>(`${this.Url}/${dto.id}`, formData);
   }
 
   Delete(id: string): Observable<boolean> {

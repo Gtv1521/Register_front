@@ -85,7 +85,18 @@
               <div class="photo-preview">
                 @if (OnEditar()) {
                   @for (photo of PhotoSave(); track $index) {
-                    <img [src]="photo.photo" alt="preview" />
+                    <img
+                      [src]="photo.photo"
+                      alt="preview"
+                      (click)="OnDeletePhoto(photo.id, $index)"
+                    />
+                  }
+                  @for (photo of photoPreviews(); track photo) {
+                    <img
+                      [src]="photo"
+                      alt="preview"
+                      (click)="removePhoto(photoPreviews().indexOf(photo))"
+                    />
                   }
                 } @else {
                   @for (photo of photoPreviews(); track photo) {
