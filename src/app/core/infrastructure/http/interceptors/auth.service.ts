@@ -3,7 +3,6 @@ import { Subscription, timer } from 'rxjs';
 import { UserGetUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-get.useCase';
 import { SignalRService } from '../../services/signalr/signal-r.service';
 import { Router } from '@angular/router';
-import { RoleService } from '../../services/effect/role.service';
 
 @Injectable({
   providedIn: 'root',

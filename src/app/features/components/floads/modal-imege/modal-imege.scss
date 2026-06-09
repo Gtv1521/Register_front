@@ -125,7 +125,8 @@
 }
 
 .zoomable-img {
-  height: 90%;
+  max-width: 90%;
+  max-height: 90%;
   margin: auto;
   display: block;
   border: 2px solid var(--color-primary);

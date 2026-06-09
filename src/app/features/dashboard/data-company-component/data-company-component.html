@@ -33,12 +33,19 @@
     }
     @if (isEditar()) {
       <div class="formulario">
-        <app-new-company-component [onEditar]="true" #formCompany />
+        <app-new-company-component
+          [onEditar]="true"
+          (onEditLogo)="onEditLogo($event)"
+          #formCompany
+        />
         <div class="actions">
           <button class="btn" (click)="onEditar()">Cancelar</button>
-          <button class="btn">Guardar</button>
+          <button class="btn" (click)="onGuardar()">Guardar</button>
         </div>
       </div>
     }
   </div>
 </div>
+@if (loaderUpdate()) {
+  <app-cargando-accion-component [mensaje]="`Actualizando Datos Empresa !!`" />
+}

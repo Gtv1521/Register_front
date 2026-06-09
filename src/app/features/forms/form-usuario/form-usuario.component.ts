@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/core/infrastructure/http/interceptors/auth.service';
 import { Rol } from 'src/app/core/infrastructure/dto/request/sig-in-request.dto';
-import { confirmPasswordValidator, strongPasswordValidator } from 'src/app/core/infrastructure/http/interceptors/password.validator';
+import { confirmPasswordValidator, strongPasswordValidator } from 'src/app/core/infrastructure/http/validators/password.validator';
 import { ValidaEmailUseCase } from 'src/app/core/aplication/use-cases/session-usecase/valida-email.useCase';
 import { UserCreateUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-create.useCase';
 import { UserRequestDto } from 'src/app/core/infrastructure/dto/request/user/user-request.dto';

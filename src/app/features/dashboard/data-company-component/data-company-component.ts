@@ -6,20 +6,27 @@ import { CompanyGetUseCase } from 'src/app/core/aplication/use-cases/company-use
 import { lastValueFrom } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 import { NewCompanyComponent } from '../../forms/new-company-component/new-company-component';
+import { CompanyUpdateUseCase } from 'src/app/core/aplication/use-cases/company-usecase/company-update.useCase';
+import { SignalRService } from 'src/app/core/infrastructure/services/signalr/signal-r.service';
+import { CargandoAccionComponent } from "../../components/floads/cargando-accion-component/cargando-accion-component";
 
 @Component({
   selector: 'app-data-company-component',
-  imports: [LoaderComponent, MatIcon, NewCompanyComponent],
+  imports: [LoaderComponent, MatIcon, NewCompanyComponent, CargandoAccionComponent],
   templateUrl: './data-company-component.html',
   styleUrl: './data-company-component.scss',
 })
 export class DataCompanyComponent {
   private auth = inject(AuthService);
   private getCompany = inject(CompanyGetUseCase);
+  private updateCompany = inject(CompanyUpdateUseCase);
+  private signalR = inject(SignalRService);
 
   isLoader = signal<boolean>(false);
   company = signal<CompanyEntity | null>(null);
   isEditar = signal<boolean>(false);
+  editaLogo = signal<boolean>(false);
+  loaderUpdate = signal<boolean>(false);
 
   formCompany = viewChild(NewCompanyComponent);
 
@@ -31,12 +38,21 @@ export class DataCompanyComponent {
     }
   });
 
+  constructor() {
+    this.signalR.updateCompany$.subscribe((company) => {
+      const currentCompany = this.company();
+      if (currentCompany && currentCompany.id === company.id) {
+        this.company.set(company);
+      }
+    });
+  }
+
   async ngOnInit(): Promise<void> {
     this.isLoader.set(true);
     try {
       await this.loderCompany();
     } catch (error) {
-      console.log(error);
+      throw new Error('Error al cargar la empresa');
     } finally {
       this.isLoader.set(false);
     }
@@ -53,5 +69,33 @@ export class DataCompanyComponent {
       );
       this.company.set(response);
     } catch (error) {}
+  }
+
+  onEditLogo($event: boolean): void {
+    this.editaLogo.set($event);
+  }
+
+  toggleUpdate(): void {
+    this.loaderUpdate.set(!this.loaderUpdate());
+  }
+
+  async onGuardar(): Promise<void> {
+    const datos = await this.formCompany()?.onData();
+
+    try {
+      this.toggleUpdate();
+      await lastValueFrom(
+        this.updateCompany.execute(
+          datos,
+          this.company()?.id!,
+          this.editaLogo(),
+        ),
+      );
+    } catch (error) {
+      throw new Error('Error al actualizar la empresa');
+    } finally {
+      this.toggleUpdate();
+      this.isEditar.set(false);
+    }
   }
 }

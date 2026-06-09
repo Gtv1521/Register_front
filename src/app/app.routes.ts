@@ -23,6 +23,8 @@ import { EditRolComponet } from './features/users/edit-rol-componet/edit-rol-com
 import { UsersComponent } from './features/users/users-component/users-component';
 import { DataUserComponent } from './features/users/data-user-component/data-user-component';
 import { MensajesFijosComponent } from './features/users/mensajes-fijos-component/mensajes-fijos-component';
+import { logedGuard } from './core/infrastructure/services/permisos/loged.guard';
+import { authGuard } from './core/infrastructure/services/permisos/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -30,24 +32,37 @@ export const routes: Routes = [
     path: '',
     component: AuthComponent,
     children: [
-      { path: 'login', component: LoginComponent },
+      { path: 'login', component: LoginComponent, canActivate: [authGuard] },
       { path: 'sigin', component: SigInComponent },
       { path: 'reset', component: ResetComponent },
     ],
   },
-  { path: 'dashboard', component: DashboardLayout },
-  { path: 'register/:id', component: DashboardLayout }, //  esta es la ruta para mostrar los registros
-  { path: 'sessions/:id', component: SessionsComponent }, // esta es la ruta para mostrar las sesiones
+  { path: 'dashboard', component: DashboardLayout, canActivate: [logedGuard] },
+  {
+    path: 'register/:id',
+    component: DashboardLayout,
+    canActivate: [logedGuard],
+  }, //  esta es la ruta para mostrar los registros
+  {
+    path: 'sessions/:id',
+    component: SessionsComponent,
+    canActivate: [logedGuard],
+  }, // esta es la ruta para mostrar las sesiones
   {
     path: 'registro/:id',
     component: SeeObservation,
-    canActivate: [qrAccessGuard],
+    canActivate: [qrAccessGuard, logedGuard],
   },
-  { path: 'new-registro', component: NewRegisterComponent },
+  {
+    path: 'new-registro',
+    component: NewRegisterComponent,
+    canActivate: [logedGuard],
+  },
   { path: 'logout', component: LogoutComponent },
   {
     path: 'user',
     component: DataUserComponent,
+    canActivate: [logedGuard],
     children: [
       { path: '', redirectTo: 'data/:id', pathMatch: 'full' },
       { path: 'data/:id', component: DatosUsuarioLoged },
@@ -57,7 +72,7 @@ export const routes: Routes = [
   {
     path: 'users',
     component: UsersComponent,
-    canActivate: [roleGuard],
+    canActivate: [roleGuard, logedGuard],
     data: { roles: [Rol.Administrador, Rol.Super] },
     children: [
       { path: '', redirectTo: 'edit', pathMatch: 'full' },
@@ -72,11 +87,11 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: 'theme', component: ThemeComponent },
+  { path: 'theme', component: ThemeComponent, canActivate: [logedGuard] },
   {
     path: 'componies',
     component: CompaniesComponent,
-    canActivate: [roleGuard],
+    canActivate: [roleGuard, roleGuard],
     data: { roles: [Rol.Administrador, Rol.Super] },
   },
   { path: 'no-access', component: NoAccessComponent },

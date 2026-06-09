@@ -21,7 +21,9 @@ export function strongPasswordValidator(): ValidatorFn {
 
     const password = control.value;
     const hasMinLength = password.length >= 8;
-    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(
+      password,
+    );
 
     if (!hasMinLength || !hasSpecialChar) {
       return {
@@ -33,5 +35,18 @@ export function strongPasswordValidator(): ValidatorFn {
     }
 
     return null;
+  };
+}
+
+// se pone para que al menos tenga una mayuscula
+export function regexValidator(regex: RegExp, errorName: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    // Si el campo está vacío, no validamos (deja que 'required' se encargue)
+    if (!control.value) {
+      return null;
+    }
+    const isValid = regex.test(control.value);
+    // Si es válido, retornamos null. Si no, retornamos un objeto con el errorName como clave.
+    return isValid ? null : { [errorName]: { value: control.value } };
   };
 }

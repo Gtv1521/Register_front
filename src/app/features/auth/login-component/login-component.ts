@@ -54,6 +54,7 @@ export class LoginComponent {
   async onSubmit() {
     if (this.login.valid) {
       this.loading.set(true);
+      this.error.set(null);
       const datos = await this.dataNav.GoData();
 
       const data = this.login.value as LoginRequestDto;
@@ -63,14 +64,16 @@ export class LoginComponent {
 
       try {
         const res = await lastValueFrom(this.loginSession.execate(data));
+        console.log(res);
         this.auth.setAuth(res.idUser, res.idSession, res.idCompany);
         this.loading.set(false);
-        this.error.set(null);
         this.success.set(true);
         this.themeActivo.set(res.theme);
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 1000);
+        if (res.idCompany !== null) {
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 1000);
+        }
       } catch (err: any) {
         if (err.status === 401) {
           this.error.set(err);
@@ -78,12 +81,7 @@ export class LoginComponent {
           this.error.set(err);
           this.goSessions();
         } else {
-          this.error.set(
-            new HttpErrorResponse({
-              status: err.status,
-              statusText: 'Error en el servidor',
-            }),
-          );
+          this.error.set(err);
         }
         this.error.set(err);
       } finally {

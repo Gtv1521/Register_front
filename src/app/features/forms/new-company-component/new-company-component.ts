@@ -1,11 +1,20 @@
 import { validateHorizontalPosition } from '@angular/cdk/overlay';
-import { Component, inject, input, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormsModule,
   Validators,
   ReactiveFormsModule,
   FormGroupDirective,
+  FormControl,
 } from '@angular/forms';
 import { CompanyRequestDto } from 'src/app/core/infrastructure/dto/request/company/company-request.dto';
 
@@ -19,6 +28,7 @@ export class NewCompanyComponent {
   private fb = inject(FormBuilder);
 
   onEditar = input<boolean>();
+  onEditLogo = output<boolean>();
 
   logo = signal<string>('');
   changeLogo = signal<boolean>(false);
@@ -34,7 +44,16 @@ export class NewCompanyComponent {
     image: [null as File | null, [Validators.required]],
   });
 
-  public async onValidate(): Promise<boolean> {
+  img = new FormControl(null as File | null);
+
+  Efecto = effect(() => {
+    this.onEditLogo.emit(this.changeLogo());
+    if (!this.changeLogo()) {
+      this.img.disable();
+    }
+  });
+
+  async onValidate(): Promise<boolean> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return false;
@@ -42,20 +61,28 @@ export class NewCompanyComponent {
     return true;
   }
 
+  toggleLogoChange($event: any) {
+    const isChecked = $event.target.checked;
+    this.changeLogo.set(isChecked);
+    if (isChecked) {
+      this.img.enable();
+    }
+  }
+
   showLogo(data: string) {
     this.logo.set(data);
+    this.img.disable();
   }
 
   onFileChange(event: any) {
-    const file = event.target.files[0]; // Capturamos el primer archivo
+    const file = event.target.files[0];
 
-    if (file) {
-      // 1. Insertamos el archivo real en el formulario
+    if (file && !this.changeLogo()) {
       this.form.patchValue({
         image: file,
       });
       this.form.get('image')?.updateValueAndValidity();
-    }
+    } else if (this.changeLogo()) this.img.patchValue(file);
   }
 
   onLlenaData(datos: any) {
@@ -64,6 +91,10 @@ export class NewCompanyComponent {
 
   obtenerDatos() {
     return this.form.getRawValue();
+  }
+
+  obtieneImagen() {
+    return this.img?.value;
   }
 
   resetear() {
@@ -79,14 +110,19 @@ export class NewCompanyComponent {
     this.form.get('image')?.disable();
   }
 
-  public async onData(): Promise<FormData> {
+  async onData(): Promise<FormData> {
     const formData = new FormData();
     formData.append('Name', this.form.get('name')?.value!);
     formData.append('NIT', this.form.get('nit')?.value!);
     formData.append('Address', this.form.get('address')?.value!);
     formData.append('Phone', this.form.get('phone')?.value!);
     formData.append('Email', this.form.get('email')?.value!);
-    formData.append('Image', this.form.get('image')?.value!);
+    formData.append(
+      'Image',
+      this.onEditar() && this.changeLogo()
+        ? this.img.getRawValue()!
+        : this.form.get('image')?.getRawValue()!,
+    );
     return formData;
   }
 }

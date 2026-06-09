@@ -57,7 +57,14 @@ export interface IAllFilter<entity> {
 
 export interface IAllData<dto, entity> extends Omit<
   ICrud<dto, entity>,
-  'GetAll'
+  'GetAll' | 'Update'
 > {
   GetAll(pag: number, size: number): Observable<entity[]>;
+  Update(dto: dto, id: string, updateLogo: boolean): Observable<boolean>;
+}
+
+export interface IUpdateUser {
+  UpdateName(id: string, name: string): Observable<boolean>;
+  UpdateMail(id: string, Mail: string): Observable<boolean>;
+  UpdatePassword(id: string, password: string): Observable<boolean>;
 }

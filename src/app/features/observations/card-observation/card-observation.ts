@@ -64,7 +64,7 @@ export class CardObservation {
         this.deleteObservation.execute(this.Observation()?.id!),
       );
     } catch (error) {
-      console.log(error);
+      throw error;
     } finally {
       this.loadDelete.set(false);
     }

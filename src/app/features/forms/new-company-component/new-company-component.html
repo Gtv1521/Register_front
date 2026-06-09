@@ -157,25 +157,24 @@
           }
         } @else {
           <div class="action_logo">
-            <img [src]="logo()" alt="" class="logo" />
+            <img [src]="logo()" alt="Logo en database" class="logo" />
             <div class="title_logo">
               <div class="btn_option">
                 <label for="ChangeLogo">Cambiar Logo</label>
                 <input
                   class="box"
                   type="checkbox"
-                  name=""
                   [checked]="changeLogo()"
-                  (change)="changeLogo.set($any($event.target).checked)"
+                  (change)="toggleLogoChange($event)"
                   id="ChangeLogo"
                 />
               </div>
               <input
                 class="entrada"
+                [disabled]="!changeLogo()"
                 type="file"
                 accept="image/*"
-                placeholder="Cambiar logo"
-                [disabled]="!changeLogo()"
+                (change)="onFileChange($event)"
                 appSingleFile
               />
             </div>
