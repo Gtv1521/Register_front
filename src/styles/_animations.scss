@@ -55,7 +55,7 @@
 
   --animation-fade-in: fadeInSlide var(--anim-duration-slow) var(--anim-curve)
     forwards;
-  --animation-pulse: pulseHighlight var(--anim-duration-fast) linear infinite;
+  --animation-pulse: pulseHighlight 0.25s linear 2;
   --animation-center-expand: expandCenterToEdges var(--anim-duration-expand)
     var(--anim-curve-expand) forwards;
 

@@ -215,10 +215,15 @@ export class DashboardLayout implements OnInit {
 
   // trae todos los usuarios
   async GetUser(): Promise<UserEntity> {
-    const res = await lastValueFrom(this.user.execute());
-    if (!res) throw new Error('El usuario no se encontro');
-    this.usuario.set(res);
-    return res;
+    try {
+      const res = await lastValueFrom(this.user.execute());
+      this.usuario.set(res);
+      return res;
+    } catch (error) {
+      this.GetUser();
+      throw new Error(`Error al obtener el usuario: ${error}`);
+      throw error;
+    }
   }
 
   // funcion de busqueda segun la descripcion

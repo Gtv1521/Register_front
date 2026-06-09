@@ -34,6 +34,7 @@ import localeEsCo from '@angular/common/locales/es-CO';
 import { conexionInterceptor } from './core/infrastructure/http/interceptors/conexion.interceptor';
 import { ADVERTENCIA_TOKEN } from './core/aplication/tokens/advertencias.token';
 import { AdvertenciasHttpService } from './core/infrastructure/http/http-api/advertencias.http-service';
+import { UP_USER_TOKEN } from './core/aplication/tokens/update-user.token';
 
 registerLocaleData(localeEsCo);
 
@@ -51,6 +52,7 @@ export const appConfig: ApplicationConfig = {
     { provide: SESSIONES_TOKEN, useClass: SessionHttpService },
     { provide: COMPANY_TOKEN, useClass: CompanyHttpService },
     { provide: ADVERTENCIA_TOKEN, useClass: AdvertenciasHttpService },
+    { provide: UP_USER_TOKEN, useClass: UserHttpService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

@@ -27,7 +27,7 @@ export class CompanyHttpService implements IAllData<
   ) {}
 
   Delete(id: string): Observable<boolean> {
-    throw new Error('Method not implemented.');
+    return this.http.delete<boolean>(`${this.Url}/${id}`);
   }
 
   GetAll(pag: number, size: number): Observable<CompanyEntity[]> {
@@ -45,11 +45,17 @@ export class CompanyHttpService implements IAllData<
   }
 
   Create(dto: CompanyRequestDto): Observable<string> {
-    console.log('Enviando datos al backend:', dto);
     return this.http.post<string>(`${this.Url}`, dto);
   }
 
-  Update(dto: CompanyRequestDto): Observable<boolean> {
-    throw new Error('Method not implemented.');
+  Update(
+    dto: CompanyRequestDto,
+    id: string,
+    updateLogo: boolean,
+  ): Observable<boolean> {
+
+    return this.http
+      .post<boolean>(`${this.Url}/${id}?updateLogo=${updateLogo}`, dto)
+      .pipe(map(() => true));
   }
 }

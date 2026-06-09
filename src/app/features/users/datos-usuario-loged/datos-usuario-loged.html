@@ -7,13 +7,194 @@
       </div>
     } @else {
       <div class="datos">
-        <div class="item">
-          <strong>Nombre: </strong>{{ dataUser()?.name }}
-          <span class="icono"><mat-icon class="icono">create</mat-icon></span>
+        <!-- form usuario  -->
+        <div
+          class="item"
+          [class.fail]="falloUser()"
+          [class.onEdition]="editName()"
+        >
+          <strong>Nombre: </strong>
+          @if (editName()) {
+            <input
+              class="caja"
+              type="text"
+              autofocus
+              [formControl]="inputUser"
+              (keydown.enter)="onConfirm('user')"
+            />
+            <div class="options">
+              <button class="action" (click)="onConfirm('user')">
+                <span>
+                  <mat-icon class="icono">how_to_reg</mat-icon>
+                </span>
+              </button>
+              <button class="action" (click)="changeEditName()">
+                <span><mat-icon class="icono">clear</mat-icon></span>
+              </button>
+            </div>
+          } @else {
+            {{ dataUser()?.name }}
+            <span class="icono" (click)="changeEditName()">
+              <mat-icon class="icono">create</mat-icon>
+            </span>
+          }
         </div>
-        <div class="item">
-          <strong>Correo: </strong> {{ dataUser()?.email }}
-          <span class="icono"><mat-icon class="icono">create</mat-icon></span>
+        <!-- form correo -->
+        <div class="item" [class.onEdition]="editMail()">
+          <strong>Correo: </strong>
+          @if (editMail()) {
+            <input
+              class="caja"
+              type="text"
+              autofocus
+              [formControl]="inputMail"
+              (keydown.enter)="onConfirm('mail')"
+              (keydown.escape)="changeEditMail()"
+            />
+            <div class="options">
+              <button class="action" (click)="onConfirm('mail')">
+                <span><mat-icon class="icono">how_to_reg</mat-icon></span>
+              </button>
+              <button class="action" (click)="changeEditMail()">
+                <span><mat-icon class="icono">clear</mat-icon></span>
+              </button>
+            </div>
+          } @else {
+            {{ dataUser()?.email }}
+            <span class="icono" (click)="changeEditMail()"
+              ><mat-icon class="icono">create</mat-icon></span
+            >
+          }
+        </div>
+
+        <!-- form contraseña -->
+        <div class="item" [class.OnActive]="changePass()">
+          <strong>{{
+            changePass() ? "Editar Contraseña:" : "Contraseña:"
+          }}</strong>
+          @if (!changePass()) {
+            <button class="btn" (click)="changeContrasena()">
+              Cambiar Contraseña
+              <span><mat-icon>loop</mat-icon></span>
+            </button>
+          } @else {
+            <form
+              [formGroup]="formPass"
+              (ngSubmit)="onSavePass()"
+              class="change_pass"
+              autocomplete="off"
+            >
+              <div class="item_group">
+                <label for="pass">Nueva contraseña:</label>
+                <div class="inp_pass">
+                  <input
+                    id="pass"
+                    required
+                    autofocus
+                    formControlName="password"
+                    placeholder="Contraseña"
+                    [type]="showPass() ? 'password' : 'text'"
+                  />
+                  <span>
+                    @if (showPass()) {
+                      <mat-icon (click)="togglePass()">visibility</mat-icon>
+                    } @else {
+                      <mat-icon (click)="togglePass()">visibility_off</mat-icon>
+                    }
+                  </span>
+                </div>
+                @if (
+                  formPass.get("password")?.touched &&
+                  formPass.get("password")?.invalid
+                ) {
+                  <div class="error-message">
+                    @if (formPass.get("password")?.errors?.["required"]) {
+                      <span>La contraseña es requerida</span>
+                    }
+                    @if (formPass.get("password")?.errors?.["minlength"]) {
+                      <span
+                        >La contraseña debe tener al menos 8 caracteres</span
+                      >
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="item_group">
+                <label for="con_pass">Confirma contraseña nueva: </label>
+                <div class="inp_pass">
+                  <input
+                    id="con_pass"
+                    required
+                    formControlName="confirmPassword"
+                    placeholder="Confirmar contraseñá"
+                    [type]="showPass() ? 'password' : 'text'"
+                  />
+                  <span>
+                    @if (showPass()) {
+                      <mat-icon (click)="togglePass()">visibility</mat-icon>
+                    } @else {
+                      <mat-icon (click)="togglePass()">visibility_off</mat-icon>
+                    }
+                  </span>
+                </div>
+                @if (
+                  formPass.get("confirmPassword")?.touched &&
+                  formPass.get("confirmPassword")?.invalid
+                ) {
+                  <div class="error-message">
+                    @if (
+                      formPass.get("confirmPassword")?.errors?.["required"]
+                    ) {
+                      <span>La contraseña es requerida</span>
+                    }
+                    @if (
+                      formPass.get("confirmPassword")?.errors?.["minlength"]
+                    ) {
+                      <span
+                        >La contraseña debe tener al menos 8 caracteres</span
+                      >
+                    }
+                    @if (
+                      formPass
+                        .get("confirmPassword")
+                        ?.hasError("sinMayuscula") &&
+                      formPass.get("confirmPassword")?.touched
+                    ) {
+                      <span>Al menos 1 mayuscula (A-Z)</span>
+                    }
+                    @if (
+                      formPass
+                        .get("confirmPassword")
+                        ?.hasError("sinCaracterEspecial") &&
+                      formPass.get("confirmPassword")?.touched
+                    ) {
+                      <span>Al menos 1 caracter espcial (!@#$%^&*)</span>
+                    }
+                    @if (
+                      formPass.get("confirmPassword")?.errors?.[
+                        "passwordMismatch"
+                      ]
+                    ) {
+                      <span>Las contraseñas no son iguales</span>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="actions">
+                <button type="button" class="btn" (click)="changeContrasena()">
+                  <span>
+                    <mat-icon>reply_all</mat-icon>
+                  </span>
+                  Cancelar
+                </button>
+                <button class="btn" type="submit" [disabled]="formPass.invalid">
+                  <span> <mat-icon>save</mat-icon> </span>Cambiar
+                </button>
+              </div>
+            </form>
+          }
         </div>
         <div class="item"><strong>Empresa: </strong> {{ nameCompany() }}</div>
         <div class="item"><strong>Rol: </strong> {{ dataUser()?.rol }}</div>
@@ -21,3 +202,21 @@
     }
   </div>
 </div>
+
+@if (confirmaUser()) {
+  <app-confirm-alert-component
+    (respuesta)="onEditarUser($event)"
+    [pregunta]="`Seguro quiere cambiar el nombre ?`"
+  />
+}
+
+@if (confirmaMail()) {
+  <app-confirm-alert-component
+    (respuesta)="onEditarMail($event)"
+    [pregunta]="`Seguro quiere cambiar correo ?`"
+  />
+}
+
+@if (onUpdate()) {
+  <app-cargando-accion-component mensaje="{{ mensaje() }}" />
+}

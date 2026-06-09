@@ -22,5 +22,151 @@
       width: 80px;
       height: 80px;
     }
+    .datos {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px;
+
+      .item {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        .caja {
+          border-color: var(--color-border);
+          padding: 0 5px;
+          border-radius: 7px;
+        }
+
+        .icono {
+          width: 20px;
+          height: 20px;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: var(--color-bg-btn);
+          border-radius: 5px;
+
+          &:hover {
+            background-color: var(--color-bg-hover-btn);
+            color: var(--color-text-hover-btn);
+          }
+        }
+
+        .options {
+          padding: 0 5px;
+          box-sizing: border-box;
+          display: flex;
+          gap: 5px;
+
+          .action {
+            border: none;
+            background-color: transparent;
+            color: var(--color-text);
+          }
+        }
+
+        .change_pass {
+          background-color: var(--color-panel);
+          display: flex;
+          flex-direction: column;
+          padding: 10px;
+          border-radius: 10px;
+          gap: 10px;
+
+          .item_group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+
+            label {
+              font-weight: bold;
+            }
+
+            .inp_pass {
+              width: 70%;
+              position: relative;
+
+              input {
+                width: 100%;
+                border-radius: 7px;
+                padding: 2px 10px;
+                // font-size: medium;
+                box-sizing: border-box;
+              }
+
+              mat-icon {
+                position: absolute;
+                top: 50%;
+                right: 7px;
+                transform: translateY(-50%);
+                color: black;
+
+                &:hover {
+                  border-radius: 50%;
+                  color: var(--color-text-subtitle);
+                }
+              }
+            }
+          }
+
+          .actions {
+            display: flex;
+            gap: 10px;
+            text-align: end;
+            justify-content: right;
+          }
+        }
+
+        .btn {
+          padding: 2px 20px;
+          border-radius: 8px;
+          border-color: transparent;
+          background-color: var(--color-bg-btn);
+          color: var(--color-text);
+          font-weight: bold;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+
+          mat-icon {
+            width: 18px;
+            height: 18px;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+
+      .OnActive {
+        display: block;
+        flex-direction: column !important;
+        justify-content: start !important;
+        text-align: left !important;
+      }
+    }
+  }
+
+  .fail {
+    border-color: red !important;
+    animation: var(--animation-pulse) !important;
+  }
+
+  .onEdition {
+    border: 2px solid var(--color-border);
+    border-radius: 15px;
+    display: flex;
+    padding: 10px;
+    gap: 15px;
+    justify-content: center !important;
+    margin-bottom: 5px;
+    animation: var(--animation-pulse);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IUser } from 'src/app/core/domain/interfaces/ICrud';
+import { IUpdateUser, IUser } from 'src/app/core/domain/interfaces/ICrud';
 import { UserRequestDto } from '../../dto/request/user/user-request.dto';
 import { UserEntity } from 'src/app/core/domain/entitys/user.entity';
 import { environment } from '@environment';
@@ -10,7 +10,9 @@ import { UserResponseDto } from '../../dto/response/user/user-response.dto';
 import { Rol } from '../../dto/request/sig-in-request.dto';
 
 @Injectable({ providedIn: 'root' })
-export class UserHttpService implements IUser<UserRequestDto, UserEntity> {
+export class UserHttpService
+  implements IUser<UserRequestDto, UserEntity>, IUpdateUser
+{
   Url = `${environment.apiUrl}/User`;
   constructor(
     private http: HttpClient,
@@ -69,5 +71,29 @@ export class UserHttpService implements IUser<UserRequestDto, UserEntity> {
         update: boolean;
       }>(`${this.Url}/Rol/${id}`, {}, { params: { rol } })
       .pipe(map((res) => res.update));
+  }
+
+  UpdateName(id: string, name: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${this.Url}/up_name/${id}`,
+      {},
+      { params: { name } },
+    );
+  }
+
+  UpdateMail(id: string, Mail: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${this.Url}/up_mail/${id}`,
+      {},
+      { params: { Mail } },
+    );
+  }
+
+  UpdatePassword(id: string, password: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${this.Url}/up_password/${id}`,
+      {},
+      { params: { password } },
+    );
   }
 }

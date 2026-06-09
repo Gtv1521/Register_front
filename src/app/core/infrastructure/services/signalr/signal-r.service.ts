@@ -6,6 +6,7 @@ import { RegisterEntity } from 'src/app/core/domain/entitys/register.entity';
 import { ObservationEntity } from 'src/app/core/domain/entitys/observation.entity';
 import { LogLevel } from '@microsoft/signalr';
 import { AdvertenciaEntity } from 'src/app/core/domain/entitys/advertencia.entity';
+import { CompanyEntity } from 'src/app/core/domain/entitys/company.entity';
 
 @Injectable({ providedIn: 'root' })
 export class SignalRService {
@@ -17,6 +18,7 @@ export class SignalRService {
   private newObservation = new Subject<ObservationEntity>();
   private deleteObservacion = new Subject<string>();
   private updateRegister = new Subject<RegisterEntity>();
+  private updateObservacion = new Subject<ObservationEntity>();
   private revokeSession = new Subject<string>();
   private updateAntisipo = new Subject<any>();
   private updateTotal = new Subject<any>();
@@ -24,6 +26,10 @@ export class SignalRService {
   private newAdvertencia = new Subject<AdvertenciaEntity>();
   private deleteAdvertencia = new Subject<string>();
   private updateAdvertencia = new Subject<AdvertenciaEntity>();
+  private updateCompany = new Subject<CompanyEntity>();
+  private updatePassword = new Subject<{ message: string; state: number }>();
+  private updateMail = new Subject<string>();
+  private updateName = new Subject<string>();
 
   deleteRegistro$ = this.deleteRegsiter.asObservable();
   newRegistro$ = this.newRegister.asObservable();
@@ -37,6 +43,11 @@ export class SignalRService {
   newAdvertencia$ = this.newAdvertencia.asObservable();
   deleteAdvertencia$ = this.deleteAdvertencia.asObservable();
   updateAdvertencia$ = this.updateAdvertencia.asObservable();
+  updateObservacion$ = this.updateObservacion.asObservable();
+  updateCompany$ = this.updateCompany.asObservable();
+  updateMail$ = this.updateMail.asObservable();
+  updateName$ = this.updateName.asObservable();
+  updatePass$ = this.updatePassword.asObservable();
 
   public async conectar() {
     if (
@@ -58,6 +69,7 @@ export class SignalRService {
     this.registerHandler('RegistroCreado', this.newRegister);
     this.registerHandler('RegistroEliminado', this.deleteRegsiter);
     this.registerHandler('ObservacionEliminada', this.deleteObservacion);
+    this.registerHandler('ObservacionActualizada', this.updateObservacion);
     this.registerHandler('ObservacionCreada', this.newObservation);
     this.registerHandler('SesionRevoked', this.revokeSession);
     this.registerHandler('UpdateTotal', this.updateTotal);
@@ -66,6 +78,10 @@ export class SignalRService {
     this.registerHandler('AdvertenciaCreated', this.newAdvertencia);
     this.registerHandler('AdvertenciaDeleted', this.deleteAdvertencia);
     this.registerHandler('AdvertenciaUpdated', this.updateAdvertencia);
+    this.registerHandler('CompanyUpdated', this.updateCompany);
+    this.registerHandler('Change Pass', this.updatePassword);
+    this.registerHandler('ChangeMail', this.updateMail);
+    this.registerHandler('ChangeName', this.updateName);
 
     try {
       await this.hubConnection.start();

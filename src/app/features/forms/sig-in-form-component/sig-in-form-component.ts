@@ -5,7 +5,7 @@ import {
   ɵInternalFormsSharedModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { confirmPasswordValidator } from 'src/app/core/infrastructure/http/interceptors/password.validator';
+import { confirmPasswordValidator } from 'src/app/core/infrastructure/http/validators/password.validator';
 import { SigInRequestDto } from 'src/app/core/infrastructure/dto/request/sig-in-request.dto';
 import { LoaderComponent } from '../../components/floads/loader-component/loader-component';
 import { ValidaEmailUseCase } from 'src/app/core/aplication/use-cases/session-usecase/valida-email.useCase';

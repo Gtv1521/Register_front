@@ -113,10 +113,23 @@ export class SeeObservation implements OnInit {
   total = new FormControl('');
   search = new FormControl('', [Validators.required]);
 
-  // actualiza = effect(
   constructor() {
     this.signalr.updateTotal$.subscribe((data) => {
       if (data.id === this.registro()) this.register.updateTotal(data.total);
+    });
+
+    this.signalr.updateObservacion$.subscribe((observation) => {
+      const index = this.observationsList().findIndex(
+        (item) => item.id === observation.id,
+      );
+
+      if (index !== -1) {
+        this.observationsList()[index] = {
+          ...this.observationsList()[index],
+          ...observation,
+        };
+        this.observationsList.set([...this.observationsList()]);
+      }
     });
 
     this.signalr.updateAntisipo$.subscribe((data) => {
@@ -169,11 +182,9 @@ export class SeeObservation implements OnInit {
           this.allObservations.set(observations);
         }),
         this.loadAdvertencias(),
-        // await this.LoadUser((await dataRegistro).idUser),
-        // this.usuario.set(dataRegistro.tecnico),
       ]);
     } catch (error: any) {
-      console.log(error);
+      throw error;
     } finally {
       this.loader.set(false);
     }
