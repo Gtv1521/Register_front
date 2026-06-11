@@ -40,7 +40,11 @@ export class TokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    const excludedRoutes = ['api/Session/login', 'api/Session/signin'];
+    const excludedRoutes = [
+      'api/Session/login',
+      'api/Session/signin',
+      'api/Session/change_password',
+    ];
     if (excludedRoutes.some((url) => req.url.includes(url)))
       return next.handle(req);
 
@@ -111,11 +115,9 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   private shouldLogout(err: HttpErrorResponse): boolean {
-    console.log(err)
+    console.log(err);
     return (
-      err.status === 400 ||
-      err.status === 401 ||
-      err.error?.success === false
+      err.status === 400 || err.status === 401 || err.error?.success === false
     );
   }
 

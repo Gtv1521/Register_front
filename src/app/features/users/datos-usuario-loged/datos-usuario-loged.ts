@@ -25,9 +25,11 @@ import { UserUpdateNameUseCase } from 'src/app/core/aplication/use-cases/user-us
 import { UserUpdatePasswordUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-update-password.useCase';
 import { SignalRService } from 'src/app/core/infrastructure/services/signalr/signal-r.service';
 import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
-
-const MAYUSCULA_REGEX = /[A-Z]/;
-const ESPECIAL_REGEX = /[!@#$%^&*(),.?":{}|<>]/;
+import {
+  ESPECIAL_REGEX,
+  MAYUSCULA_REGEX,
+} from 'src/app/core/domain/reusables/estados.constant';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-datos-usuario-loged',
@@ -71,6 +73,9 @@ export class DatosUsuarioLoged {
   onUpdate = signal<boolean>(false);
   mensaje = signal<string>('Mensaje');
 
+  errors = signal<HttpErrorResponse[]>([]);
+  novedades = signal<{ novedad: string; tipo: string }[]>([]);
+
   inputUser = new FormControl('');
   inputMail = new FormControl('');
 
@@ -82,7 +87,7 @@ export class DatosUsuarioLoged {
         Validators.minLength(8),
         regexValidator(MAYUSCULA_REGEX, 'sinMayuscula'),
         regexValidator(ESPECIAL_REGEX, 'sinCaracterEspecial'),
-        strongPasswordValidator,
+        strongPasswordValidator(),
       ],
     ],
     confirmPassword: [
@@ -93,7 +98,7 @@ export class DatosUsuarioLoged {
         regexValidator(MAYUSCULA_REGEX, 'sinMayuscula'),
         regexValidator(ESPECIAL_REGEX, 'sinCaracterEspecial'),
         confirmPasswordValidator('password'),
-        strongPasswordValidator,
+        strongPasswordValidator(),
       ],
     ],
   });
@@ -163,6 +168,10 @@ export class DatosUsuarioLoged {
           this.formPass.value.password!,
         ),
       );
+      this.novedades.update((lista) => [
+        ...lista,
+        { novedad: 'Se cambio la contraseñá con exito', tipo: 'pass' },
+      ]);
       this.clearPass();
     } catch (error) {
       throw new Error('Algo fallo al actualizar contraseña');
@@ -170,6 +179,10 @@ export class DatosUsuarioLoged {
       this.changePass.set(false);
       this.onUpdate.set(false);
     }
+  }
+
+  onDeleteNovedad(index: number) {
+    this.novedades.update((lista) => lista.filter((_, i) => i !== index));
   }
 
   async OnUpdateName(): Promise<void> {
@@ -253,6 +266,10 @@ export class DatosUsuarioLoged {
           this.inputUser.value!,
         ),
       );
+      this.novedades.update((lista) => [
+        ...lista,
+        { novedad: 'Se cambio el nombre con exito.', tipo: 'nombre' },
+      ]);
     } catch (error) {
       throw new Error('No se pudo actualizar nombre: ' + error);
     } finally {
@@ -268,6 +285,11 @@ export class DatosUsuarioLoged {
       await lastValueFrom(
         this.updateEmail.execute(this.auth.getUserId()!, this.inputMail.value!),
       );
+
+      this.novedades.update((lista) => [
+        ...lista,
+        { novedad: 'Se cambio el correo con exito', tipo: 'correo' },
+      ]);
     } catch (error) {
       throw new Error('No se pudo actualizar correo' + error);
     } finally {

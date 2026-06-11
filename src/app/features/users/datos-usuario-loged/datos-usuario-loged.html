@@ -87,103 +87,117 @@
               <div class="item_group">
                 <label for="pass">Nueva contraseña:</label>
                 <div class="inp_pass">
-                  <input
-                    id="pass"
-                    required
-                    autofocus
-                    formControlName="password"
-                    placeholder="Contraseña"
-                    [type]="showPass() ? 'password' : 'text'"
-                  />
-                  <span>
-                    @if (showPass()) {
-                      <mat-icon (click)="togglePass()">visibility</mat-icon>
-                    } @else {
-                      <mat-icon (click)="togglePass()">visibility_off</mat-icon>
-                    }
-                  </span>
-                </div>
-                @if (
-                  formPass.get("password")?.touched &&
-                  formPass.get("password")?.invalid
-                ) {
-                  <div class="error-message">
-                    @if (formPass.get("password")?.errors?.["required"]) {
-                      <span>La contraseña es requerida</span>
-                    }
-                    @if (formPass.get("password")?.errors?.["minlength"]) {
-                      <span
-                        >La contraseña debe tener al menos 8 caracteres</span
-                      >
-                    }
+                  <div class="entrada">
+                    <input
+                      id="pass"
+                      required
+                      autofocus
+                      formControlName="password"
+                      autocomplete="new-password"
+                      placeholder="Contraseña"
+                      [type]="showPass() ? 'password' : 'text'"
+                    />
+                    <span>
+                      @if (showPass()) {
+                        <mat-icon (click)="togglePass()">visibility</mat-icon>
+                      } @else {
+                        <mat-icon (click)="togglePass()"
+                          >visibility_off</mat-icon
+                        >
+                      }
+                    </span>
                   </div>
-                }
+                  @if (
+                    formPass.get("password")?.touched &&
+                    formPass.get("password")?.invalid
+                  ) {
+                    <div class="error-message">
+                      @if (formPass.get("password")?.errors?.["required"]) {
+                        <span>La contraseña es requerida</span>
+                      }
+                      @if (formPass.get("password")?.errors?.["minlength"]) {
+                        <span
+                          >La contraseña debe tener al menos 8 caracteres</span
+                        >
+                      }
+                    </div>
+                  }
+                </div>
               </div>
 
               <div class="item_group">
                 <label for="con_pass">Confirma contraseña nueva: </label>
                 <div class="inp_pass">
-                  <input
-                    id="con_pass"
-                    required
-                    formControlName="confirmPassword"
-                    placeholder="Confirmar contraseñá"
-                    [type]="showPass() ? 'password' : 'text'"
-                  />
-                  <span>
-                    @if (showPass()) {
-                      <mat-icon (click)="togglePass()">visibility</mat-icon>
-                    } @else {
-                      <mat-icon (click)="togglePass()">visibility_off</mat-icon>
-                    }
-                  </span>
-                </div>
-                @if (
-                  formPass.get("confirmPassword")?.touched &&
-                  formPass.get("confirmPassword")?.invalid
-                ) {
-                  <div class="error-message">
-                    @if (
-                      formPass.get("confirmPassword")?.errors?.["required"]
-                    ) {
-                      <span>La contraseña es requerida</span>
-                    }
-                    @if (
-                      formPass.get("confirmPassword")?.errors?.["minlength"]
-                    ) {
-                      <span
-                        >La contraseña debe tener al menos 8 caracteres</span
-                      >
-                    }
-                    @if (
-                      formPass
-                        .get("confirmPassword")
-                        ?.hasError("sinMayuscula") &&
-                      formPass.get("confirmPassword")?.touched
-                    ) {
-                      <span>Al menos 1 mayuscula (A-Z)</span>
-                    }
-                    @if (
-                      formPass
-                        .get("confirmPassword")
-                        ?.hasError("sinCaracterEspecial") &&
-                      formPass.get("confirmPassword")?.touched
-                    ) {
-                      <span>Al menos 1 caracter espcial (!@#$%^&*)</span>
-                    }
-                    @if (
-                      formPass.get("confirmPassword")?.errors?.[
-                        "passwordMismatch"
-                      ]
-                    ) {
-                      <span>Las contraseñas no son iguales</span>
-                    }
+                  <div class="entrada">
+                    <input
+                      id="con_pass"
+                      required
+                      formControlName="confirmPassword"
+                      placeholder="Confirmar contraseñá"
+                      autocomplete="new-password"
+                      [type]="showPass() ? 'password' : 'text'"
+                    />
+                    <span>
+                      @if (showPass()) {
+                        <mat-icon (click)="togglePass()">visibility</mat-icon>
+                      } @else {
+                        <mat-icon (click)="togglePass()"
+                          >visibility_off</mat-icon
+                        >
+                      }
+                    </span>
                   </div>
-                }
+                  @if (
+                    formPass.get("confirmPassword")?.touched &&
+                    formPass.get("confirmPassword")?.invalid
+                  ) {
+                    <div class="error-message">
+                      @if (
+                        formPass.get("confirmPassword")?.errors?.["required"]
+                      ) {
+                        <span>La contraseña es requerida</span>
+                      }
+                      @if (
+                        formPass.get("confirmPassword")?.errors?.["minlength"]
+                      ) {
+                        <span
+                          >La contraseña debe tener al menos 8 caracteres</span
+                        >
+                      }
+                      @if (
+                        formPass
+                          .get("confirmPassword")
+                          ?.hasError("sinMayuscula") &&
+                        formPass.get("confirmPassword")?.touched
+                      ) {
+                        <span>Al menos 1 mayuscula (A-Z)</span>
+                      }
+                      @if (
+                        formPass
+                          .get("confirmPassword")
+                          ?.hasError("sinCaracterEspecial") &&
+                        formPass.get("confirmPassword")?.touched
+                      ) {
+                        <span>Al menos 1 caracter espcial (!@#$%^&*)</span>
+                      }
+                      @if (
+                        formPass.get("confirmPassword")?.errors?.[
+                          "passwordMismatch"
+                        ]
+                      ) {
+                        <span>Las contraseñas no son iguales</span>
+                      }
+                    </div>
+                  }
+                </div>
               </div>
 
               <div class="actions">
-                <button type="button" class="btn" (click)="changeContrasena()">
+                <button
+                  type="button"
+                  class="btn back"
+                  (click)="changeContrasena()"
+                >
                   <span>
                     <mat-icon>reply_all</mat-icon>
                   </span>
@@ -200,6 +214,16 @@
         <div class="item"><strong>Rol: </strong> {{ dataUser()?.rol }}</div>
       </div>
     }
+
+    <div class="novedades">
+      @if (novedades().length > 0) {
+        @for (item of novedades(); track $index) {
+          <span (click)="onDeleteNovedad($index)">
+            {{ item.novedad }} !!!
+          </span>
+        }
+      }
+    </div>
   </div>
 </div>
 

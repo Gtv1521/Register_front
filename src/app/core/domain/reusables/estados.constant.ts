@@ -16,3 +16,7 @@ export const LIST_TYPE = [
   { value: types.Entregado, label: 'Entregado' },
   { value: types.Cancelado, label: 'Cancelado' },
 ];
+
+export const MAYUSCULA_REGEX = /[A-Z]/;
+
+export const ESPECIAL_REGEX = /[!@#$%^&*(),.?":{}|<>]/;

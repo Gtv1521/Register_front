@@ -25,6 +25,7 @@ import { DataUserComponent } from './features/users/data-user-component/data-use
 import { MensajesFijosComponent } from './features/users/mensajes-fijos-component/mensajes-fijos-component';
 import { logedGuard } from './core/infrastructure/services/permisos/loged.guard';
 import { authGuard } from './core/infrastructure/services/permisos/auth.guard';
+import { RestartPassComponent } from './features/auth/restart-pass-component/restart-pass-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -37,6 +38,7 @@ export const routes: Routes = [
       { path: 'reset', component: ResetComponent },
     ],
   },
+  { path: 'new_password', component: RestartPassComponent },
   { path: 'dashboard', component: DashboardLayout, canActivate: [logedGuard] },
   {
     path: 'register/:id',

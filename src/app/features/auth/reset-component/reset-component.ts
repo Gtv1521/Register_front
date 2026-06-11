@@ -1,23 +1,28 @@
-import { NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoaderComponent } from "../../components/floads/loader-component/loader-component";
+import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
+import { SendMailUseCase } from 'src/app/core/aplication/use-cases/session-usecase/send-mail.useCase';
+import { lastValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-reset-component',
-  imports: [ReactiveFormsModule, LoaderComponent],
+  imports: [ReactiveFormsModule, CargandoAccionComponent],
   templateUrl: './reset-component.html',
   styleUrl: './reset-component.scss',
 })
 export class ResetComponent {
-  // estados
-  estado: boolean = false;
-  loading: boolean = false;
-
   // constructor
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private sendMail = inject(SendMailUseCase);
+
+  // estados
+  estado = signal<boolean>(false);
+  loading = signal<boolean>(false);
+  hecho = signal<boolean>(false);
+  err = signal<HttpErrorResponse | null>(null);
 
   // inicializacion
   reset = this.fb.group({
@@ -29,13 +34,22 @@ export class ResetComponent {
     this.router.navigate(['/login']);
   }
 
-  onSubmit() {
+  async onSubmit(): Promise<void> {
     if (this.reset.valid) {
-      this.loading = true;
+      try {
+        const baseUrl = window.location.origin;
 
-      const mail = this.reset.value;
-
-      console.log(mail.email);
+        this.loading.set(true);
+        const mail = this.reset.value;
+        var response = await lastValueFrom(
+          this.sendMail.execute(mail.email!, `${baseUrl}/new_password`),
+        );
+        this.hecho.set(response);
+      } catch (error) {
+        this.err.set(error as HttpErrorResponse);
+      } finally {
+        this.loading.set(false);
+      }
     }
   }
 }
