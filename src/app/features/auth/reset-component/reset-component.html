@@ -4,6 +4,15 @@
       <a (click)="goLogin()">Volver</a>
     </section>
     <h3 class="title">Restablecer contraseña</h3>
+
+    @if (hecho()) {
+      <div class="terminado">Se envio un mensaje a tu correo !!</div>
+    }
+    @if (err()) {
+      <div class="errors">
+        {{ err()?.error.mensaje }}
+      </div>
+    }
     <form class="container-form" [formGroup]="reset" (ngSubmit)="onSubmit()">
       <section class="form_group">
         <label for="">Email</label>

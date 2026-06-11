@@ -66,9 +66,6 @@ export class SessionHttpService
     });
   }
 
-  ResetPassword(mail: string): Observable<boolean> {
-    throw new Error('Method not implemented.');
-  }
   VerifyMail(mail: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/verifyEmail/${mail}`);
   }

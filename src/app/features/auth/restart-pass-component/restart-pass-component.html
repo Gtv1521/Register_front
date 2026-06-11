@@ -4,9 +4,9 @@
     @if (actualizado()) {
       <span class="actualizado"> Contraseña Actualizada. </span>
     }
-    @if (err()) {
+    @if (err()?.status === 401) {
       <span class="errors">
-        {{ err() }}
+        {{ err().error.mensaje }}
       </span>
     }
 

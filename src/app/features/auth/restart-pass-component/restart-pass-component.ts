@@ -73,8 +73,6 @@ export class RestartPassComponent {
     this.route.queryParams.subscribe((params) => {
       this.token.set(params['token']);
       this.id.set(params['id']);
-
-      console.log(this.id(), this.token());
     });
   }
 
@@ -90,18 +88,20 @@ export class RestartPassComponent {
     if (this.inputs.invalid) return;
 
     const contraseña = this.inputs.value.password!;
-    console.log(contraseña);
     try {
       this.onUpdate.set(true);
       const response = await lastValueFrom(
         this.update.execute(this.id(), contraseña, this.token()),
       );
-      console.log(response);
       this.actualizado.set(response);
     } catch (error) {
-      this.err.set(error);
+      const errors = error as HttpErrorResponse;
+      this.err.set(errors);
     } finally {
       this.onUpdate.set(false);
+      setTimeout(() => {
+        this.OnVolver();
+      }, 1100);
     }
   }
 }

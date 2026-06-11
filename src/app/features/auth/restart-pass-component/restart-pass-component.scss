@@ -33,6 +33,25 @@
       text-align: center;
       animation: var(--animation-pulse);
       font-weight: bold;
+
+      &::before {
+        content: "✅ ";
+      }
+    }
+
+    .errors {
+      width: 100%;
+      text-align: center;
+      background-color: var(--color-alert);
+      color: var(--color-text-title);
+      padding: 10px 3px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      font-weight: bold;
+
+      &::before {
+        content: "⚠️  ";
+      }
     }
 
     .formulario {
