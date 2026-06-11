@@ -14,6 +14,7 @@ import { environment } from '@environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SessionResponseDto } from '../../dto/response/session/session-response.dto';
 import { SessionMapper } from 'src/app/core/aplication/mappers/session.mapper';
+import { IReset } from 'src/app/core/domain/interfaces/ICrud';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,8 @@ import { SessionMapper } from 'src/app/core/aplication/mappers/session.mapper';
 export class SessionHttpService
   implements
     ISession<LoginRequestDto, SigInRequestDto, SessionEntity>,
-    ISessionInfo<SessionInfo>
+    ISessionInfo<SessionInfo>,
+    IReset
 {
   apiUrl = `${environment.apiUrl}/Session`;
 
@@ -75,5 +77,26 @@ export class SessionHttpService
     return this.http.get<SessionInfo[]>(
       `${this.apiUrl}/openSessions/${idUser}`,
     );
+  }
+
+  updatePass(id: string, token: string, pass: string): Observable<boolean> {
+    return this.http
+      .post<boolean>(
+        `${this.apiUrl}/change_password/${id}`,
+        {},
+        {
+          params: {
+            token,
+            password: pass,
+          },
+        },
+      )
+      .pipe(map((res: any) => res.success as boolean));
+  }
+
+  sentMail(email: string, ruta: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/restart_password`, {
+      params: { email, ruta },
+    });
   }
 }

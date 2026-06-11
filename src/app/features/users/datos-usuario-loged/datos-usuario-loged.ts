@@ -25,9 +25,10 @@ import { UserUpdateNameUseCase } from 'src/app/core/aplication/use-cases/user-us
 import { UserUpdatePasswordUseCase } from 'src/app/core/aplication/use-cases/user-usecase/user-update-password.useCase';
 import { SignalRService } from 'src/app/core/infrastructure/services/signalr/signal-r.service';
 import { CargandoAccionComponent } from '../../components/floads/cargando-accion-component/cargando-accion-component';
-
-const MAYUSCULA_REGEX = /[A-Z]/;
-const ESPECIAL_REGEX = /[!@#$%^&*(),.?":{}|<>]/;
+import {
+  ESPECIAL_REGEX,
+  MAYUSCULA_REGEX,
+} from 'src/app/core/domain/reusables/estados.constant';
 
 @Component({
   selector: 'app-datos-usuario-loged',

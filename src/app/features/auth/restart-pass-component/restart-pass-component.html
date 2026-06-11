@@ -1,0 +1,116 @@
+<div class="container">
+  <div class="container-fluid">
+    <div class="title">Restablecer contraseña</div>
+    @if (actualizado()) {
+      <span class="actualizado"> Contraseña Actualizada. </span>
+    }
+    @if (err()) {
+      <span class="errors">
+        {{ err() }}
+      </span>
+    }
+
+    <form
+      (submit)="onSubmit()"
+      [formGroup]="inputs"
+      class="formulario"
+      autocorrect="off"
+      autocomplete="off"
+    >
+      <div class="input_group">
+        <label for="">Nueva contraseña: </label>
+
+        <div class="input_view">
+          <input
+            placeholder="Contraseña"
+            formControlName="password"
+            [type]="toggleView() ? 'text' : 'password'"
+          />
+          @if (!toggleView()) {
+            <span (click)="onToggle()"
+              ><mat-icon class="icon">visibility</mat-icon></span
+            >
+          } @else {
+            <span (click)="onToggle()"
+              ><mat-icon class="icon">visibility_off</mat-icon></span
+            >
+          }
+        </div>
+        @if (
+          inputs.get("password")?.invalid && inputs.get("password")?.touched
+        ) {
+          <div class="error-alert">
+            @if (inputs.get("password")?.errors?.["required"]) {
+              <span>La contraseña es requerida.</span>
+            }
+            @if (inputs.get("password")?.errors?.["minlength"]) {
+              <span>Debe tener 8 caracteres o mas.</span>
+            }
+            @if (
+              inputs.get("password")?.hasError("sinMayuscula") &&
+              inputs.get("password")?.touched
+            ) {
+              <span>Debe tener una la menos 1 mayuscula (A-Z).</span>
+            }
+            @if (inputs.get("password")?.hasError("sinCaracterEspecial")) {
+              <span>Debe tener un caracter espcial (!@#$%^*._).</span>
+            }
+          </div>
+        }
+      </div>
+      <div class="input_group">
+        <label for="">Confirmar contraseña: </label>
+        <div class="input_view">
+          <input
+            placeholder="Contraseña"
+            formControlName="confirma"
+            [type]="toggleView() ? 'text' : 'password'"
+          />
+          @if (!toggleView()) {
+            <span (click)="onToggle()">
+              <mat-icon class="icon">visibility</mat-icon>
+            </span>
+          } @else {
+            <span (click)="onToggle()">
+              <mat-icon class="icon">visibility_off</mat-icon>
+            </span>
+          }
+        </div>
+
+        @if (
+          inputs.get("confirma")?.invalid && inputs.get("confirma")?.touched
+        ) {
+          <div class="error-alert">
+            @if (inputs.get("confirma")?.hasError("required")) {
+              <span>La contraseña es requerida.</span>
+            }
+            @if (inputs.get("confirma")?.hasError("minlength")) {
+              <span>Debe tener 8 caracteres o mas.</span>
+            }
+            @if (inputs.get("confirma")?.hasError("sinMayuscula")) {
+              <span>Debe tener una la menos 1 mayuscula (A-Z).</span>
+            }
+            @if (inputs.get("confirma")?.hasError("sinCaracterEspecial")) {
+              <span>Debe tener un caracter espcial (!@#$%^*._).</span>
+            }
+            @if (inputs.get("confirma")?.hasError("passwordMismatch")) {
+              <span>Las contraseñás son diferentes.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="input_action">
+        <button class="btn" (click)="OnVolver()">
+          <span><mat-icon>reply_all</mat-icon></span> Cancelar
+        </button>
+        <button class="btn" type="submit" [disabled]="inputs.invalid">
+          <span><mat-icon>save</mat-icon></span> Enviar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+@if (onUpdate()) {
+  <app-cargando-accion-component [mensaje]="`Actualizando contraseña !!!`" />
+}

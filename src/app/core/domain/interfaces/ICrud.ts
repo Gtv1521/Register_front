@@ -1,3 +1,4 @@
+import { observableToBeFn } from 'node_modules/rxjs/dist/types/internal/testing/TestScheduler';
 import { Observable } from 'rxjs';
 
 export interface ICrud<dto, entity> {
@@ -67,4 +68,9 @@ export interface IUpdateUser {
   UpdateName(id: string, name: string): Observable<boolean>;
   UpdateMail(id: string, Mail: string): Observable<boolean>;
   UpdatePassword(id: string, password: string): Observable<boolean>;
+}
+
+export interface IReset {
+  updatePass(id: string, token: string, pass: string): Observable<boolean>;
+  sentMail(email: string, ruta: string): Observable<boolean>;
 }

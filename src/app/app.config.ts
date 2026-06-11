@@ -8,6 +8,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {
+  RESET_TOKEN,
   SESSION_TOKEN,
   SESSIONES_TOKEN,
 } from './core/aplication/tokens/session.token';
@@ -53,6 +54,7 @@ export const appConfig: ApplicationConfig = {
     { provide: COMPANY_TOKEN, useClass: CompanyHttpService },
     { provide: ADVERTENCIA_TOKEN, useClass: AdvertenciasHttpService },
     { provide: UP_USER_TOKEN, useClass: UserHttpService },
+    { provide: RESET_TOKEN, useClass: SessionHttpService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
